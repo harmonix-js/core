@@ -1,8 +1,11 @@
 {
-  "name": "core",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
+  "name": "harmony-framework",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harmony-ts/harmony.git"
+  },
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "prepack": "unbuild",
@@ -24,5 +27,10 @@
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
-  }
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": "^16.0.0 || >=18.0.0"
+  },
+  "version": ""
 }
