@@ -1,0 +1,28 @@
+{
+  "name": "core",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "prepack": "unbuild",
+    "start": "node ./bin/index.mjs",
+    "lint": "prettier --write ."
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "c12": "^1.10.0",
+    "defu": "^6.1.4",
+    "discord.js": "^14.15.1",
+    "dotenv": "^16.4.5",
+    "jiti": "^1.21.0",
+    "pathe": "^1.1.2",
+    "unbuild": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
