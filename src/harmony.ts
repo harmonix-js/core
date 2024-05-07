@@ -25,16 +25,16 @@ export class Harmony {
     return this._events
   }
 
-	constructor() {}
+  constructor() {}
 
   public static async create(opts: LoadHarmonyConfigOptions) {
     const harmony = new Harmony()
 
-		await harmony._initConfig(opts)
-		harmony._initCommands()
-		harmony._initEvents()
+    await harmony._initConfig(opts)
+    harmony._initCommands()
+    harmony._initEvents()
 
-		return harmony
+    return harmony
   }
 
   private async _initConfig(opts: LoadHarmonyConfigOptions) {
@@ -43,9 +43,9 @@ export class Harmony {
   }
 
   private _initCommands() {
-		if (!this._config || !this._cwd) {
-			throw new Error("Configuration not initialized")
-		}
+    if (!this._config || !this._cwd) {
+      throw new Error('Configuration not initialized')
+    }
     const filesPath = getAllFiles(
       resolve(this._cwd, this._config!.dir.commands as string)
     )
@@ -60,9 +60,9 @@ export class Harmony {
   }
 
   private _initEvents() {
-		if (!this._config || !this._cwd) {
-			throw new Error("Configuration not initialized")
-		}
+    if (!this._config || !this._cwd) {
+      throw new Error('Configuration not initialized')
+    }
     const filesPath = getAllFiles(
       resolve(this._cwd, this._config.dir.events as string)
     )
@@ -92,13 +92,15 @@ export class Harmony {
         name: c.name,
         description: c.description,
         options: c.arguments,
-        nsfw: c.nsfw,
+        nsfw: c.nsfw
       })
     }
   }
 
   public initClient() {
-    this._client = new Client({ intents: ['Guilds', 'GuildMessages', 'MessageContent'] })
+    this._client = new Client({
+      intents: ['Guilds', 'GuildMessages', 'MessageContent']
+    })
 
     this._refreshSlashCommands()
 

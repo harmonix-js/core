@@ -1,6 +1,11 @@
 import createJiti from 'jiti'
 import { filename } from 'pathe/utils'
-import type { DefineEvent, DefineEventWithOptions, EventCallback, EventResult } from '../types'
+import type {
+  DefineEvent,
+  DefineEventWithOptions,
+  EventCallback,
+  EventResult
+} from '../types'
 
 const jiti = createJiti(undefined as unknown as string, {
   interopDefault: true,
