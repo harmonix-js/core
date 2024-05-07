@@ -1,6 +1,6 @@
 import { LoadConfigOptions, loadConfig } from 'c12'
 import { resolve } from 'pathe'
-import type { HarmonyConfig } from '../types'
+import type { HarmonyConfig } from './types'
 
 const HarmonyDefaults: HarmonyConfig = {
   scanDirs: [],

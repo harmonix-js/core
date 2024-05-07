@@ -5,10 +5,10 @@ import type {
   DefineEventWithOptions,
   EventCallback,
   EventOptions,
+  Harmony,
   HarmonyEvent,
   HarmonyEventInput
-} from '../types'
-import { Harmony } from './harmony'
+} from './types'
 
 export const resolveHarmonyEvent = (
   evt: HarmonyEventInput,
@@ -21,7 +21,7 @@ export const resolveHarmonyEvent = (
     const _evtPath = _jiti.resolve(evt)
     const event = _jiti(_evtPath) as HarmonyEvent
     const options: EventOptions = {
-      name: filename(_evtPath).split('.')[0],
+      name: event.options.name || filename(_evtPath).split('.')[0],
       once: event.options.once || filename(_evtPath).endsWith('.once')
     }
 

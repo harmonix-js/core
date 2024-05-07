@@ -4,10 +4,10 @@ import { filename } from 'pathe/utils'
 import type {
   CommandExecute,
   CommandOptions,
+  Harmony,
   HarmonyCommand,
   HarmonyCommandInput
-} from '../types'
-import { Harmony } from './harmony'
+} from './types'
 
 export const resolveHarmonyCommand = (
   cmd: HarmonyCommandInput,
@@ -20,8 +20,8 @@ export const resolveHarmonyCommand = (
     const _cmdPath = _jiti.resolve(cmd)
     const command = _jiti(_cmdPath) as HarmonyCommand<boolean>
     const options: CommandOptions = {
-      name: filename(_cmdPath).split('.')[0],
-      category: filename(dirname(_cmdPath)),
+      name: command.options.name || filename(_cmdPath).split('.')[0],
+      category: command.options.category || filename(dirname(_cmdPath)),
       slash: command.options.slash || filename(_cmdPath).endsWith('.slash'),
       ...command.options
     }

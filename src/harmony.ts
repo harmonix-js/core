@@ -1,13 +1,9 @@
-import { HarmonyConfig, HarmonyOptions } from '../types'
-import { loadOptions } from './config'
 import type { LoadConfigOptions } from 'c12'
+import { loadOptions } from './options'
 import { scanCommands, scanEvents } from './scan'
 import { resolveHarmonyCommand } from './commands'
 import { resolveHarmonyEvent } from './events'
-
-export interface Harmony {
-  options: HarmonyOptions
-}
+import type { Harmony, HarmonyConfig, HarmonyOptions } from './types'
 
 export const createHarmony = async (
   config: HarmonyConfig = {},

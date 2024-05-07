@@ -1,6 +1,6 @@
 import { globby } from 'globby'
 import { join, relative } from 'pathe'
-import { Harmony } from './harmony'
+import { Harmony } from './types'
 
 const GLOB_SCAN_PATTERN = '**/*.{js,ts}'
 

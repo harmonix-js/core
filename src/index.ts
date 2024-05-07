@@ -1,5 +1,5 @@
 export * from './commands'
 export * from './events'
-export * from './config'
+export * from './options'
 export * from './harmony'
 export * from './scan'
