@@ -1,27 +1,42 @@
 import { LoadConfigOptions, loadConfig } from 'c12'
-import { defu } from 'defu'
+import { resolve } from 'pathe'
 import type { HarmonyConfig } from '../types'
 
-export interface LoadHarmonyConfigOptions
-  extends LoadConfigOptions<HarmonyConfig> {}
+const HarmonyDefaults: HarmonyConfig = {
+  scanDirs: [],
+  ignore: []
+}
 
-export const loadHarmonyConfig = async (opts: LoadHarmonyConfigOptions) => {
+export const loadOptions = async (
+  configOverrides: HarmonyConfig = {},
+  opts: LoadConfigOptions
+) => {
   const { config } = await loadConfig<HarmonyConfig>({
     name: 'harmony',
     configFile: 'harmony.config',
     rcFile: '.harmonyrc',
     dotenv: true,
     globalRc: true,
+    overrides: configOverrides,
+    defaults: HarmonyDefaults,
     ...opts
   })
 
-  return defu(config, {
-    defaultPrefix: '!',
-    dir: {
-      commands: './commands',
-      events: './events'
-    }
-  })
+  if (!config) {
+    throw new Error('No configuration found')
+  }
+  const options = config
+
+  options.rootDir = resolve(options.rootDir || '.')
+  options.srcDir = resolve(options.srcDir || options.rootDir)
+  options.scanDirs?.unshift(options.srcDir)
+  options.scanDirs = options.scanDirs?.map((dir) =>
+    resolve(options.srcDir!, dir!)
+  )
+  options.scanDirs = [...new Set(options.scanDirs)]
+  options.defaultPrefix = options.defaultPrefix || '!'
+
+  return options
 }
 
 export const defineHarmonyConfig = (config: HarmonyConfig) => {

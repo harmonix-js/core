@@ -19,6 +19,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
+      globby:
+        specifier: ^14.0.1
+        version: 14.0.1
       jiti:
         specifier: ^1.21.0
         version: 1.21.0

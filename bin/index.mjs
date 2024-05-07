@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 
-import { Harmony } from '../dist/index.mjs'
-import { resolve } from 'pathe'
+import { createHarmony } from '../dist/index.mjs'
 import 'dotenv/config'
 
 const initHarmony = async () => {
-  const harmony = await Harmony.create({ cwd: resolve('./playground') })
-
+  const harmony = await createHarmony(
+    { rootDir: './playground' },
+    { cwd: './playground' }
+  )
   console.log(harmony)
-
-  harmony.initClient()
 }
 
 initHarmony()
