@@ -6,10 +6,14 @@ import { getAllFiles } from './utils'
 import { resolve } from 'path'
 import { Client } from 'discord.js'
 
+type DeepRequired<T> = {
+  [P in keyof T]: Required<DeepRequired<T[P]>>
+}
+
 export class Harmony {
-  private _config: Required<HarmonyConfig> | null = null
-  private _commands: Record<string, Command> = {}
-  private _events: Record<string, Event> = {}
+  private _config: Required<DeepRequired<HarmonyConfig>> | null = null
+  private _commands: Map<string, Command> = new Map()
+  private _events: Map<string, Event> = new Map()
   private _cwd: string | null = null
   private _client: Client | null = null
 
@@ -46,34 +50,26 @@ export class Harmony {
     if (!this._config || !this._cwd) {
       throw new Error('Configuration not initialized')
     }
-    const filesPath = getAllFiles(
-      resolve(this._cwd, this._config!.dir.commands as string)
-    )
+    const filesPath = getAllFiles(resolve(this._cwd, this._config.dir.commands))
 
-    this._commands = Object.fromEntries(
-      filesPath.map((path) => {
-        const command = getCommand(path)
+    for (const path of filesPath) {
+      const command = getCommand(resolve(this._cwd, path))
 
-        return [command.name, command]
-      })
-    )
+      this._commands.set(command.name, command)
+    }
   }
 
   private _initEvents() {
     if (!this._config || !this._cwd) {
       throw new Error('Configuration not initialized')
     }
-    const filesPath = getAllFiles(
-      resolve(this._cwd, this._config.dir.events as string)
-    )
+    const filesPath = getAllFiles(resolve(this._cwd, this._config.dir.events))
 
-    this._events = Object.fromEntries(
-      filesPath.map((path) => {
-        const event = getEvent(resolve(this._cwd as string, path))
+    for (const path of filesPath) {
+      const event = getEvent(resolve(this._cwd, path))
 
-        return [event.name, event]
-      })
-    )
+      this._events.set(event.name, event)
+    }
   }
 
   private _refreshSlashCommands() {
@@ -81,18 +77,16 @@ export class Harmony {
       return
     }
 
-    for (const command in this._commands) {
-      const c = this._commands[command]
-
-      if (!c.slash) {
+    for (const [, command] of this._commands) {
+      if (!command.slash) {
         continue
       }
 
       this._client.application?.commands.create({
-        name: c.name,
-        description: c.description,
-        options: c.arguments,
-        nsfw: c.nsfw
+        name: command.name,
+        description: command.description,
+        options: command.arguments,
+        nsfw: command.nsfw
       })
     }
   }
@@ -104,13 +98,11 @@ export class Harmony {
 
     this._refreshSlashCommands()
 
-    for (const event in this._events) {
-      const e = this._events[event]
-
-      if (e.once) {
-        this._client.once(e.name, e.callback)
+    for (const [, event] of this._events) {
+      if (event.once) {
+        this._client.once(event.name, event.callback)
       } else {
-        this._client.on(e.name, e.callback)
+        this._client.on(event.name, event.callback)
       }
     }
 
@@ -124,7 +116,7 @@ export class Harmony {
       const [commandName] = message.content
         .slice(this._config.defaultPrefix.length)
         .split(' ')
-      const command = this._commands[commandName]
+      const command = this._commands.get(commandName)
 
       if (!command || command.slash) {
         return
@@ -136,7 +128,7 @@ export class Harmony {
       if (!this._config || !interaction.isChatInputCommand()) {
         return
       }
-      const command = this._commands[interaction.commandName]
+      const command = this._commands.get(interaction.commandName)
 
       if (!command || !command.slash) {
         return
