@@ -1,7 +1,7 @@
 import createJiti from 'jiti'
 import { filename } from 'pathe/utils'
-import { getAllFiles } from './utils'
-import type { CommandExecute, CommandOptions, CommandResult } from '../types'
+import type { CommandExecute, CommandResult } from '../types'
+import { dirname } from 'pathe'
 
 const jiti = createJiti(undefined as unknown as string, {
   interopDefault: true,
@@ -10,34 +10,77 @@ const jiti = createJiti(undefined as unknown as string, {
   extensions: ['.ts', '.js']
 })
 
-const commandsPath = getAllFiles('./playground/commands')
-
-const parseFileName = (fileName: string) => {
-  const parts = fileName.split('.')
-  const name = parts[0]
-  const hasSlash = parts[parts.length - 1] === 'slash'
-
-  return [name, hasSlash]
+interface CommandContext {
+  name: string
+  category: string
+  slash: boolean
+  execute: CommandExecute<boolean>
 }
 
-export const loadCommands = () => {
-  const commands = Object.fromEntries(
-    commandsPath.map((path) => {
-      const [name, hasSlash] = parseFileName(filename(path))!
-
-      return [name, () => ({ slash: hasSlash, ...jiti(path) })]
-    })
-  ) as Record<string, () => { slash: boolean } & CommandResult>
-
-  return commands
+interface CommandOptions {
+  name?: string
+  description?: string
+  category?: string
+  arguments?: any[]
+  nsfw?: boolean
+  slash?: boolean
+  ownerOnly?: boolean
+  guildOnly?: boolean
+  userPermissions?: any[]
+  botPermissions?: any[]
+  cooldown?: number
 }
 
-export const defineCommand = (
-  options: CommandOptions,
-  execute: CommandExecute
-): CommandResult => {
+export class Command {
+  public name: string
+  public description: string
+  public category: string
+  public arguments: any[]
+  public nsfw: boolean
+  public slash: boolean
+  public ownerOnly: boolean
+  public guildOnly: boolean
+  public userPermissions: any[]
+  public botPermissions: any[]
+  public cooldown: number
+
+  public execute: CommandExecute<boolean>
+
+  constructor(context: CommandContext, options: CommandOptions = {}) {
+    this.name = options.name ?? context.name
+    this.description = options.description ?? ''
+    this.category = options.category ?? context.category
+    this.arguments = options.arguments ?? []
+    this.nsfw = options.nsfw ?? false
+    this.slash = options.slash || context.slash
+    this.ownerOnly = options.ownerOnly ?? false
+    this.guildOnly = options.guildOnly ?? false
+    this.userPermissions = options.userPermissions ?? []
+    this.botPermissions = options.botPermissions ?? []
+    this.cooldown = options.cooldown ?? 0
+
+    this.execute = context.execute
+  }
+}
+
+export const getCommand = (path: string) => {
+  const command = jiti(path) as CommandResult<boolean>
+  const context: CommandContext = {
+    name: filename(path).split('.')[0],
+    category: filename(dirname(path)),
+    slash: filename(path).endsWith('.slash'),
+    execute: command.execute
+  }
+
+  return new Command(context, command.options)
+}
+
+export const defineCommand = <Slash extends boolean>(
+  options: CommandOptions & { slash?: Slash },
+  execute: CommandExecute<Slash>
+): CommandResult<Slash> => {
   return {
-    data: options,
+    options,
     execute
   }
 }

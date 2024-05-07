@@ -1,7 +1,6 @@
 import createJiti from 'jiti'
 import { filename } from 'pathe/utils'
-import { getAllFiles } from './utils'
-import type { EventCallback, EventOptions, EventResult } from '../types'
+import type { DefineEvent, DefineEventWithOptions, EventCallback, EventResult } from '../types'
 
 const jiti = createJiti(undefined as unknown as string, {
   interopDefault: true,
@@ -10,34 +9,60 @@ const jiti = createJiti(undefined as unknown as string, {
   extensions: ['.ts', '.js']
 })
 
-const eventsPath = getAllFiles('./playground/events')
-
-const parseFileName = (fileName: string) => {
-  const parts = fileName.split('.')
-  const name = parts[0]
-  const hasOnce = parts[parts.length - 1] === 'once'
-
-  return [name, hasOnce]
+interface EventContext {
+  name: string
+  once: boolean
+  execute: EventCallback
 }
 
-export const loadEvents = () => {
-  const events = Object.fromEntries(
-    eventsPath.map((path) => {
-      const [name, isOnce] = parseFileName(filename(path))!
-
-      return [name, () => ({ once: isOnce, ...jiti(path) })]
-    })
-  ) as Record<string, () => { once: boolean } & EventResult>
-
-  return events
+interface EventOptions {
+  once?: boolean
 }
 
-export const defineEvent = (
-  options: EventOptions,
-  callback: EventCallback
+export class Event {
+  public name: string
+  public once: boolean
+
+  public callback: EventCallback
+
+  constructor(context: EventContext, options: EventOptions = {}) {
+    this.name = context.name
+    this.once = options.once || context.once
+
+    this.callback = context.execute
+  }
+}
+
+export const getEvent = (path: string) => {
+  const event = jiti(path) as EventResult
+  const context: EventContext = {
+    name: filename(path).split('.')[0],
+    once: filename(path).endsWith('.once'),
+    execute: event.callback
+  }
+
+  return new Event(context, event.options)
+}
+
+export const defineEvent: DefineEvent & DefineEventWithOptions = (
+  ...args: [EventOptions | EventCallback, EventCallback?]
 ): EventResult => {
-  return {
-    data: options,
-    callback
+  let options: EventOptions = {}
+
+  if (args.length === 1) {
+    const [callback] = args as [EventCallback]
+
+    return {
+      options,
+      callback
+    }
+  } else {
+    const [opts, callback] = args as [EventOptions, EventCallback]
+
+    options = opts
+    return {
+      options,
+      callback
+    }
   }
 }

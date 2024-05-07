@@ -1,17 +1,11 @@
-import { Client } from 'discord.js'
-
-export interface EventOptions {
-  once?: boolean
-}
+import type { Client } from 'discord.js'
 
 export type EventCallback = (client: Client) => void
 
+export type DefineEvent = (callback: EventCallback) => EventResult
+export type DefineEventWithOptions = (options: EventOptions, callback: EventCallback) => EventResult
+
 export interface EventResult {
-  data: EventOptions
+  options: EventOptions
   callback: EventCallback
 }
-
-export type DefineEvent = (
-  options: EventOptions,
-  callback: EventCallback
-) => EventResult

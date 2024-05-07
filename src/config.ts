@@ -1,20 +1,26 @@
-import { loadConfig } from 'c12'
-import { resolve } from 'pathe'
+import { LoadConfigOptions, loadConfig } from 'c12'
 import { defu } from 'defu'
 import type { HarmonyConfig } from '../types'
 
-export const loadHarmonyConfig = async () => {
+export interface LoadHarmonyConfigOptions
+  extends LoadConfigOptions<HarmonyConfig> {}
+
+export const loadHarmonyConfig = async (opts: LoadHarmonyConfigOptions) => {
   const { config } = await loadConfig<HarmonyConfig>({
     name: 'harmony',
     configFile: 'harmony.config',
     rcFile: '.harmonyrc',
     dotenv: true,
     globalRc: true,
-    cwd: resolve('./playground')
+    ...opts
   })
 
   return defu(config, {
-    defaultPrefix: '!'
+    defaultPrefix: '!',
+    dir: {
+      commands: './commands',
+      events: './events'
+    }
   })
 }
 
