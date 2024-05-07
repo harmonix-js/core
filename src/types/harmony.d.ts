@@ -23,3 +23,7 @@ export interface HarmonyConfig
   routeRules?: any
   rollupConfig?: any
 }
+
+export interface Harmony {
+  options: HarmonyOptions
+}

@@ -41,7 +41,7 @@ export interface CommandOptions {
   cooldown?: number
 }
 
-export type HarmonyCommandInput = string | HarmonyCommand
+export type HarmonyCommandInput = string | HarmonyCommand<boolean>
 
 export interface HarmonyCommand<Slash extends boolean> {
   options: CommandOptions
