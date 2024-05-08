@@ -4,7 +4,8 @@ import type { HarmonyConfig } from './types'
 
 const HarmonyDefaults: HarmonyConfig = {
   scanDirs: [],
-  ignore: []
+  ignore: [],
+  intents: ['Guilds', 'GuildMessages', 'MessageContent']
 }
 
 export const loadOptions = async (

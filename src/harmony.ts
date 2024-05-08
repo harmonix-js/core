@@ -3,6 +3,7 @@ import { loadOptions } from './options'
 import { scanCommands, scanEvents } from './scan'
 import { resolveHarmonyCommand } from './commands'
 import { resolveHarmonyEvent } from './events'
+import { initCient, registerCommands, registerEvents } from './discord'
 import type { Harmony, HarmonyConfig, HarmonyOptions } from './types'
 
 export const createHarmony = async (
@@ -34,8 +35,9 @@ export const createHarmony = async (
     })
   )
 
-  console.log('commands', commands)
-  console.log('events', events)
+  harmony.client = initCient(harmony.options)
+  registerCommands(harmony, commands)
+  registerEvents(harmony, events)
 
   return harmony
 }

@@ -1,6 +1,11 @@
 import type { C12InputConfig } from 'c12'
-import { HarmonyCommandInput } from './commands'
-import { HarmonyEventInput } from './events'
+import type {
+  Client,
+  BitFieldResolvable,
+  GatewayIntentsString
+} from 'discord.js'
+import type { HarmonyCommandInput } from './commands'
+import type { HarmonyEventInput } from './events'
 
 export interface HarmonyOptions {
   rootDir: string
@@ -10,6 +15,7 @@ export interface HarmonyOptions {
   commands: HarmonyCommandInput[]
   events: HarmonyEventInput[]
   defaultPrefix: string
+  intents: BitFieldResolvable<GatewayIntentsString, number>
 }
 
 type DeepPartial<T> =
@@ -26,4 +32,5 @@ export interface HarmonyConfig
 
 export interface Harmony {
   options: HarmonyOptions
+  client?: Client
 }
