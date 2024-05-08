@@ -1,3 +1,5 @@
 import { defineHarmonyConfig } from '../src'
 
-export default defineHarmonyConfig({})
+export default defineHarmonyConfig({
+  defaultPrefix: 'h!'
+})

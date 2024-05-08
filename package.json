@@ -1,23 +1,37 @@
 {
-  "name": "harmony-framework",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/harmony-ts/harmony.git"
-  },
+  "name": "harmony",
+  "version": "0.0.1",
+  "description": "⚡ Next-gen Discord Bot Framework",
+  "repository": "harmony-ts/harmony",
   "license": "MIT",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types.d.ts",
+      "import": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./types.d.ts",
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
   "scripts": {
     "prepack": "unbuild",
     "start": "node ./bin/index.mjs",
     "lint": "prettier --write ."
   },
-  "types": "./dist/index.d.ts",
+  "resolutions": {
+    "harmony": "link:."
+  },
   "dependencies": {
     "c12": "^1.10.0",
     "defu": "^6.1.4",
     "discord.js": "^14.15.1",
     "dotenv": "^16.4.5",
+    "globby": "^14.0.1",
     "jiti": "^1.21.0",
     "pathe": "^1.1.2",
     "unbuild": "^2.0.0"
@@ -31,6 +45,5 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": "^16.0.0 || >=18.0.0"
-  },
-  "version": ""
+  }
 }
