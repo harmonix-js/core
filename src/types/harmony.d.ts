@@ -24,11 +24,8 @@ type DeepPartial<T> =
     : T
 
 export interface HarmonyConfig
-  extends DeepPartial<Omit<HarmonyOptions, 'routeRules' | 'rollupConfig'>>,
-    C12InputConfig<HarmonyConfig> {
-  routeRules?: any
-  rollupConfig?: any
-}
+  extends DeepPartial<HarmonyOptions>,
+    C12InputConfig<HarmonyConfig> {}
 
 export interface Harmony {
   options: HarmonyOptions
