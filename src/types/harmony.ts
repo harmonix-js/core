@@ -16,6 +16,7 @@ export interface HarmonyOptions {
   events: HarmonyEventInput[]
   defaultPrefix: string
   intents: BitFieldResolvable<GatewayIntentsString, number>
+  clientId: string
 }
 
 type DeepPartial<T> =
