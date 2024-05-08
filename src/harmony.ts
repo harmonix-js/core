@@ -3,7 +3,12 @@ import { loadOptions } from './options'
 import { scanCommands, scanEvents } from './scan'
 import { resolveHarmonyCommand } from './commands'
 import { resolveHarmonyEvent } from './events'
-import { initCient, registerCommands, registerEvents } from './discord'
+import {
+  initCient,
+  registerCommands,
+  registerEvents,
+  registerSlashCommands
+} from './discord'
 import type { Harmony, HarmonyConfig, HarmonyOptions } from './types'
 
 export const createHarmony = async (
@@ -17,26 +22,23 @@ export const createHarmony = async (
 
   const scannedCommands = await scanCommands(harmony)
   const _commands = [...(harmony.options.commands || []), ...scannedCommands]
-  const commands = new Map(
-    _commands.map((cmd) => {
-      const command = resolveHarmonyCommand(cmd, harmony.options)
-
-      return [command.options.name!, command]
-    })
+  const commands = _commands.map((cmd) =>
+    resolveHarmonyCommand(cmd, harmony.options)
   )
 
   const scannedEvents = await scanEvents(harmony)
   const _events = [...(harmony.options.events || []), ...scannedEvents]
-  const events = new Map(
-    _events.map((evt) => {
-      const event = resolveHarmonyEvent(evt, harmony.options)
-
-      return [event.options.name!, event]
-    })
-  )
+  const events = _events.map((evt) => resolveHarmonyEvent(evt, harmony.options))
 
   harmony.client = initCient(harmony.options)
-  registerCommands(harmony, commands)
+  registerCommands(
+    harmony,
+    commands.filter((cmd) => !cmd.options.slash)
+  )
+  await registerSlashCommands(
+    harmony,
+    commands.filter((cmd) => cmd.options.slash)
+  )
   registerEvents(harmony, events)
 
   return harmony
