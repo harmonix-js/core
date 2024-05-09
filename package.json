@@ -5,13 +5,6 @@
   "repository": "harmony-ts/harmony",
   "license": "MIT",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./types.d.ts",
-      "import": "./dist/index.mjs"
-    },
-    "./package.json": "./package.json"
-  },
   "main": "./dist/index.mjs",
   "types": "./types.d.ts",
   "files": [
