@@ -19,8 +19,8 @@ packages/*/LICENSE
 
 # Generated dirs
 dist
-.harmony
-.harmony-*
+.harmonix
+.harmonix-*
 .output
 .output-*
 .gen

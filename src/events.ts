@@ -5,21 +5,21 @@ import type {
   DefineEventWithOptions,
   EventCallback,
   EventOptions,
-  Harmony,
-  HarmonyEvent,
-  HarmonyEventInput
+  Harmonix,
+  HarmonixEvent,
+  HarmonixEventInput
 } from './types'
 
-export const resolveHarmonyEvent = (
-  evt: HarmonyEventInput,
-  harmonyOptions: Harmony['options']
-): HarmonyEvent => {
+export const resolveHarmonixEvent = (
+  evt: HarmonixEventInput,
+  harmonixOptions: Harmonix['options']
+): HarmonixEvent => {
   if (typeof evt === 'string') {
-    const _jiti = jiti(harmonyOptions.rootDir, {
+    const _jiti = jiti(harmonixOptions.rootDir, {
       interopDefault: true
     })
     const _evtPath = _jiti.resolve(evt)
-    const event = _jiti(_evtPath) as HarmonyEvent
+    const event = _jiti(_evtPath) as HarmonixEvent
     const options: EventOptions = {
       name: event.options.name || filename(_evtPath).split('.')[0],
       once: event.options.once || filename(_evtPath).endsWith('.once')
@@ -33,7 +33,7 @@ export const resolveHarmonyEvent = (
 
 export const defineEvent: DefineEvent & DefineEventWithOptions = (
   ...args: [EventOptions | EventCallback, EventCallback?]
-): HarmonyEvent => {
+): HarmonixEvent => {
   let options: EventOptions = {}
 
   if (args.length === 1) {

@@ -1,34 +1,34 @@
 import { globby } from 'globby'
 import { join, relative } from 'pathe'
-import { Harmony } from './types'
+import { Harmonix } from './types'
 
 const GLOB_SCAN_PATTERN = '**/*.{js,ts}'
 
-export const scanCommands = async (harmony: Harmony) => {
-  const files = await scanFiles(harmony, 'commands')
+export const scanCommands = async (harmonix: Harmonix) => {
+  const files = await scanFiles(harmonix, 'commands')
 
   return files.map((f) => f.fullPath)
 }
 
-export const scanEvents = async (harmony: Harmony) => {
-  const files = await scanFiles(harmony, 'events')
+export const scanEvents = async (harmonix: Harmonix) => {
+  const files = await scanFiles(harmonix, 'events')
 
   return files.map((f) => f.fullPath)
 }
 
-const scanFiles = async (harmony: Harmony, name: string) => {
+const scanFiles = async (harmonix: Harmonix, name: string) => {
   const files = await Promise.all(
-    harmony.options.scanDirs!.map((dir) => scanDir(harmony, dir, name))
+    harmonix.options.scanDirs!.map((dir) => scanDir(harmonix, dir, name))
   ).then((r) => r.flat())
 
   return files
 }
 
-const scanDir = async (harmony: Harmony, dir: string, name: string) => {
+const scanDir = async (harmonix: Harmonix, dir: string, name: string) => {
   const fileNames = await globby(join(name, GLOB_SCAN_PATTERN), {
     cwd: dir,
     dot: true,
-    ignore: harmony.options.ignore,
+    ignore: harmonix.options.ignore,
     absolute: true
   })
 

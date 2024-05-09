@@ -17,7 +17,7 @@ export enum CommandArgType {
   Attachment = 'Attachment'
 }
 
-export interface HarmonyCommandArgType {
+export interface HarmonixCommandArgType {
   String: []
   Integer: []
   Boolean: []
@@ -82,9 +82,9 @@ export interface CommandOptions {
   cooldown?: number
 }
 
-export type HarmonyCommandInput = string | HarmonyCommand<boolean>
+export type HarmonixCommandInput = string | HarmonixCommand<boolean>
 
-export interface HarmonyCommand<Slash extends boolean> {
+export interface HarmonixCommand<Slash extends boolean> {
   options: CommandOptions
   execute: CommandExecute<Slash>
 }

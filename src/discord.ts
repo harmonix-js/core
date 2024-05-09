@@ -1,23 +1,23 @@
 import { Client, REST, Routes, Events } from 'discord.js'
-import type { Harmony, HarmonyCommand, HarmonyEvent } from './types'
+import type { Harmonix, HarmonixCommand, HarmonixEvent } from './types'
 import 'dotenv/config'
 import { toJSON } from './commands'
 
-export const initCient = (harmonyOptions: Harmony['options']) => {
-  const client = new Client({ intents: harmonyOptions.intents })
+export const initCient = (harmonixOptions: Harmonix['options']) => {
+  const client = new Client({ intents: harmonixOptions.intents })
 
-  client.login(process.env.HARMONY_CLIENT_TOKEN)
+  client.login(process.env.HARMONIX_CLIENT_TOKEN)
 
   return client
 }
 
 export const registerCommands = (
-  harmony: Harmony,
-  commands: HarmonyCommand<false>[]
+  harmonix: Harmonix,
+  commands: HarmonixCommand<false>[]
 ) => {
-  harmony.client?.on(Events.MessageCreate, (message) => {
+  harmonix.client?.on(Events.MessageCreate, (message) => {
     if (message.author.bot) return
-    const prefix = harmony.options.defaultPrefix
+    const prefix = harmonix.options.defaultPrefix
     const args = message.content.slice(prefix.length).trim().split(/ +/)
     const command = args.shift()?.toLowerCase()
 
@@ -28,43 +28,43 @@ export const registerCommands = (
       cmd?.options.args?.map((arg, i) => [arg.name, args[i]]) || []
     )
     if (!cmd || cmd.options.slash) return
-    cmd.execute(harmony.client!, message, { slash: false, params: params })
+    cmd.execute(harmonix.client!, message, { slash: false, params: params })
   })
 }
 
 export const registerSlashCommands = async (
-  harmony: Harmony,
-  commands: HarmonyCommand<true>[]
+  harmonix: Harmonix,
+  commands: HarmonixCommand<true>[]
 ) => {
 	if (commands.length === 0) return
-  const rest = new REST().setToken(process.env.HARMONY_CLIENT_TOKEN || '')
+  const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN || '')
 
   await rest.put(
     Routes.applicationCommands(
-      harmony.options.clientId || process.env.HARMONY_CLIENT_ID || ''
+      harmonix.options.clientId || process.env.HARMONIX_CLIENT_ID || ''
     ),
     { body: commands.map((cmd) => toJSON(cmd)) }
   )
-  harmony.client?.on('interactionCreate', (interaction) => {
+  harmonix.client?.on('interactionCreate', (interaction) => {
     if (!interaction.isChatInputCommand()) return
     const cmd = commands.find(
       (cmd) => cmd.options.name === interaction.commandName
     )
 
     if (!cmd || !cmd.options.slash) return
-    cmd.execute(harmony.client!, interaction, {
+    cmd.execute(harmonix.client!, interaction, {
       slash: true,
       params: interaction.options
     })
   })
 }
 
-export const registerEvents = (harmony: Harmony, events: HarmonyEvent[]) => {
+export const registerEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
   for (const event of events) {
     if (event.options.once) {
-      harmony.client?.once(event.options.name!, event.callback)
+      harmonix.client?.once(event.options.name!, event.callback)
     } else {
-      harmony.client?.on(event.options.name!, event.callback)
+      harmonix.client?.on(event.options.name!, event.callback)
     }
   }
 }

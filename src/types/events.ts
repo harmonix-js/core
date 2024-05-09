@@ -13,15 +13,15 @@ export interface EventOptions {
   once?: boolean
 }
 
-export type DefineEvent = (callback: EventCallback) => HarmonyEvent
+export type DefineEvent = (callback: EventCallback) => HarmonixEvent
 export type DefineEventWithOptions = (
   options: EventOptions,
   callback: EventCallback
-) => HarmonyEvent
+) => HarmonixEvent
 
-export type HarmonyEventInput = string | HarmonyEvent
+export type HarmonixEventInput = string | HarmonixEvent
 
-export interface HarmonyEvent {
+export interface HarmonixEvent {
   options: EventOptions
   callback: EventCallback
 }

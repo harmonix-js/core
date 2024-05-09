@@ -1,25 +1,25 @@
 import { LoadConfigOptions, loadConfig } from 'c12'
 import { resolve } from 'pathe'
-import type { HarmonyConfig } from './types'
+import type { HarmonixConfig } from './types'
 
-const HarmonyDefaults: HarmonyConfig = {
+const HarmonixDefaults: HarmonixConfig = {
   scanDirs: [],
   ignore: [],
   intents: ['Guilds', 'GuildMessages', 'MessageContent']
 }
 
 export const loadOptions = async (
-  configOverrides: HarmonyConfig = {},
+  configOverrides: HarmonixConfig = {},
   opts: LoadConfigOptions
 ) => {
-  const { config } = await loadConfig<HarmonyConfig>({
-    name: 'harmony',
-    configFile: 'harmony.config',
-    rcFile: '.harmonyrc',
+  const { config } = await loadConfig<HarmonixConfig>({
+    name: 'harmonix',
+    configFile: 'harmonix.config',
+    rcFile: '.harmonixrc',
     dotenv: true,
     globalRc: true,
     overrides: configOverrides,
-    defaults: HarmonyDefaults,
+    defaults: HarmonixDefaults,
     ...opts
   })
 
@@ -40,6 +40,6 @@ export const loadOptions = async (
   return options
 }
 
-export const defineHarmonyConfig = (config: HarmonyConfig) => {
+export const defineHarmonixConfig = (config: HarmonixConfig) => {
   return config
 }

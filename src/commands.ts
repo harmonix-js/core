@@ -3,28 +3,28 @@ import { dirname } from 'pathe'
 import { filename } from 'pathe/utils'
 import {
   CommandArgType,
-  type HarmonyCommandArgType,
+  type HarmonixCommandArgType,
   type CommandExecute,
   type CommandOptions,
-  type Harmony,
-  type HarmonyCommand,
-  type HarmonyCommandInput,
+  type Harmonix,
+  type HarmonixCommand,
+  type HarmonixCommandInput,
   type CommandArg,
   type CommandExecuteOptions,
   ArgumentResolver
 } from './types'
 import { SlashCommandBuilder } from 'discord.js'
 
-export const resolveHarmonyCommand = (
-  cmd: HarmonyCommandInput,
-  harmonyOptions: Harmony['options']
-): HarmonyCommand<boolean> => {
+export const resolveHarmonixCommand = (
+  cmd: HarmonixCommandInput,
+  harmonixOptions: Harmonix['options']
+): HarmonixCommand<boolean> => {
   if (typeof cmd === 'string') {
-    const _jiti = jiti(harmonyOptions.rootDir, {
+    const _jiti = jiti(harmonixOptions.rootDir, {
       interopDefault: true
     })
     const _cmdPath = _jiti.resolve(cmd)
-    const command = _jiti(_cmdPath) as HarmonyCommand<boolean>
+    const command = _jiti(_cmdPath) as HarmonixCommand<boolean>
     const options: CommandOptions = {
       name: command.options.name || filename(_cmdPath).split('.')[0],
       category: command.options.category || filename(dirname(_cmdPath)),
@@ -41,11 +41,11 @@ export const resolveHarmonyCommand = (
 export const defineCommand = <Slash extends boolean>(
   options: CommandOptions & { slash?: Slash },
   execute: CommandExecute<Slash>
-): HarmonyCommand<Slash> => {
+): HarmonixCommand<Slash> => {
   return { options, execute }
 }
 
-export const toJSON = (cmd: HarmonyCommand<true>) => {
+export const toJSON = (cmd: HarmonixCommand<true>) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.options.name!)
     .setDescription(cmd.options.description || 'No description provided')
@@ -133,7 +133,7 @@ export const toJSON = (cmd: HarmonyCommand<true>) => {
 }
 
 export const defineArgument = <
-  Type extends keyof HarmonyCommandArgType
+  Type extends keyof HarmonixCommandArgType
 >(options: {
   type: Type
   name: string

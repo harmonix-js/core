@@ -4,16 +4,16 @@ import type {
   BitFieldResolvable,
   GatewayIntentsString
 } from 'discord.js'
-import type { HarmonyCommandInput } from './commands'
-import type { HarmonyEventInput } from './events'
+import type { HarmonixCommandInput } from './commands'
+import type { HarmonixEventInput } from './events'
 
-export interface HarmonyOptions {
+export interface HarmonixOptions {
   rootDir: string
   srcDir: string
   scanDirs: string[]
   ignore: string[]
-  commands: HarmonyCommandInput[]
-  events: HarmonyEventInput[]
+  commands: HarmonixCommandInput[]
+  events: HarmonixEventInput[]
   defaultPrefix: string
   intents: BitFieldResolvable<GatewayIntentsString, number>
   clientId: string
@@ -24,11 +24,11 @@ type DeepPartial<T> =
     ? { [P in keyof T]?: DeepPartial<T[P]> | T[P] }
     : T
 
-export interface HarmonyConfig
-  extends DeepPartial<HarmonyOptions>,
-    C12InputConfig<HarmonyConfig> {}
+export interface HarmonixConfig
+  extends DeepPartial<HarmonixOptions>,
+    C12InputConfig<HarmonixConfig> {}
 
-export interface Harmony {
-  options: HarmonyOptions
+export interface Harmonix {
+  options: HarmonixOptions
   client?: Client
 }
