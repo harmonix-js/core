@@ -6,7 +6,7 @@ import { toJSON } from './commands'
 export const initCient = (harmonyOptions: Harmony['options']) => {
   const client = new Client({ intents: harmonyOptions.intents })
 
-  client.login(process.env.HARMONY_TOKEN)
+  client.login(process.env.HARMONY_CLIENT_TOKEN)
 
   return client
 }
@@ -36,7 +36,8 @@ export const registerSlashCommands = async (
   harmony: Harmony,
   commands: HarmonyCommand<true>[]
 ) => {
-  const rest = new REST().setToken(process.env.HARMONY_TOKEN || '')
+	if (commands.length === 0) return
+  const rest = new REST().setToken(process.env.HARMONY_CLIENT_TOKEN || '')
 
   await rest.put(
     Routes.applicationCommands(
