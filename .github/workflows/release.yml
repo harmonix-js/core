@@ -25,7 +25,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Build
-        run: pnpm build
+        run: pnpm prepack
 
       - name: Release
         run: pnpm publish --access public --no-git-checks --tag latest
