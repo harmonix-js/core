@@ -12,9 +12,10 @@
     "*.d.ts"
   ],
   "scripts": {
+    "lint": "prettier --write .",
     "prepack": "unbuild",
     "start": "node ./bin/index.mjs",
-    "lint": "prettier --write ."
+    "release": "changelogen --release"
   },
   "resolutions": {
     "@harmonix-js/core": "link:."
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.8",
+    "changelogen": "^0.5.5",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
