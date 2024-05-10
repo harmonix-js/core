@@ -28,7 +28,9 @@ export const createHarmonix = async (
 
   const scannedEvents = await scanEvents(harmonix)
   const _events = [...(harmonix.options.events || []), ...scannedEvents]
-  const events = _events.map((evt) => resolveHarmonixEvent(evt, harmonix.options))
+  const events = _events.map((evt) =>
+    resolveHarmonixEvent(evt, harmonix.options)
+  )
 
   harmonix.client = initCient(harmonix.options)
   registerCommands(

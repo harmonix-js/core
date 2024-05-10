@@ -36,7 +36,7 @@ export const registerSlashCommands = async (
   harmonix: Harmonix,
   commands: HarmonixCommand<true>[]
 ) => {
-	if (commands.length === 0) return
+  if (commands.length === 0) return
   const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN || '')
 
   await rest.put(

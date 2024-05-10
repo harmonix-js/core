@@ -16,7 +16,7 @@ export interface HarmonixOptions {
   events: HarmonixEventInput[]
   defaultPrefix: string
   intents: BitFieldResolvable<GatewayIntentsString, number>
-  clientId: string,
+  clientId: string
   ownerId: string | string[]
 }
 
