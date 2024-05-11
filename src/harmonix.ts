@@ -32,6 +32,16 @@ export const createHarmonix = async (
     resolveHarmonixEvent(evt, harmonix.options)
   )
 
+  if (!process.env.HARMONIX_CLIENT_TOKEN) {
+    throw new Error(
+      'Client token is required. Please provide it in the environment variable HARMONIX_CLIENT_TOKEN.'
+    )
+  }
+  if (!harmonix.options.clientId && !process.env.HARMONIX_CLIENT_ID) {
+    throw new Error(
+      'Client ID is required. You can provide it in the configuration file or in the environment variable HARMONIX_CLIENT_ID.'
+    )
+  }
   harmonix.client = initCient(harmonix.options)
   registerCommands(
     harmonix,
