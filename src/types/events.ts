@@ -2,12 +2,6 @@ import type { Client } from 'discord.js'
 
 export type EventCallback = (client: Client) => void
 
-export interface EventContext {
-  name: string
-  once: boolean
-  execute: EventCallback
-}
-
 export interface EventOptions {
   name?: string
   once?: boolean
