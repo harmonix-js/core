@@ -4,7 +4,5 @@ export default defineCommand(
   {
     description: 'Test the bot'
   },
-  () => {
-    console.log('Tested the bot')
-  }
+  () => console.log('Tested the bot')
 )

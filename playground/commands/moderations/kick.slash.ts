@@ -1,5 +1,4 @@
 import { defineArgument, defineCommand } from '../../../src'
-import { CommandArgType } from '../../../src/types'
 
 export default defineCommand(
   {
@@ -17,7 +16,9 @@ export default defineCommand(
       })
     ]
   },
-  (_, message) => {
-    message.reply('Kicked user')
+  (_, interaction, options) => {
+    const { user, reason } = options.args
+
+    interaction.reply(`Kicked user ${user} for ${reason}`)
   }
 )

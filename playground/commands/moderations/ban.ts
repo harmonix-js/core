@@ -1,5 +1,4 @@
-import type { CommandInteractionOption } from 'discord.js'
-import { defineCommand, defineArgument, useArguments } from '../../../src'
+import { defineCommand, defineArgument } from '../../../src'
 
 export default defineCommand(
   {
@@ -10,14 +9,17 @@ export default defineCommand(
         type: 'User',
         name: 'user',
         description: 'The user to ban'
+      }),
+      defineArgument({
+        type: 'String',
+        name: 'reason',
+        description: 'The reason for the ban'
       })
     ]
   },
   (_, interaction, options) => {
-    const { get } = useArguments(options)
+    const { user, reason } = options.args
 
-    interaction.reply(
-      `Banned user ${get<CommandInteractionOption>('user').user?.username}`
-    )
+    interaction.reply(`Banned user ${user} for ${reason}`)
   }
 )
