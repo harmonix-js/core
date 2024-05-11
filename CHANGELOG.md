@@ -56,6 +56,4 @@
 
 ### ❤️ Contributors
 
-- Nethris <david.abou@epitech.eu>
 - David ([@nethriis](http://github.com/nethriis))
-
