@@ -1,4 +1,4 @@
-import {
+import type {
   Client,
   Message,
   ChatInputCommandInteraction,
@@ -12,9 +12,7 @@ export enum CommandArgType {
   User = 'User',
   Channel = 'Channel',
   Role = 'Role',
-  Mentionable = 'Mentionable',
-  Number = 'Number',
-  Attachment = 'Attachment'
+  Number = 'Number'
 }
 
 export interface HarmonixCommandArgType {
@@ -46,27 +44,18 @@ export type ExecuteArgument<Slash extends boolean> = Slash extends true
     ? Message
     : MessageOrInteraction
 
-export interface CommandExecuteOptions {
+export type CommandExecuteOptions<Args extends CommandArg[]> = {
   slash: boolean
-  params: any
+  args: {
+    [K in Args[number]['name']]: any
+  }
 }
 
-export interface ArgumentResolver {
-  get: <T>(name: string) => T
-}
-
-export type CommandExecute<Slash extends boolean> = (
+export type CommandExecute<Slash extends boolean, Args extends CommandArg[]> = (
   client: Client,
   entity: ExecuteArgument<Slash>,
-  options: CommandExecuteOptions
+  options: CommandExecuteOptions<Args>
 ) => void
-
-export interface CommandContext {
-  name: string
-  category: string
-  slash: boolean
-  execute: CommandExecute<boolean>
-}
 
 export interface CommandOptions {
   name?: string
@@ -82,9 +71,14 @@ export interface CommandOptions {
   cooldown?: number
 }
 
-export type HarmonixCommandInput = string | HarmonixCommand<boolean>
+export type HarmonixCommandInput =
+  | string
+  | HarmonixCommand<boolean, CommandArg[]>
 
-export interface HarmonixCommand<Slash extends boolean> {
+export interface HarmonixCommand<
+  Slash extends boolean,
+  Args extends CommandArg[]
+> {
   options: CommandOptions
-  execute: CommandExecute<Slash>
+  execute: CommandExecute<Slash, Args>
 }

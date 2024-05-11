@@ -9,22 +9,20 @@ import {
   type Harmonix,
   type HarmonixCommand,
   type HarmonixCommandInput,
-  type CommandArg,
-  type CommandExecuteOptions,
-  ArgumentResolver
+  type CommandArg
 } from './types'
 import { SlashCommandBuilder } from 'discord.js'
 
 export const resolveHarmonixCommand = (
   cmd: HarmonixCommandInput,
   harmonixOptions: Harmonix['options']
-): HarmonixCommand<boolean> => {
+): HarmonixCommand<boolean, CommandArg[]> => {
   if (typeof cmd === 'string') {
     const _jiti = jiti(harmonixOptions.rootDir, {
       interopDefault: true
     })
     const _cmdPath = _jiti.resolve(cmd)
-    const command = _jiti(_cmdPath) as HarmonixCommand<boolean>
+    const command = _jiti(_cmdPath) as HarmonixCommand<boolean, CommandArg[]>
     const options: CommandOptions = {
       name: command.options.name || filename(_cmdPath).split('.')[0],
       category: command.options.category || filename(dirname(_cmdPath)),
@@ -38,14 +36,14 @@ export const resolveHarmonixCommand = (
   }
 }
 
-export const defineCommand = <Slash extends boolean>(
-  options: CommandOptions & { slash?: Slash },
-  execute: CommandExecute<Slash>
-): HarmonixCommand<Slash> => {
+export const defineCommand = <Slash extends boolean, Args extends CommandArg[]>(
+  options: CommandOptions & { slash?: Slash; args?: Args },
+  execute: CommandExecute<Slash, Args>
+): HarmonixCommand<Slash, Args> => {
   return { options, execute }
 }
 
-export const toJSON = (cmd: HarmonixCommand<true>) => {
+export const toJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.options.name!)
     .setDescription(cmd.options.description || 'No description provided')
@@ -101,24 +99,8 @@ export const toJSON = (cmd: HarmonixCommand<true>) => {
               .setRequired(arg.required!)
           )
           break
-        case CommandArgType.Mentionable:
-          builder.addMentionableOption((opt) =>
-            opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
-          )
-          break
         case CommandArgType.Number:
           builder.addNumberOption((opt) =>
-            opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
-          )
-          break
-        case CommandArgType.Attachment:
-          builder.addAttachmentOption((opt) =>
             opt
               .setName(arg.name)
               .setDescription(arg.description)
@@ -146,22 +128,4 @@ export const defineArgument = <
     description: options.description,
     required: options.required ?? true
   } as CommandArg
-}
-
-export const useArguments = (
-  options: CommandExecuteOptions
-): ArgumentResolver => {
-  if (options.slash) {
-    return {
-      get: (name: string) => {
-        return options.params.get(name)
-      }
-    }
-  } else {
-    return {
-      get: (name: string) => {
-        return options.params[name] || undefined
-      }
-    }
-  }
 }
