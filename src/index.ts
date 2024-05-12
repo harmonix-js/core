@@ -1,5 +1,6 @@
 export * from './events'
 export * from './commands'
+export * from './contextMenus'
 export * from './modals'
 export * from './options'
 export * from './harmonix'

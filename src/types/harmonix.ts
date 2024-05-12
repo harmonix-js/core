@@ -6,6 +6,7 @@ import type {
 } from 'discord.js'
 import type { HarmonixCommandInput } from './commands'
 import type { HarmonixEventInput } from './events'
+import type { HarmonixContextMenuInput } from './contextMenus'
 
 export interface HarmonixOptions {
   rootDir: string
@@ -14,6 +15,7 @@ export interface HarmonixOptions {
   ignore: string[]
   commands: HarmonixCommandInput[]
   events: HarmonixEventInput[]
+  contextMenus: HarmonixContextMenuInput[]
   defaultPrefix: string
   intents: BitFieldResolvable<GatewayIntentsString, number>
   clientId: string

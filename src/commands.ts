@@ -1,7 +1,11 @@
 import jiti from 'jiti'
 import { dirname } from 'pathe'
 import { filename } from 'pathe/utils'
-import { SlashCommandBuilder } from 'discord.js'
+import {
+  ApplicationCommandType,
+  ContextMenuCommandBuilder,
+  SlashCommandBuilder
+} from 'discord.js'
 import {
   CommandArgType,
   type HarmonixCommandArgType,
@@ -10,7 +14,8 @@ import {
   type Harmonix,
   type HarmonixCommand,
   type HarmonixCommandInput,
-  type CommandArg
+  type CommandArg,
+  HarmonixContextMenu
 } from './types'
 
 export const resolveHarmonixCommand = (
@@ -43,7 +48,7 @@ export const defineCommand = <Slash extends boolean, Args extends CommandArg[]>(
   return { options, execute }
 }
 
-export const toJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
+export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.options.name!)
     .setDescription(cmd.options.description || 'No description provided')
@@ -110,6 +115,20 @@ export const toJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
       }
     }
   }
+
+  return builder.toJSON()
+}
+
+export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
+  const builder = new ContextMenuCommandBuilder()
+    .setName(ctm.options.name!)
+    .setType(
+      ctm.options.type === 'message'
+        ? ApplicationCommandType.Message
+        : ctm.options.type === 'user'
+          ? ApplicationCommandType.User
+          : ApplicationCommandType.Message
+    )
 
   return builder.toJSON()
 }

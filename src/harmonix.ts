@@ -1,11 +1,14 @@
 import type { LoadConfigOptions } from 'c12'
 import { loadOptions } from './options'
-import { scanCommands, scanEvents } from './scan'
+import { scanCommands, scanContextMenus, scanEvents } from './scan'
 import { resolveHarmonixCommand } from './commands'
 import { resolveHarmonixEvent } from './events'
+import { resolveHarmonixContextMenu } from './contextMenus'
 import {
   initCient,
+  refreshApplicationCommands,
   registerCommands,
+  registerContextMenu,
   registerEvents,
   registerSlashCommands
 } from './discord'
@@ -32,6 +35,15 @@ export const createHarmonix = async (
     resolveHarmonixEvent(evt, harmonix.options)
   )
 
+  const scannedContextMenus = await scanContextMenus(harmonix)
+  const _contextMenus = [
+    ...(harmonix.options.contextMenus || []),
+    ...scannedContextMenus
+  ]
+  const contextMenus = _contextMenus.map((ctm) =>
+    resolveHarmonixContextMenu(ctm, harmonix.options)
+  )
+
   if (!process.env.HARMONIX_CLIENT_TOKEN) {
     throw new Error(
       'Client token is required. Please provide it in the environment variable HARMONIX_CLIENT_TOKEN.'
@@ -43,15 +55,20 @@ export const createHarmonix = async (
     )
   }
   harmonix.client = initCient(harmonix.options)
+  refreshApplicationCommands(harmonix, [
+    ...commands.filter((cmd) => cmd.options.slash),
+    ...contextMenus
+  ])
+  registerEvents(harmonix, events)
   registerCommands(
     harmonix,
     commands.filter((cmd) => !cmd.options.slash)
   )
-  await registerSlashCommands(
+  registerSlashCommands(
     harmonix,
     commands.filter((cmd) => cmd.options.slash)
   )
-  registerEvents(harmonix, events)
+  registerContextMenu(harmonix, contextMenus)
 
   return harmonix
 }

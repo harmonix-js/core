@@ -6,16 +6,18 @@ import {
   type User,
   ApplicationCommandOptionType
 } from 'discord.js'
+import consola from 'consola'
 import {
   type CommandArg,
   CommandArgType,
   type Harmonix,
   type HarmonixCommand,
   type HarmonixEvent,
-  type MessageOrInteraction
+  type MessageOrInteraction,
+  HarmonixContextMenu
 } from './types'
 import 'dotenv/config'
-import { toJSON } from './commands'
+import { slashToJSON, contextMenuToJSON } from './commands'
 
 export const initCient = (harmonixOptions: Harmonix['options']) => {
   const client = new Client({ intents: harmonixOptions.intents })
@@ -23,6 +25,51 @@ export const initCient = (harmonixOptions: Harmonix['options']) => {
   client.login(process.env.HARMONIX_CLIENT_TOKEN)
 
   return client
+}
+
+export const refreshApplicationCommands = async (
+  harmonix: Harmonix,
+  commands: (HarmonixCommand<true, CommandArg[]> | HarmonixContextMenu)[]
+) => {
+  if (commands.length === 0) return
+  const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN!)
+
+  try {
+    consola.info('Started refreshing application commands.')
+    await rest.put(
+      Routes.applicationCommands(
+        harmonix.options.clientId || process.env.HARMONIX_CLIENT_ID!
+      ),
+      {
+        body: commands.map((cmd) =>
+          isHarmonixCommand(cmd) ? slashToJSON(cmd) : contextMenuToJSON(cmd)
+        )
+      }
+    )
+    consola.success('Successfully reloaded application commands.')
+  } catch {
+    consola.error('Failed to reload application commands.')
+  }
+}
+
+export const registerEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
+  for (const event of events.filter((evt) => !evt.options.type)) {
+    if (event.options.once) {
+      harmonix.client?.once(event.options.name!, event.callback)
+    } else {
+      harmonix.client?.on(event.options.name!, event.callback)
+    }
+  }
+
+  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isModalSubmit()) return
+    const event = events
+      .filter((evt) => evt.options.type === 'modal')
+      .find((evt) => evt.options.name === interaction.customId)
+
+    if (!event) return
+    event.callback(interaction)
+  })
 }
 
 export const registerCommands = (
@@ -50,19 +97,10 @@ export const registerCommands = (
   })
 }
 
-export const registerSlashCommands = async (
+export const registerSlashCommands = (
   harmonix: Harmonix,
   commands: HarmonixCommand<true, CommandArg[]>[]
 ) => {
-  if (commands.length === 0) return
-  const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN!)
-
-  await rest.put(
-    Routes.applicationCommands(
-      harmonix.options.clientId || process.env.HARMONIX_CLIENT_ID!
-    ),
-    { body: commands.map((cmd) => toJSON(cmd)) }
-  )
   harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) return
     const cmd = commands.find(
@@ -89,24 +127,27 @@ export const registerSlashCommands = async (
   })
 }
 
-export const registerEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
-  for (const event of events.filter((evt) => !evt.options.type)) {
-    if (event.options.once) {
-      harmonix.client?.once(event.options.name!, event.callback)
-    } else {
-      harmonix.client?.on(event.options.name!, event.callback)
-    }
-  }
+export const registerContextMenu = (
+  harmonix: Harmonix,
+  contextMenus: HarmonixContextMenu[]
+) => {
+  harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isContextMenuCommand()) return
+    const ctm = contextMenus.find(
+      (ctm) => ctm.options.name === interaction.commandName
+    )
 
-  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
-    if (!interaction.isModalSubmit()) return
-    const event = events
-      .filter((evt) => evt.options.type === 'modal')
-      .find((evt) => evt.options.name === interaction.customId)
-
-    if (!event) return
-    event.callback(interaction)
+    if (!ctm) return
+    ctm.callback(interaction)
   })
+}
+
+const isHarmonixCommand = (
+  command: HarmonixCommand<true, CommandArg[]> | HarmonixContextMenu
+): command is HarmonixCommand<true, CommandArg[]> => {
+  return (
+    (command as HarmonixCommand<true, CommandArg[]>).options.slash !== undefined
+  )
 }
 
 export const resolveArgument = async (

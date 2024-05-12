@@ -1,3 +1,5 @@
 export * from './commands'
 export * from './events'
+export * from './contextMenus'
+export * from './modals'
 export * from './harmonix'

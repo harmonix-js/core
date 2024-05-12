@@ -8,7 +8,8 @@ import type {
   EventOptions,
   Harmonix,
   HarmonixEvent,
-  HarmonixEventInput
+  HarmonixEventInput,
+  HarmonixEvents
 } from './types'
 
 export const resolveHarmonixEvent = (
@@ -36,20 +37,25 @@ export const resolveHarmonixEvent = (
   }
 }
 
-export const defineEvent: DefineEvent & DefineEventWithOptions = (
-  ...args: [EventOptions | EventCallback, EventCallback?]
+export const defineEvent: DefineEvent & DefineEventWithOptions = <
+  Event extends keyof HarmonixEvents = any
+>(
+  ...args: [EventOptions | EventCallback<Event>, EventCallback<Event>?]
 ): HarmonixEvent => {
   let options: EventOptions = {}
 
   if (args.length === 1) {
-    const [callback] = args as [EventCallback]
+    const [callback] = args as [EventCallback<keyof HarmonixEvents>]
 
     return {
       options,
       callback
     }
   } else {
-    const [opts, callback] = args as [EventOptions, EventCallback]
+    const [opts, callback] = args as [
+      EventOptions,
+      EventCallback<keyof HarmonixEvents>
+    ]
 
     options = opts
     return {

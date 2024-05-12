@@ -1,4 +1,12 @@
-export type EventCallback = (...args: any) => void
+import type { ClientEvents, ModalSubmitInteraction } from 'discord.js'
+
+export interface HarmonixEvents extends ClientEvents {
+  modal: [interaction: ModalSubmitInteraction]
+}
+
+export type EventCallback<Event extends keyof HarmonixEvents | any = any> = (
+  ...args: Event extends keyof HarmonixEvents ? HarmonixEvents[Event] : any[]
+) => void
 
 export interface EventOptions {
   name?: string
@@ -6,15 +14,17 @@ export interface EventOptions {
   type?: 'modal'
 }
 
-export type DefineEvent = (callback: EventCallback) => HarmonixEvent
-export type DefineEventWithOptions = (
+export type DefineEvent = <Event extends keyof HarmonixEvents = any>(
+  callback: EventCallback<Event>
+) => HarmonixEvent
+export type DefineEventWithOptions = <Event extends keyof HarmonixEvents = any>(
   options: EventOptions,
-  callback: EventCallback
+  callback: EventCallback<Event>
 ) => HarmonixEvent
 
 export type HarmonixEventInput = string | HarmonixEvent
 
 export interface HarmonixEvent {
   options: EventOptions
-  callback: EventCallback
+  callback: EventCallback<keyof HarmonixEvents>
 }

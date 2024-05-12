@@ -11,7 +11,19 @@ export const scanCommands = async (harmonix: Harmonix) => {
 }
 
 export const scanEvents = async (harmonix: Harmonix) => {
-  const files = await scanFiles(harmonix, 'events')
+  const files = await Promise.all([
+    scanFiles(harmonix, 'events'),
+    scanFiles(harmonix, 'listeners')
+  ]).then((r) => r.flat())
+
+  return files.map((f) => f.fullPath)
+}
+
+export const scanContextMenus = async (harmonix: Harmonix) => {
+  const files = await Promise.all([
+    scanFiles(harmonix, 'context-menus'),
+    scanFiles(harmonix, 'contextMenus')
+  ]).then((r) => r.flat())
 
   return files.map((f) => f.fullPath)
 }
