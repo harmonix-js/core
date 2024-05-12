@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.4
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.3...v0.0.4)
+
+### 🩹 Fixes
+
+- Bug application commands not refreshing ([04bc4e2](https://github.com/harmonix-js/core/commit/04bc4e2))
+
+### 📖 Documentation
+
+- Command is in a folder ([13d4c85](https://github.com/harmonix-js/core/commit/13d4c85))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.3
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.2...v0.0.3)
