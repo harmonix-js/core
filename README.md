@@ -14,7 +14,7 @@ npx @harmonix-js/cli init bot-name
 
 #### Command
 
-`commands/ping.ts`
+`commands/utils/ping.ts`
 
 ```ts
 import { defineCommand } from '@harmonix-js/core'
