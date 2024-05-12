@@ -1,6 +1,39 @@
 # Changelog
 
 
+## v0.0.3
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.2...v0.0.3)
+
+### 🚀 Enhancements
+
+- Add modals handling ([2d62b0c](https://github.com/harmonix-js/core/commit/2d62b0c))
+- Add context menu and improve events types ([2896dfd](https://github.com/harmonix-js/core/commit/2896dfd))
+
+### 🩹 Fixes
+
+- Add consola dependencies for better logs ([c6f4b9c](https://github.com/harmonix-js/core/commit/c6f4b9c))
+
+### 📖 Documentation
+
+- Changelog fix ([1635932](https://github.com/harmonix-js/core/commit/1635932))
+- Add examples ([57d7074](https://github.com/harmonix-js/core/commit/57d7074))
+- Fix event usage ([ffb08b9](https://github.com/harmonix-js/core/commit/ffb08b9))
+- Add installation section ([318dce3](https://github.com/harmonix-js/core/commit/318dce3))
+
+### ✅ Tests
+
+- Test modal on playground ([2051f6e](https://github.com/harmonix-js/core/commit/2051f6e))
+- Playground ([7540999](https://github.com/harmonix-js/core/commit/7540999))
+
+### 🎨 Styles
+
+- Lint ([0a9d61f](https://github.com/harmonix-js/core/commit/0a9d61f))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.2
 
 
