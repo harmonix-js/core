@@ -4,6 +4,14 @@ Create Discord Bot with ease and simplicity.
 
 ## Examples
 
+### Installation
+
+```bash
+npx @harmonix-js/cli init bot-name
+# pnpm dlx @harmonix-js/cli init bot-name
+# yarn dlx @harmonix-js/cli init bot-name
+```
+
 #### Command
 
 `commands/ping.ts`
