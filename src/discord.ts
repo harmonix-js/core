@@ -31,7 +31,6 @@ export const refreshApplicationCommands = async (
   harmonix: Harmonix,
   commands: (HarmonixCommand<true, CommandArg[]> | HarmonixContextMenu)[]
 ) => {
-  if (commands.length === 0) return
   const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN!)
 
   try {
