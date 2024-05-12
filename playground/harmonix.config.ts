@@ -1,6 +1,6 @@
 import { defineHarmonixConfig } from '../src'
 
 export default defineHarmonixConfig({
-  defaultPrefix: 'h!',
+  defaultPrefix: '!',
   clientId: '929023549656662047'
 })
