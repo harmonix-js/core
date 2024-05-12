@@ -28,7 +28,7 @@ export default defineCommand(
 ```ts
 import { defineEvent } from '@harmonix-js/core'
 
-export default defineEvent((client) => {
+export default defineEvent<'ready'>((client) => {
   console.log('Bot is ready!')
 })
 ```
