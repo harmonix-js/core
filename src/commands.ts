@@ -1,6 +1,7 @@
 import jiti from 'jiti'
 import { dirname } from 'pathe'
 import { filename } from 'pathe/utils'
+import { SlashCommandBuilder } from 'discord.js'
 import {
   CommandArgType,
   type HarmonixCommandArgType,
@@ -11,7 +12,6 @@ import {
   type HarmonixCommandInput,
   type CommandArg
 } from './types'
-import { SlashCommandBuilder } from 'discord.js'
 
 export const resolveHarmonixCommand = (
   cmd: HarmonixCommandInput,

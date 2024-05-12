@@ -63,7 +63,7 @@ export const registerSlashCommands = async (
     ),
     { body: commands.map((cmd) => toJSON(cmd)) }
   )
-  harmonix.client?.on('interactionCreate', async (interaction) => {
+  harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) return
     const cmd = commands.find(
       (cmd) => cmd.options.name === interaction.commandName
@@ -90,13 +90,23 @@ export const registerSlashCommands = async (
 }
 
 export const registerEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
-  for (const event of events) {
+  for (const event of events.filter((evt) => !evt.options.type)) {
     if (event.options.once) {
       harmonix.client?.once(event.options.name!, event.callback)
     } else {
       harmonix.client?.on(event.options.name!, event.callback)
     }
   }
+
+  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isModalSubmit()) return
+    const event = events
+      .filter((evt) => evt.options.type === 'modal')
+      .find((evt) => evt.options.name === interaction.customId)
+
+    if (!event) return
+    event.callback(interaction)
+  })
 }
 
 export const resolveArgument = async (

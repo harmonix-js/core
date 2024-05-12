@@ -1,10 +1,9 @@
-import type { Client } from 'discord.js'
-
-export type EventCallback = (client: Client) => void
+export type EventCallback = (...args: any) => void
 
 export interface EventOptions {
   name?: string
   once?: boolean
+  type?: 'modal'
 }
 
 export type DefineEvent = (callback: EventCallback) => HarmonixEvent

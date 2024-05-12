@@ -1,4 +1,5 @@
 import jiti from 'jiti'
+import { dirname } from 'pathe'
 import { filename } from 'pathe/utils'
 import type {
   DefineEvent,
@@ -22,7 +23,11 @@ export const resolveHarmonixEvent = (
     const event = _jiti(_evtPath) as HarmonixEvent
     const options: EventOptions = {
       name: event.options.name || filename(_evtPath).split('.')[0],
-      once: event.options.once || filename(_evtPath).endsWith('.once')
+      once: event.options.once || filename(_evtPath).endsWith('.once'),
+      type:
+        event.options.type || filename(dirname(_evtPath)) === 'modals'
+          ? 'modal'
+          : undefined
     }
 
     return { options, callback: event.callback }
