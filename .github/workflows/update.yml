@@ -1,0 +1,46 @@
+name: ⬆️ update
+
+on:
+  workflow_run:
+    workflows: [🚀 release]
+    types:
+      - completed
+
+jobs:
+  update:
+    strategy:
+      matrix:
+        include:
+          - repository: harmonix-js/starter
+            dependencies:
+              install: '@harmonix-js/core@latest'
+              dev: '@harmonix-js/cli@latest'
+          - repository: harmonix-js/cli
+            dependencies:
+              install: '@harmonix-js/core@latest'
+              dev: ''
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.5
+        with:
+          repository: ${{matrix.repository}}
+          ref: main
+          token: ${{secrets.ACTION_GITHUB_TOKEN}}
+      - uses: actions/setup-node@v4.0.2
+        with:
+          node-version: 20.x
+      - run: npm install
+      - name: Update dependencies
+        run: |
+          npm install ${{matrix.dependencies.install}}
+          if [ -n "${{matrix.dependencies.dev}}" ]; then
+            npm install -D ${{matrix.dependencies.dev}}
+          fi
+      - name: Commit changes
+        run: |
+          git config user.email ${{secrets.EMAIL}}
+          git config user.name ${{secrets.NAME}}
+          git commit -am "fix: update dependencies" || echo "No changes to commit"
+          git push
+
