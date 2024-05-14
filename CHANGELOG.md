@@ -1,5 +1,31 @@
 # Changelog
 
+## v0.0.6
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.5...v0.0.6)
+
+### 🚀 Enhancements
+
+- Add preconditions for context menus ([cb2194c](https://github.com/harmonix-js/core/commit/cb2194c))
+- Add preconditions ([fe2c82d](https://github.com/harmonix-js/core/commit/fe2c82d))
+- Add preconditions ([9e6a0cc](https://github.com/harmonix-js/core/commit/9e6a0cc))
+
+### 🩹 Fixes
+
+- Remove cooldowns (not used) ([6e60529](https://github.com/harmonix-js/core/commit/6e60529))
+
+### 💅 Refactors
+
+- Project structure ([0261621](https://github.com/harmonix-js/core/commit/0261621))
+
+### ✅ Tests
+
+- Playground ([7925682](https://github.com/harmonix-js/core/commit/7925682))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.5
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.4...v0.0.5)
