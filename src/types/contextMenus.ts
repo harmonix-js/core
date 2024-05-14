@@ -1,14 +1,13 @@
 import type {
-  CacheType,
   MessageContextMenuCommandInteraction,
   PermissionsString,
   UserContextMenuCommandInteraction
 } from 'discord.js'
 
-export type ContextMenuCallback = (
-  interaction:
-    | MessageContextMenuCommandInteraction<CacheType>
-    | UserContextMenuCommandInteraction<CacheType>
+export type ContextMenuCallback<Type extends 'message' | 'user'> = (
+  interaction: Type extends 'message'
+    ? MessageContextMenuCommandInteraction
+    : UserContextMenuCommandInteraction
 ) => void
 
 export interface ContextMenuOptions {
@@ -18,17 +17,17 @@ export interface ContextMenuOptions {
   preconditions?: string[]
 }
 
-export type DefineContextMenu = (
-  callback: ContextMenuCallback
+export type DefineContextMenu = <Type extends 'message' | 'user'>(
+  callback: ContextMenuCallback<Type>
 ) => HarmonixContextMenu
-export type DefineContextMenuWithOptions = (
+export type DefineContextMenuWithOptions = <Type extends 'message' | 'user'>(
   options: ContextMenuOptions,
-  callback: ContextMenuCallback
+  callback: ContextMenuCallback<Type>
 ) => HarmonixContextMenu
 
 export type HarmonixContextMenuInput = string | HarmonixContextMenu
 
 export interface HarmonixContextMenu {
   options: ContextMenuOptions
-  callback: ContextMenuCallback
+  callback: ContextMenuCallback<'message' | 'user'>
 }

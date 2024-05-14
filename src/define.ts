@@ -70,20 +70,26 @@ export const defineCommand = <
 }
 
 export const defineContextMenu: DefineContextMenu &
-  DefineContextMenuWithOptions = (
-  ...args: [ContextMenuOptions | ContextMenuCallback, ContextMenuCallback?]
+  DefineContextMenuWithOptions = <Type extends 'message' | 'user'>(
+  ...args: [
+    ContextMenuOptions | ContextMenuCallback<Type>,
+    ContextMenuCallback<Type>?
+  ]
 ): HarmonixContextMenu => {
   let options: ContextMenuOptions = {}
 
   if (args.length === 1) {
-    const [callback] = args as [ContextMenuCallback]
+    const [callback] = args as [ContextMenuCallback<Type>]
 
     return {
       options,
       callback
     }
   } else {
-    const [opts, callback] = args as [ContextMenuOptions, ContextMenuCallback]
+    const [opts, callback] = args as [
+      ContextMenuOptions,
+      ContextMenuCallback<Type>
+    ]
 
     options = opts
     return {
