@@ -15,7 +15,8 @@ export default defineCommand(
         name: 'reason',
         description: 'The reason for the ban'
       })
-    ]
+    ],
+    userPermissions: ['Administrator']
   },
   (_, interaction, options) => {
     const { user, reason } = options.args
