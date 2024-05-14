@@ -1,10 +1,13 @@
 import { defineContextMenu } from '../../src'
 
-export default defineContextMenu(
+export default defineContextMenu<'message'>(
   {
+    name: 'Get message author',
     preconditions: ['ownerOnly']
   },
   (interaction) => {
-    interaction.reply('Context menu opened!')
+    interaction.reply(
+      `This message has been sent by ${interaction.targetMessage.author}`
+    )
   }
 )
