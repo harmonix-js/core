@@ -2,7 +2,8 @@ import type {
   Client,
   Message,
   ChatInputCommandInteraction,
-  CacheType
+  CacheType,
+  PermissionsString
 } from 'discord.js'
 
 export enum CommandArgType {
@@ -65,9 +66,7 @@ export interface CommandOptions {
   nsfw?: boolean
   slash?: boolean
   ownerOnly?: boolean
-  guildOnly?: boolean
-  userPermissions?: any[]
-  botPermissions?: any[]
+  userPermissions?: PermissionsString[]
   cooldown?: number
 }
 

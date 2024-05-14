@@ -4,6 +4,7 @@ import { filename } from 'pathe/utils'
 import {
   ApplicationCommandType,
   ContextMenuCommandBuilder,
+  PermissionFlagsBits,
   SlashCommandBuilder
 } from 'discord.js'
 import {
@@ -52,6 +53,12 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.options.name!)
     .setDescription(cmd.options.description || 'No description provided')
+    .setDefaultMemberPermissions(
+      cmd.options.userPermissions?.reduce(
+        (acc, perm) => acc | PermissionFlagsBits[perm],
+        0n
+      )
+    )
 
   if (cmd.options.args) {
     for (const arg of cmd.options.args) {

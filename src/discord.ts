@@ -18,6 +18,7 @@ import {
 } from './types'
 import 'dotenv/config'
 import { slashToJSON, contextMenuToJSON } from './commands'
+import { createError } from './harmonix'
 
 export const initCient = (harmonixOptions: Harmonix['options']) => {
   const client = new Client({ intents: harmonixOptions.intents })
@@ -37,7 +38,7 @@ export const refreshApplicationCommands = async (
     consola.info('Started refreshing application commands.')
     await rest.put(
       Routes.applicationCommands(
-        harmonix.options.clientId || process.env.HARMONIX_CLIENT_ID!
+        harmonix.options.clientId || process.env.HARMONIX_CLIENT_ID || ''
       ),
       {
         body: commands.map((cmd) =>
@@ -47,7 +48,7 @@ export const refreshApplicationCommands = async (
     )
     consola.success('Successfully reloaded application commands.')
   } catch {
-    consola.error('Failed to reload application commands.')
+    createError('Failed to reload application commands.')
   }
 }
 
@@ -83,6 +84,8 @@ export const registerCommands = (
 
     if (!command) return
     const cmd = commands.find((cmd) => cmd.options.name === command)
+
+    if (!cmd || cmd.options.slash) return
     const resolvedArgs = await Promise.all(
       (cmd?.options.args || []).map(async (arg, i) => [
         arg.name,
@@ -91,7 +94,17 @@ export const registerCommands = (
     )
     const fullArgs = Object.fromEntries(resolvedArgs)
 
-    if (!cmd || cmd.options.slash) return
+    if (cmd.options.ownerOnly) {
+      if (!harmonix.options.ownerId) {
+        createError('Owner ID is required for ownerOnly commands.')
+      }
+      if (!isOwner(harmonix, message.author.id)) return // TODO: Make possibility to customize ownerOnly message
+    }
+    if (cmd.options.userPermissions) {
+      for (const perm of cmd.options.userPermissions) {
+        if (!message.member?.permissions.has(perm)) return // TODO: Make possibility to customize userPermissions message
+      }
+    }
     cmd.execute(harmonix.client!, message, { slash: false, args: fullArgs })
   })
 }
@@ -112,15 +125,18 @@ export const registerSlashCommands = (
         opt.name,
         await resolveArgument(
           interaction,
-          commandArgType(opt.type)!,
+          commandArgType(opt.type),
           String(opt.value)
         )
       ])
     )
     const fullArgs = Object.fromEntries(resolvedArgs)
 
+    if (cmd.options.ownerOnly && harmonix.options.ownerId) {
+      if (!isOwner(harmonix, interaction.user.id)) return // TODO: Make possibility to customize ownerOnly message
+    }
     cmd.execute(harmonix.client!, interaction, {
-      slash: true,
+      slash: false,
       args: fullArgs
     })
   })
@@ -141,6 +157,20 @@ export const registerContextMenu = (
   })
 }
 
+const isOwner = (harmonix: Harmonix, authorId: string) => {
+  if (
+    Array.isArray(harmonix.options.ownerId) &&
+    !harmonix.options.ownerId.includes(authorId)
+  )
+    return false
+  if (
+    typeof harmonix.options.ownerId === 'string' &&
+    authorId !== harmonix.options.ownerId
+  )
+    return false
+  return true
+}
+
 const isHarmonixCommand = (
   command: HarmonixCommand<true, CommandArg[]> | HarmonixContextMenu
 ): command is HarmonixCommand<true, CommandArg[]> => {
@@ -151,7 +181,7 @@ const isHarmonixCommand = (
 
 export const resolveArgument = async (
   entity: MessageOrInteraction,
-  type: CommandArgType,
+  type: CommandArgType | null,
   value: string
 ) => {
   switch (type) {
@@ -208,7 +238,7 @@ const resolveRole = async (entity: MessageOrInteraction, value: string) => {
   )
 }
 
-const commandArgType = (type: ApplicationCommandOptionType) => {
+const commandArgType = (type: ApplicationCommandOptionType | null) => {
   switch (type) {
     case ApplicationCommandOptionType.String:
       return CommandArgType.String
@@ -224,5 +254,7 @@ const commandArgType = (type: ApplicationCommandOptionType) => {
       return CommandArgType.Role
     case ApplicationCommandOptionType.Number:
       return CommandArgType.Number
+    default:
+      return null
   }
 }

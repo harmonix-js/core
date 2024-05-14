@@ -1,11 +1,11 @@
 import { LoadConfigOptions, loadConfig } from 'c12'
 import { resolve } from 'pathe'
 import type { HarmonixConfig } from './types'
+import { createError } from './harmonix'
 
 const HarmonixDefaults: HarmonixConfig = {
   scanDirs: [],
-  ignore: [],
-  intents: ['Guilds', 'GuildMessages', 'MessageContent']
+  ignore: []
 }
 
 export const loadOptions = async (
@@ -24,7 +24,7 @@ export const loadOptions = async (
   })
 
   if (!config) {
-    throw new Error('No configuration found')
+    return createError('No configuration found')
   }
   const options = config
 
@@ -36,6 +36,11 @@ export const loadOptions = async (
   )
   options.scanDirs = [...new Set(options.scanDirs)]
   options.defaultPrefix = options.defaultPrefix || '!'
+  options.intents = options.intents || [
+    'Guilds',
+    'GuildMessages',
+    'MessageContent'
+  ]
 
   return options
 }

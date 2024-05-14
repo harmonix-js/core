@@ -1,4 +1,5 @@
 import type { LoadConfigOptions } from 'c12'
+import consola from 'consola'
 import { loadOptions } from './options'
 import { scanCommands, scanContextMenus, scanEvents } from './scan'
 import { resolveHarmonixCommand } from './commands'
@@ -45,21 +46,21 @@ export const createHarmonix = async (
   )
 
   if (!process.env.HARMONIX_CLIENT_TOKEN) {
-    throw new Error(
+    createError(
       'Client token is required. Please provide it in the environment variable HARMONIX_CLIENT_TOKEN.'
     )
   }
   if (!harmonix.options.clientId && !process.env.HARMONIX_CLIENT_ID) {
-    throw new Error(
+    createError(
       'Client ID is required. You can provide it in the configuration file or in the environment variable HARMONIX_CLIENT_ID.'
     )
   }
   harmonix.client = initCient(harmonix.options)
-  refreshApplicationCommands(harmonix, [
+  registerEvents(harmonix, events)
+  await refreshApplicationCommands(harmonix, [
     ...commands.filter((cmd) => cmd.options.slash),
     ...contextMenus
   ])
-  registerEvents(harmonix, events)
   registerCommands(
     harmonix,
     commands.filter((cmd) => !cmd.options.slash)
@@ -71,4 +72,9 @@ export const createHarmonix = async (
   registerContextMenu(harmonix, contextMenus)
 
   return harmonix
+}
+
+export const createError = (message: string) => {
+  consola.error(new Error(message))
+  process.exit(1)
 }
