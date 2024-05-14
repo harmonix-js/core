@@ -1,5 +1,34 @@
 # Changelog
 
+## v0.0.5
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.4...v0.0.5)
+
+### 🚀 Enhancements
+
+- Implementing commands preconditions (ownerOnly, userPermissions) ([494ce35](https://github.com/harmonix-js/core/commit/494ce35))
+- Implementing commands preconditions nsfw ([ffd23a9](https://github.com/harmonix-js/core/commit/ffd23a9))
+
+### 🩹 Fixes
+
+- Update discord.js version to latest ([f53ebd2](https://github.com/harmonix-js/core/commit/f53ebd2))
+
+### ✅ Tests
+
+- Playground ([c358307](https://github.com/harmonix-js/core/commit/c358307))
+
+### 🎨 Styles
+
+- Lint ([7190256](https://github.com/harmonix-js/core/commit/7190256))
+
+### 🤖 CI
+
+- Dependencies updater ([6a9702c](https://github.com/harmonix-js/core/commit/6a9702c))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.4
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.3...v0.0.4)
