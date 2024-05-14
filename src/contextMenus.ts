@@ -22,7 +22,8 @@ export const resolveHarmonixContextMenu = (
     const contextMenu = _jiti(_ctmPath) as HarmonixContextMenu
     const options: ContextMenuOptions = {
       name: contextMenu.options.name || filename(_ctmPath).split('.')[0],
-      type: contextMenu.options.type || 'message'
+      type: contextMenu.options.type || 'message',
+      ...contextMenu.options
     }
 
     return { options, callback: contextMenu.callback }

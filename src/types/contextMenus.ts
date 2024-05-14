@@ -1,6 +1,7 @@
 import type {
   CacheType,
   MessageContextMenuCommandInteraction,
+  PermissionsString,
   UserContextMenuCommandInteraction
 } from 'discord.js'
 
@@ -13,6 +14,8 @@ export type ContextMenuCallback = (
 export interface ContextMenuOptions {
   name?: string
   type?: 'message' | 'user'
+  userPermissions?: PermissionsString[]
+  preconditions?: string[]
 }
 
 export type DefineContextMenu = (
