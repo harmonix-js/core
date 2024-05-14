@@ -58,17 +58,31 @@ export type CommandExecute<Slash extends boolean, Args extends CommandArg[]> = (
   options: CommandExecuteOptions<Args>
 ) => void
 
-export interface CommandOptions {
+export interface MessageCommandOptions {
   name?: string
   description?: string
+  slash?: boolean
+  category?: string
+  args?: CommandArg[]
+  preconditions?: string[]
+  cooldown?: number
+}
+
+export interface SlashCommandOptions {
+  name?: string
+  description?: string
+  slash?: boolean
   category?: string
   args?: CommandArg[]
   nsfw?: boolean
-  slash?: boolean
-  ownerOnly?: boolean
   userPermissions?: PermissionsString[]
+  preconditions?: string[]
   cooldown?: number
 }
+
+export type CommandOptions<Slash extends boolean> = Slash extends true
+  ? SlashCommandOptions
+  : MessageCommandOptions
 
 export type HarmonixCommandInput =
   | string
@@ -78,6 +92,6 @@ export interface HarmonixCommand<
   Slash extends boolean,
   Args extends CommandArg[]
 > {
-  options: CommandOptions
+  options: CommandOptions<Slash>
   execute: CommandExecute<Slash, Args>
 }

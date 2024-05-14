@@ -29,7 +29,7 @@ export const resolveHarmonixCommand = (
     })
     const _cmdPath = _jiti.resolve(cmd)
     const command = _jiti(_cmdPath) as HarmonixCommand<boolean, CommandArg[]>
-    const options: CommandOptions = {
+    const options: CommandOptions<boolean> = {
       name: command.options.name || filename(_cmdPath).split('.')[0],
       category: command.options.category || filename(dirname(_cmdPath)),
       slash: command.options.slash || filename(_cmdPath).endsWith('.slash'),
@@ -42,8 +42,11 @@ export const resolveHarmonixCommand = (
   }
 }
 
-export const defineCommand = <Slash extends boolean, Args extends CommandArg[]>(
-  options: CommandOptions & { slash?: Slash; args?: Args },
+export const defineCommand = <
+  Slash extends boolean,
+  Args extends CommandArg[] = CommandArg[]
+>(
+  options: CommandOptions<Slash> & { slash?: Slash; args?: Args },
   execute: CommandExecute<Slash, Args>
 ): HarmonixCommand<Slash, Args> => {
   return { options, execute }
@@ -136,6 +139,12 @@ export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
         : ctm.options.type === 'user'
           ? ApplicationCommandType.User
           : ApplicationCommandType.Message
+    )
+    .setDefaultMemberPermissions(
+      ctm.options.userPermissions?.reduce(
+        (acc, perm) => acc | PermissionFlagsBits[perm],
+        0n
+      )
     )
 
   return builder.toJSON()

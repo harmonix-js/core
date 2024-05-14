@@ -28,6 +28,12 @@ export const scanContextMenus = async (harmonix: Harmonix) => {
   return files.map((f) => f.fullPath)
 }
 
+export const scanPreconditions = async (harmonix: Harmonix) => {
+  const files = await scanFiles(harmonix, 'preconditions')
+
+  return files.map((f) => f.fullPath)
+}
+
 const scanFiles = async (harmonix: Harmonix, name: string) => {
   const files = await Promise.all(
     harmonix.options.scanDirs!.map((dir) => scanDir(harmonix, dir, name))

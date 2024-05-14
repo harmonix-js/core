@@ -4,8 +4,7 @@ import {
   Routes,
   Events,
   type User,
-  ApplicationCommandOptionType,
-  ChannelType
+  ApplicationCommandOptionType
 } from 'discord.js'
 import consola from 'consola'
 import {
@@ -15,11 +14,13 @@ import {
   type HarmonixCommand,
   type HarmonixEvent,
   type MessageOrInteraction,
-  HarmonixContextMenu
+  type HarmonixContextMenu,
+  type HarmonixPrecondition
 } from './types'
 import 'dotenv/config'
 import { slashToJSON, contextMenuToJSON } from './commands'
 import { createError } from './harmonix'
+import { colors } from 'consola/utils'
 
 export const initCient = (harmonixOptions: Harmonix['options']) => {
   const client = new Client({ intents: harmonixOptions.intents })
@@ -47,9 +48,9 @@ export const refreshApplicationCommands = async (
         )
       }
     )
-    consola.success('Successfully reloaded application commands.')
+    consola.success('Successfully reloaded application commands.\n')
   } catch {
-    createError('Failed to reload application commands.')
+    createError('Failed to reload application commands.\n')
   }
 }
 
@@ -95,19 +96,21 @@ export const registerCommands = (
     )
     const fullArgs = Object.fromEntries(resolvedArgs)
 
-    if (cmd.options.ownerOnly) {
-      if (!harmonix.options.ownerId) {
-        createError('Owner ID is required for ownerOnly commands.')
+    if (cmd.options.preconditions) {
+      for (const prc of cmd.options.preconditions) {
+        const precondition = harmonix.preconditions.get(prc)
+
+        if (!precondition) {
+          consola.warn(`Precondition ${colors.cyan(prc)} not found.`)
+          continue
+        }
+        const result = precondition.callback(harmonix.options, {
+          type: 'message',
+          message
+        })
+
+        if (!result) return
       }
-      if (!isOwner(harmonix, message.author.id)) return // TODO: Make possibility to customize ownerOnly message
-    }
-    if (cmd.options.userPermissions) {
-      for (const perm of cmd.options.userPermissions) {
-        if (!message.member?.permissions.has(perm)) return // TODO: Make possibility to customize userPermissions message
-      }
-    }
-    if (cmd.options.nsfw && message.channel.type === ChannelType.GuildText) {
-      if (!message.channel.nsfw) return // TODO: Make possibility to customize nsfw message
     }
     cmd.execute(harmonix.client!, message, { slash: false, args: fullArgs })
   })
@@ -136,8 +139,21 @@ export const registerSlashCommands = (
     )
     const fullArgs = Object.fromEntries(resolvedArgs)
 
-    if (cmd.options.ownerOnly && harmonix.options.ownerId) {
-      if (!isOwner(harmonix, interaction.user.id)) return // TODO: Make possibility to customize ownerOnly message
+    if (cmd.options.preconditions) {
+      for (const prc of cmd.options.preconditions) {
+        const precondition = harmonix.preconditions.get(prc)
+
+        if (!precondition) {
+          consola.warn(`Precondition ${colors.cyan(prc)} not found.`)
+          continue
+        }
+        const result = precondition.callback(harmonix.options, {
+          type: 'slash',
+          interaction
+        })
+
+        if (!result) return
+      }
     }
     cmd.execute(harmonix.client!, interaction, {
       slash: false,
@@ -157,22 +173,33 @@ export const registerContextMenu = (
     )
 
     if (!ctm) return
+    if (ctm.options.preconditions) {
+      for (const prc of ctm.options.preconditions) {
+        const precondition = harmonix.preconditions.get(prc)
+
+        if (!precondition) {
+          consola.warn(`Precondition ${colors.cyan(prc)} not found.`)
+          continue
+        }
+        const result = precondition.callback(harmonix.options, {
+          type: 'context-menu',
+          interaction
+        })
+
+        if (!result) return
+      }
+    }
     ctm.callback(interaction)
   })
 }
 
-const isOwner = (harmonix: Harmonix, authorId: string) => {
-  if (
-    Array.isArray(harmonix.options.ownerId) &&
-    !harmonix.options.ownerId.includes(authorId)
-  )
-    return false
-  if (
-    typeof harmonix.options.ownerId === 'string' &&
-    authorId !== harmonix.options.ownerId
-  )
-    return false
-  return true
+export const registerPreconditions = (
+  harmonix: Harmonix,
+  preconditions: HarmonixPrecondition[]
+) => {
+  for (const prc of preconditions) {
+    harmonix.preconditions.set(prc.options.name!, prc)
+  }
 }
 
 const isHarmonixCommand = (
