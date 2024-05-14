@@ -1,56 +1,18 @@
-import jiti from 'jiti'
-import { dirname } from 'pathe'
-import { filename } from 'pathe/utils'
 import {
+  ApplicationCommandOptionType,
   ApplicationCommandType,
   ContextMenuCommandBuilder,
   PermissionFlagsBits,
-  SlashCommandBuilder
+  SlashCommandBuilder,
+  type User
 } from 'discord.js'
 import {
-  CommandArgType,
-  type HarmonixCommandArgType,
-  type CommandExecute,
-  type CommandOptions,
-  type Harmonix,
-  type HarmonixCommand,
-  type HarmonixCommandInput,
   type CommandArg,
-  HarmonixContextMenu
+  CommandArgType,
+  type HarmonixCommand,
+  type HarmonixContextMenu,
+  type MessageOrInteraction
 } from './types'
-
-export const resolveHarmonixCommand = (
-  cmd: HarmonixCommandInput,
-  harmonixOptions: Harmonix['options']
-): HarmonixCommand<boolean, CommandArg[]> => {
-  if (typeof cmd === 'string') {
-    const _jiti = jiti(harmonixOptions.rootDir, {
-      interopDefault: true
-    })
-    const _cmdPath = _jiti.resolve(cmd)
-    const command = _jiti(_cmdPath) as HarmonixCommand<boolean, CommandArg[]>
-    const options: CommandOptions<boolean> = {
-      name: command.options.name || filename(_cmdPath).split('.')[0],
-      category: command.options.category || filename(dirname(_cmdPath)),
-      slash: command.options.slash || filename(_cmdPath).endsWith('.slash'),
-      ...command.options
-    }
-
-    return { options, execute: command.execute }
-  } else {
-    return cmd
-  }
-}
-
-export const defineCommand = <
-  Slash extends boolean,
-  Args extends CommandArg[] = CommandArg[]
->(
-  options: CommandOptions<Slash> & { slash?: Slash; args?: Args },
-  execute: CommandExecute<Slash, Args>
-): HarmonixCommand<Slash, Args> => {
-  return { options, execute }
-}
 
 export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
   const builder = new SlashCommandBuilder()
@@ -150,18 +112,90 @@ export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
   return builder.toJSON()
 }
 
-export const defineArgument = <
-  Type extends keyof HarmonixCommandArgType
->(options: {
-  type: Type
-  name: string
-  description: string
-  required?: boolean
-}) => {
-  return {
-    type: options.type,
-    name: options.name,
-    description: options.description,
-    required: options.required ?? true
-  } as CommandArg
+export const isHarmonixCommand = (
+  command: HarmonixCommand<true, CommandArg[]> | HarmonixContextMenu
+): command is HarmonixCommand<true, CommandArg[]> => {
+  return (
+    (command as HarmonixCommand<true, CommandArg[]>).options.slash !== undefined
+  )
+}
+
+export const resolveArgument = async (
+  entity: MessageOrInteraction,
+  type: CommandArgType | null,
+  value: string
+) => {
+  switch (type) {
+    case CommandArgType.String:
+      return value
+    case CommandArgType.Integer:
+      return parseInt(value)
+    case CommandArgType.Boolean:
+      return value === 'true'
+    case CommandArgType.User:
+      const user = await resolveUser(entity, value)
+
+      return user
+    case CommandArgType.Channel:
+      const channel = await resolveChannel(entity, value)
+
+      return channel
+    case CommandArgType.Role:
+      const role = await resolveRole(entity, value)
+
+      return role
+    case CommandArgType.Number:
+      return parseFloat(value)
+  }
+}
+
+const resolveUser = async (
+  entity: MessageOrInteraction,
+  value: string
+): Promise<User | undefined> => {
+  return entity.guild?.members.cache.find(
+    (member) =>
+      member.user.username === value ||
+      member.nickname === value ||
+      member.id === value ||
+      value == `<@${member.id}>` ||
+      value == `<@!${member.id}>`
+  )?.user
+}
+
+const resolveChannel = async (entity: MessageOrInteraction, value: string) => {
+  return entity.guild?.channels.cache.find(
+    (channel) =>
+      channel.name === value ||
+      channel.id === value ||
+      value == `<#${channel.id}>`
+  )
+}
+
+const resolveRole = async (entity: MessageOrInteraction, value: string) => {
+  return entity.guild?.roles.cache.find(
+    (role) =>
+      role.name === value || role.id === value || value == `<@&${role.id}>`
+  )
+}
+
+export const optionToArg = (type: ApplicationCommandOptionType | null) => {
+  switch (type) {
+    case ApplicationCommandOptionType.String:
+      return CommandArgType.String
+    case ApplicationCommandOptionType.Integer:
+      return CommandArgType.Integer
+    case ApplicationCommandOptionType.Boolean:
+      return CommandArgType.Boolean
+    case ApplicationCommandOptionType.User:
+      return CommandArgType.User
+    case ApplicationCommandOptionType.Channel:
+      return CommandArgType.Channel
+    case ApplicationCommandOptionType.Role:
+      return CommandArgType.Role
+    case ApplicationCommandOptionType.Number:
+      return CommandArgType.Number
+    default:
+      return null
+  }
 }

@@ -24,7 +24,6 @@
   "dependencies": {
     "c12": "^1.10.0",
     "consola": "^3.2.3",
-    "defu": "^6.1.4",
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",
     "globby": "^14.0.1",
@@ -35,7 +34,6 @@
     "@types/node": "^20.12.8",
     "changelogen": "^0.5.5",
     "prettier": "^3.2.5",
-    "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "unbuild": "^2.0.0"
   },

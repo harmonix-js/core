@@ -1,6 +1,6 @@
 import type { TextInputStyle } from 'discord.js'
 
-export interface TextInput {
+interface TextInput {
   id: string
   label: string
   style: TextInputStyle

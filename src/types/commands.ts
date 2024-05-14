@@ -39,13 +39,13 @@ export type MessageOrInteraction =
   | Message
   | ChatInputCommandInteraction<CacheType>
 
-export type ExecuteArgument<Slash extends boolean> = Slash extends true
+type ExecuteArgument<Slash extends boolean> = Slash extends true
   ? ChatInputCommandInteraction<CacheType>
   : Slash extends false
     ? Message
     : MessageOrInteraction
 
-export type CommandExecuteOptions<Args extends CommandArg[]> = {
+type CommandExecuteOptions<Args extends CommandArg[]> = {
   slash: boolean
   args: {
     [K in Args[number]['name']]: any
@@ -58,7 +58,7 @@ export type CommandExecute<Slash extends boolean, Args extends CommandArg[]> = (
   options: CommandExecuteOptions<Args>
 ) => void
 
-export interface MessageCommandOptions {
+interface MessageCommandOptions {
   name?: string
   description?: string
   slash?: boolean
@@ -67,7 +67,7 @@ export interface MessageCommandOptions {
   preconditions?: string[]
 }
 
-export interface SlashCommandOptions {
+interface SlashCommandOptions {
   name?: string
   description?: string
   slash?: boolean

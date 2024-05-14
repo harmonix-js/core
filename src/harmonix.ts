@@ -8,21 +8,22 @@ import {
   scanEvents,
   scanPreconditions
 } from './scan'
-import { resolveHarmonixCommand } from './commands'
-import { resolveHarmonixEvent } from './events'
-import { resolveHarmonixContextMenu } from './contextMenus'
-import { resolveHarmonixPrecondition } from './preconditions'
+import { initCient, refreshApplicationCommands } from './discord'
 import {
-  initCient,
-  refreshApplicationCommands,
   registerCommands,
   registerContextMenu,
   registerEvents,
   registerPreconditions,
   registerSlashCommands
-} from './discord'
+} from './register'
 import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
 import { version } from '../package.json'
+import {
+  resolveCommand,
+  resolveContextMenu,
+  resolveEvent,
+  resolvePrecondition
+} from './resolve'
 
 export const createHarmonix = async (
   config: HarmonixConfig = {},
@@ -36,15 +37,11 @@ export const createHarmonix = async (
 
   const scannedCommands = await scanCommands(harmonix)
   const _commands = [...(harmonix.options.commands || []), ...scannedCommands]
-  const commands = _commands.map((cmd) =>
-    resolveHarmonixCommand(cmd, harmonix.options)
-  )
+  const commands = _commands.map((cmd) => resolveCommand(cmd, harmonix.options))
 
   const scannedEvents = await scanEvents(harmonix)
   const _events = [...(harmonix.options.events || []), ...scannedEvents]
-  const events = _events.map((evt) =>
-    resolveHarmonixEvent(evt, harmonix.options)
-  )
+  const events = _events.map((evt) => resolveEvent(evt, harmonix.options))
 
   const scannedContextMenus = await scanContextMenus(harmonix)
   const _contextMenus = [
@@ -52,7 +49,7 @@ export const createHarmonix = async (
     ...scannedContextMenus
   ]
   const contextMenus = _contextMenus.map((ctm) =>
-    resolveHarmonixContextMenu(ctm, harmonix.options)
+    resolveContextMenu(ctm, harmonix.options)
   )
 
   const scannedPreconditions = await scanPreconditions(harmonix)
@@ -61,7 +58,7 @@ export const createHarmonix = async (
     ...scannedPreconditions
   ]
   const preconditions = _preconditions.map((prc) =>
-    resolveHarmonixPrecondition(prc, harmonix.options)
+    resolvePrecondition(prc, harmonix.options)
   )
 
   if (!process.env.HARMONIX_CLIENT_TOKEN) {

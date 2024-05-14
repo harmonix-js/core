@@ -44,7 +44,3 @@ export const loadOptions = async (
 
   return options
 }
-
-export const defineHarmonixConfig = (config: HarmonixConfig) => {
-  return config
-}
