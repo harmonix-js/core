@@ -43,4 +43,3 @@ jobs:
           git config user.name ${{secrets.NAME}}
           git commit -am "fix: update dependencies" || echo "No changes to commit"
           git push
-
