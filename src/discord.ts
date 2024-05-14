@@ -4,7 +4,8 @@ import {
   Routes,
   Events,
   type User,
-  ApplicationCommandOptionType
+  ApplicationCommandOptionType,
+  ChannelType
 } from 'discord.js'
 import consola from 'consola'
 import {
@@ -104,6 +105,9 @@ export const registerCommands = (
       for (const perm of cmd.options.userPermissions) {
         if (!message.member?.permissions.has(perm)) return // TODO: Make possibility to customize userPermissions message
       }
+    }
+    if (cmd.options.nsfw && message.channel.type === ChannelType.GuildText) {
+      if (!message.channel.nsfw) return // TODO: Make possibility to customize nsfw message
     }
     cmd.execute(harmonix.client!, message, { slash: false, args: fullArgs })
   })

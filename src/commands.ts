@@ -59,6 +59,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
         0n
       )
     )
+    .setNSFW(cmd.options.nsfw || false)
 
   if (cmd.options.args) {
     for (const arg of cmd.options.args) {
