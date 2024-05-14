@@ -1,19 +1,28 @@
 import type { LoadConfigOptions } from 'c12'
 import consola from 'consola'
+import { colors } from 'consola/utils'
 import { loadOptions } from './options'
-import { scanCommands, scanContextMenus, scanEvents } from './scan'
+import {
+  scanCommands,
+  scanContextMenus,
+  scanEvents,
+  scanPreconditions
+} from './scan'
 import { resolveHarmonixCommand } from './commands'
 import { resolveHarmonixEvent } from './events'
 import { resolveHarmonixContextMenu } from './contextMenus'
+import { resolveHarmonixPrecondition } from './preconditions'
 import {
   initCient,
   refreshApplicationCommands,
   registerCommands,
   registerContextMenu,
   registerEvents,
+  registerPreconditions,
   registerSlashCommands
 } from './discord'
 import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
+import { version } from '../package.json'
 
 export const createHarmonix = async (
   config: HarmonixConfig = {},
@@ -21,7 +30,8 @@ export const createHarmonix = async (
 ) => {
   const options = await loadOptions(config, opts)
   const harmonix: Harmonix = {
-    options: options as HarmonixOptions
+    options: options as HarmonixOptions,
+    preconditions: new Map()
   }
 
   const scannedCommands = await scanCommands(harmonix)
@@ -45,6 +55,15 @@ export const createHarmonix = async (
     resolveHarmonixContextMenu(ctm, harmonix.options)
   )
 
+  const scannedPreconditions = await scanPreconditions(harmonix)
+  const _preconditions = [
+    ...(harmonix.options.preconditions || []),
+    ...scannedPreconditions
+  ]
+  const preconditions = _preconditions.map((prc) =>
+    resolveHarmonixPrecondition(prc, harmonix.options)
+  )
+
   if (!process.env.HARMONIX_CLIENT_TOKEN) {
     createError(
       'Client token is required. Please provide it in the environment variable HARMONIX_CLIENT_TOKEN.'
@@ -55,8 +74,10 @@ export const createHarmonix = async (
       'Client ID is required. You can provide it in the configuration file or in the environment variable HARMONIX_CLIENT_ID.'
     )
   }
+  consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
   harmonix.client = initCient(harmonix.options)
   registerEvents(harmonix, events)
+  registerPreconditions(harmonix, preconditions)
   await refreshApplicationCommands(harmonix, [
     ...commands.filter((cmd) => cmd.options.slash),
     ...contextMenus

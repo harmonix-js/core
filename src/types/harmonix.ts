@@ -7,6 +7,10 @@ import type {
 import type { HarmonixCommandInput } from './commands'
 import type { HarmonixEventInput } from './events'
 import type { HarmonixContextMenuInput } from './contextMenus'
+import type {
+  HarmonixPrecondition,
+  HarmonixPreconditionInput
+} from './preconditions'
 
 export interface HarmonixOptions {
   rootDir: string
@@ -16,10 +20,11 @@ export interface HarmonixOptions {
   commands: HarmonixCommandInput[]
   events: HarmonixEventInput[]
   contextMenus: HarmonixContextMenuInput[]
+  preconditions: HarmonixPreconditionInput[]
   defaultPrefix: string
   intents: BitFieldResolvable<GatewayIntentsString, number>
   clientId: string
-  ownerId: string | string[]
+  ownerId: string[]
 }
 
 type DeepPartial<T> =
@@ -34,4 +39,5 @@ export interface HarmonixConfig
 export interface Harmonix {
   options: HarmonixOptions
   client?: Client
+  preconditions: Map<string, HarmonixPrecondition>
 }
