@@ -65,7 +65,6 @@ export interface MessageCommandOptions {
   category?: string
   args?: CommandArg[]
   preconditions?: string[]
-  cooldown?: number
 }
 
 export interface SlashCommandOptions {
@@ -77,7 +76,6 @@ export interface SlashCommandOptions {
   nsfw?: boolean
   userPermissions?: PermissionsString[]
   preconditions?: string[]
-  cooldown?: number
 }
 
 export type CommandOptions<Slash extends boolean> = Slash extends true
