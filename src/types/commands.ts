@@ -2,7 +2,6 @@ import type {
   Client,
   Message,
   ChatInputCommandInteraction,
-  CacheType,
   PermissionsString,
   User,
   GuildBasedChannel,
@@ -145,10 +144,10 @@ export type CommandOptions<Slash extends boolean> = Slash extends true
 
 export type MessageOrInteraction =
   | Message
-  | ChatInputCommandInteraction<CacheType>
+  | ChatInputCommandInteraction
 
 type ExecuteArgument<Slash extends boolean> = Slash extends true
-  ? ChatInputCommandInteraction<CacheType>
+  ? ChatInputCommandInteraction
   : Slash extends false
     ? Message
     : MessageOrInteraction
