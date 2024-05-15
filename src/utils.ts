@@ -36,7 +36,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
             opt
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
-              .setRequired(arg.required || true)
+              .setRequired(arg.required ?? true)
 
             if (arg.metadata?.minLength) {
               opt.setMinLength(arg.metadata.minLength)
@@ -59,7 +59,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
             opt
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
-              .setRequired(arg.required || true)
+              .setRequired(arg.required ?? true)
 
             if (arg.metadata?.minValue) {
               opt.setMinValue(arg.metadata.minValue)
@@ -82,7 +82,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
             opt
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
-              .setRequired(arg.required || true)
+              .setRequired(arg.required ?? true)
           )
           break
         case 'User':
@@ -90,7 +90,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
             opt
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
-              .setRequired(arg.required || true)
+              .setRequired(arg.required ?? true)
           )
           break
         case 'Channel':
@@ -98,7 +98,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
             opt
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
-              .setRequired(arg.required || true)
+              .setRequired(arg.required ?? true)
 
             if (arg.metadata?.channelTypes) {
               for (const type of arg.metadata.channelTypes) {
@@ -114,7 +114,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
             opt
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
-              .setRequired(arg.required || true)
+              .setRequired(arg.required ?? true)
           )
           break
         case 'Number':
@@ -122,7 +122,7 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
             opt
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
-              .setRequired(arg.required || true)
+              .setRequired(arg.required ?? true)
 
             if (arg.metadata?.minValue) {
               opt.setMinValue(arg.metadata.minValue)
