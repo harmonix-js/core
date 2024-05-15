@@ -1,23 +1,21 @@
-import { defineArgument, defineCommand } from '../../../src'
+import { defineCommand } from '../../../src'
 
 export default defineCommand(
   {
     description: 'Kick a user from the server',
-    args: [
-      defineArgument({
+    args: {
+      user: {
         type: 'User',
-        name: 'user',
-        description: 'The user to kick'
-      }),
-      defineArgument({
+        description: 'The user to ban'
+      },
+      reason: {
         type: 'String',
-        name: 'reason',
-        description: 'The reason for the kick'
-      })
-    ]
+        description: 'The reason for the ban'
+      }
+    }
   },
-  (_, interaction, options) => {
-    const { user, reason } = options.args
+  (_, interaction, context) => {
+    const { user, reason } = context.args
 
     interaction.reply(`Kicked user ${user} for ${reason}`)
   }
