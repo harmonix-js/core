@@ -30,20 +30,50 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
     for (const arg of cmd.options.args) {
       switch (arg.type) {
         case CommandArgType.String:
-          builder.addStringOption((opt) =>
+          builder.addStringOption((opt) => {
             opt
               .setName(arg.name)
               .setDescription(arg.description)
               .setRequired(arg.required!)
-          )
+
+            if (arg.metadata?.minLength) {
+              opt.setMinLength(arg.metadata.minLength)
+            }
+            if (arg.metadata?.maxLength) {
+              opt.setMaxLength(arg.metadata.maxLength)
+            }
+            if (arg.metadata?.autocomplete) {
+              opt.setAutocomplete(arg.metadata.autocomplete)
+            }
+            if (arg.metadata?.choices) {
+              opt.addChoices(arg.metadata.choices)
+            }
+
+            return opt
+          })
           break
         case CommandArgType.Integer:
-          builder.addIntegerOption((opt) =>
+          builder.addIntegerOption((opt) => {
             opt
               .setName(arg.name)
               .setDescription(arg.description)
               .setRequired(arg.required!)
-          )
+
+            if (arg.metadata?.minValue) {
+              opt.setMinValue(arg.metadata.minValue)
+            }
+            if (arg.metadata?.maxValue) {
+              opt.setMaxValue(arg.metadata.maxValue)
+            }
+            if (arg.metadata?.autocomplete) {
+              opt.setAutocomplete(arg.metadata.autocomplete)
+            }
+            if (arg.metadata?.choices) {
+              opt.addChoices(arg.metadata.choices)
+            }
+
+            return opt
+          })
           break
         case CommandArgType.Boolean:
           builder.addBooleanOption((opt) =>
@@ -62,12 +92,20 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
           )
           break
         case CommandArgType.Channel:
-          builder.addChannelOption((opt) =>
+          builder.addChannelOption((opt) => {
             opt
               .setName(arg.name)
               .setDescription(arg.description)
               .setRequired(arg.required!)
-          )
+
+            if (arg.metadata?.channelTypes) {
+              for (const type of arg.metadata.channelTypes) {
+                opt.addChannelTypes(type)
+              }
+            }
+
+            return opt
+          })
           break
         case CommandArgType.Role:
           builder.addRoleOption((opt) =>
@@ -78,12 +116,27 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
           )
           break
         case CommandArgType.Number:
-          builder.addNumberOption((opt) =>
+          builder.addNumberOption((opt) => {
             opt
               .setName(arg.name)
               .setDescription(arg.description)
               .setRequired(arg.required!)
-          )
+
+            if (arg.metadata?.minValue) {
+              opt.setMinValue(arg.metadata.minValue)
+            }
+            if (arg.metadata?.maxValue) {
+              opt.setMaxValue(arg.metadata.maxValue)
+            }
+            if (arg.metadata?.autocomplete) {
+              opt.setAutocomplete(arg.metadata.autocomplete)
+            }
+            if (arg.metadata?.choices) {
+              opt.addChoices(arg.metadata.choices)
+            }
+
+            return opt
+          })
           break
       }
     }
