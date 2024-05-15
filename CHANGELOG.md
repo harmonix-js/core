@@ -1,5 +1,36 @@
 # Changelog
 
+## v0.0.7
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.6...v0.0.7)
+
+### 🚀 Enhancements
+
+- Add the possibility to specify if context menu is message or user in the type ([5c35735](https://github.com/harmonix-js/core/commit/5c35735))
+- Add metadata to command arguments ([ee04f7d](https://github.com/harmonix-js/core/commit/ee04f7d))
+- Apply metadata to slash commands ([1ea604b](https://github.com/harmonix-js/core/commit/1ea604b))
+- New argument handling more intuitive ([b96afe2](https://github.com/harmonix-js/core/commit/b96afe2))
+
+### 🩹 Fixes
+
+- Remove useless exports ([9309ada](https://github.com/harmonix-js/core/commit/9309ada))
+- Error message more explicit ([929b4ea](https://github.com/harmonix-js/core/commit/929b4ea))
+- Export types as types ([9c6ea03](https://github.com/harmonix-js/core/commit/9c6ea03))
+
+### ✅ Tests
+
+- Playground ([27ae63f](https://github.com/harmonix-js/core/commit/27ae63f))
+- Playground ([7115f74](https://github.com/harmonix-js/core/commit/7115f74))
+- Playground ([8debd58](https://github.com/harmonix-js/core/commit/8debd58))
+
+### 🤖 CI
+
+- Update cli lockfile when triggered ([6503300](https://github.com/harmonix-js/core/commit/6503300))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.6
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.5...v0.0.6)
