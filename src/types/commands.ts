@@ -33,6 +33,7 @@ export interface CommandArg {
   name: string
   description: string
   required?: boolean
+  metadata?: Record<string, any>
 }
 
 export type MessageOrInteraction =

@@ -151,11 +151,13 @@ export const defineArgument = <
   name: string
   description: string
   required?: boolean
+  metadata?: Record<string, any>
 }) => {
   return {
     type: options.type,
     name: options.name,
     description: options.description,
-    required: options.required ?? true
+    required: options.required ?? true,
+    metadata: options.metadata
   } as CommandArg
 }
