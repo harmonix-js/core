@@ -37,7 +37,7 @@ export const refreshApplicationCommands = async (
       }
     )
     consola.success('Successfully reloaded application commands.\n')
-  } catch {
-    createError('Failed to reload application commands.\n')
+  } catch (error: any) {
+    createError(error.message)
   }
 }
