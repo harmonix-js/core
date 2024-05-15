@@ -5,7 +5,7 @@ import {
   TextInputBuilder
 } from 'discord.js'
 import type {
-  CommandArg,
+  ArgsDef,
   CommandExecute,
   CommandOptions,
   ContextMenuCallback,
@@ -18,7 +18,6 @@ import type {
   EventCallback,
   EventOptions,
   HarmonixCommand,
-  HarmonixCommandArgType,
   HarmonixConfig,
   HarmonixContextMenu,
   HarmonixEvent,
@@ -61,11 +60,11 @@ export const defineEvent: DefineEvent & DefineEventWithOptions = <
 
 export const defineCommand = <
   Slash extends boolean,
-  Args extends CommandArg[] = CommandArg[]
+  T extends ArgsDef = ArgsDef
 >(
-  options: CommandOptions<Slash> & { slash?: Slash; args?: Args },
-  execute: CommandExecute<Slash, Args>
-): HarmonixCommand<Slash, Args> => {
+  options: CommandOptions<Slash> & { slash?: Slash; args?: T },
+  execute: CommandExecute<Slash, T>
+): HarmonixCommand<Slash, T> => {
   return { options, execute }
 }
 
@@ -142,22 +141,4 @@ export const definePrecondition: DefinePrecondition = (
   callback: PreconditionCallback
 ) => {
   return { options: {}, callback }
-}
-
-export const defineArgument = <
-  Type extends keyof HarmonixCommandArgType
->(options: {
-  type: Type
-  name: string
-  description: string
-  required?: boolean
-  metadata?: Record<string, any>
-}) => {
-  return {
-    type: options.type,
-    name: options.name,
-    description: options.description,
-    required: options.required ?? true,
-    metadata: options.metadata
-  } as CommandArg
 }

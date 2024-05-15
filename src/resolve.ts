@@ -2,7 +2,7 @@ import jiti from 'jiti'
 import { dirname } from 'pathe'
 import { filename } from 'pathe/utils'
 import type {
-  CommandArg,
+  ArgsDef,
   CommandOptions,
   ContextMenuOptions,
   EventOptions,
@@ -43,16 +43,16 @@ export const resolveEvent = (
   }
 }
 
-export const resolveCommand = (
+export const resolveMessageCommand = (
   cmd: HarmonixCommandInput,
   harmonixOptions: Harmonix['options']
-): HarmonixCommand<boolean, CommandArg[]> => {
+): HarmonixCommand<boolean, ArgsDef> => {
   if (typeof cmd === 'string') {
     const _jiti = jiti(harmonixOptions.rootDir, {
       interopDefault: true
     })
     const _cmdPath = _jiti.resolve(cmd)
-    const command = _jiti(_cmdPath) as HarmonixCommand<boolean, CommandArg[]>
+    const command = _jiti(_cmdPath) as HarmonixCommand<boolean, ArgsDef>
     const options: CommandOptions<boolean> = {
       name: command.options.name || filename(_cmdPath).split('.')[0],
       category: command.options.category || filename(dirname(_cmdPath)),

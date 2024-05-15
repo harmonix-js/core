@@ -3,12 +3,13 @@ import consola from 'consola'
 import { colors } from 'consola/utils'
 import { optionToArg, resolveArgument } from './utils'
 import type {
-  CommandArg,
+  ArgsDef,
   Harmonix,
   HarmonixCommand,
   HarmonixContextMenu,
   HarmonixEvent,
-  HarmonixPrecondition
+  HarmonixPrecondition,
+  ParsedArgs
 } from './types'
 
 export const registerEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
@@ -31,27 +32,35 @@ export const registerEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
   })
 }
 
-export const registerCommands = (
+export const registerMessageCommands = (
   harmonix: Harmonix,
-  commands: HarmonixCommand<false, CommandArg[]>[]
+  commands: HarmonixCommand<false, ArgsDef>[]
 ) => {
   harmonix.client?.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return
     const prefix = harmonix.options.defaultPrefix
-    const args = message.content.slice(prefix.length).trim().split(/ +/)
-    const command = args.shift()?.toLowerCase()
+    const rawArgs = message.content.slice(prefix.length).trim().split(/ +/)
+    const command = rawArgs.shift()?.toLowerCase()
 
     if (!command) return
     const cmd = commands.find((cmd) => cmd.options.name === command)
 
     if (!cmd || cmd.options.slash) return
-    const resolvedArgs = await Promise.all(
-      (cmd?.options.args || []).map(async (arg, i) => [
-        arg.name,
-        await resolveArgument(message, arg.type, args[i])
-      ])
-    )
-    const fullArgs = Object.fromEntries(resolvedArgs)
+    const args = await Object.keys(cmd.options.args || {}).reduce<
+      Promise<ParsedArgs>
+    >(async (acc, arg, index) => {
+      const resolvedAcc = await acc
+      const resolvedArg = await resolveArgument(
+        message,
+        cmd.options.args![arg].type,
+        rawArgs[index]
+      )
+
+      return {
+        ...resolvedAcc,
+        [arg]: resolvedArg
+      }
+    }, Promise.resolve({}))
 
     if (cmd.options.preconditions) {
       for (const prc of cmd.options.preconditions) {
@@ -69,13 +78,13 @@ export const registerCommands = (
         if (!result) return
       }
     }
-    cmd.execute(harmonix.client!, message, { slash: false, args: fullArgs })
+    cmd.execute(harmonix.client!, message, { slash: false, args })
   })
 }
 
 export const registerSlashCommands = (
   harmonix: Harmonix,
-  commands: HarmonixCommand<true, CommandArg[]>[]
+  commands: HarmonixCommand<true, ArgsDef>[]
 ) => {
   harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) return
@@ -84,17 +93,22 @@ export const registerSlashCommands = (
     )
 
     if (!cmd || !cmd.options.slash) return
-    const resolvedArgs = await Promise.all(
-      interaction.options.data.map(async (opt) => [
-        opt.name,
-        await resolveArgument(
+    const args = await interaction.options.data.reduce<Promise<ParsedArgs>>(
+      async (acc, opt) => {
+        const resolvedAcc = await acc
+        const resolvedArg = await resolveArgument(
           interaction,
           optionToArg(opt.type),
           String(opt.value)
         )
-      ])
+
+        return {
+          ...resolvedAcc,
+          [opt.name]: resolvedArg
+        }
+      },
+      Promise.resolve({})
     )
-    const fullArgs = Object.fromEntries(resolvedArgs)
 
     if (cmd.options.preconditions) {
       for (const prc of cmd.options.preconditions) {
@@ -114,7 +128,7 @@ export const registerSlashCommands = (
     }
     cmd.execute(harmonix.client!, interaction, {
       slash: false,
-      args: fullArgs
+      args
     })
   })
 }

@@ -6,15 +6,15 @@ import {
   SlashCommandBuilder,
   type User
 } from 'discord.js'
-import {
-  type CommandArg,
-  CommandArgType,
-  type HarmonixCommand,
-  type HarmonixContextMenu,
-  type MessageOrInteraction
+import type {
+  HarmonixCommand,
+  HarmonixContextMenu,
+  MessageOrInteraction,
+  ArgsDef,
+  ArgType
 } from './types'
 
-export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
+export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.options.name!)
     .setDescription(cmd.options.description || 'No description provided')
@@ -27,14 +27,16 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
     .setNSFW(cmd.options.nsfw || false)
 
   if (cmd.options.args) {
-    for (const arg of cmd.options.args) {
+    for (const name in cmd.options.args) {
+      const arg = cmd.options.args[name]
+
       switch (arg.type) {
-        case CommandArgType.String:
+        case 'String':
           builder.addStringOption((opt) => {
             opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required || true)
 
             if (arg.metadata?.minLength) {
               opt.setMinLength(arg.metadata.minLength)
@@ -52,12 +54,12 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
             return opt
           })
           break
-        case CommandArgType.Integer:
+        case 'Integer':
           builder.addIntegerOption((opt) => {
             opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required || true)
 
             if (arg.metadata?.minValue) {
               opt.setMinValue(arg.metadata.minValue)
@@ -75,28 +77,28 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
             return opt
           })
           break
-        case CommandArgType.Boolean:
+        case 'Boolean':
           builder.addBooleanOption((opt) =>
             opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required || true)
           )
           break
-        case CommandArgType.User:
+        case 'User':
           builder.addUserOption((opt) =>
             opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required || true)
           )
           break
-        case CommandArgType.Channel:
+        case 'Channel':
           builder.addChannelOption((opt) => {
             opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required || true)
 
             if (arg.metadata?.channelTypes) {
               for (const type of arg.metadata.channelTypes) {
@@ -107,20 +109,20 @@ export const slashToJSON = (cmd: HarmonixCommand<true, CommandArg[]>) => {
             return opt
           })
           break
-        case CommandArgType.Role:
+        case 'Role':
           builder.addRoleOption((opt) =>
             opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required || true)
           )
           break
-        case CommandArgType.Number:
+        case 'Number':
           builder.addNumberOption((opt) => {
             opt
-              .setName(arg.name)
-              .setDescription(arg.description)
-              .setRequired(arg.required!)
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required || true)
 
             if (arg.metadata?.minValue) {
               opt.setMinValue(arg.metadata.minValue)
@@ -166,38 +168,36 @@ export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
 }
 
 export const isHarmonixCommand = (
-  command: HarmonixCommand<true, CommandArg[]> | HarmonixContextMenu
-): command is HarmonixCommand<true, CommandArg[]> => {
-  return (
-    (command as HarmonixCommand<true, CommandArg[]>).options.slash !== undefined
-  )
+  command: HarmonixCommand<true, ArgsDef> | HarmonixContextMenu
+): command is HarmonixCommand<true, ArgsDef> => {
+  return (command as HarmonixCommand<true, ArgsDef>).options.slash !== undefined
 }
 
 export const resolveArgument = async (
   entity: MessageOrInteraction,
-  type: CommandArgType | null,
+  type: ArgType | null,
   value: string
 ) => {
   switch (type) {
-    case CommandArgType.String:
+    case 'String':
       return value
-    case CommandArgType.Integer:
+    case 'Integer':
       return parseInt(value)
-    case CommandArgType.Boolean:
+    case 'Boolean':
       return value === 'true'
-    case CommandArgType.User:
+    case 'User':
       const user = await resolveUser(entity, value)
 
       return user
-    case CommandArgType.Channel:
+    case 'Channel':
       const channel = await resolveChannel(entity, value)
 
       return channel
-    case CommandArgType.Role:
+    case 'Role':
       const role = await resolveRole(entity, value)
 
       return role
-    case CommandArgType.Number:
+    case 'Number':
       return parseFloat(value)
   }
 }
@@ -235,19 +235,19 @@ const resolveRole = async (entity: MessageOrInteraction, value: string) => {
 export const optionToArg = (type: ApplicationCommandOptionType | null) => {
   switch (type) {
     case ApplicationCommandOptionType.String:
-      return CommandArgType.String
+      return 'String'
     case ApplicationCommandOptionType.Integer:
-      return CommandArgType.Integer
+      return 'Integer'
     case ApplicationCommandOptionType.Boolean:
-      return CommandArgType.Boolean
+      return 'Boolean'
     case ApplicationCommandOptionType.User:
-      return CommandArgType.User
+      return 'User'
     case ApplicationCommandOptionType.Channel:
-      return CommandArgType.Channel
+      return 'Channel'
     case ApplicationCommandOptionType.Role:
-      return CommandArgType.Role
+      return 'Role'
     case ApplicationCommandOptionType.Number:
-      return CommandArgType.Number
+      return 'Number'
     default:
       return null
   }

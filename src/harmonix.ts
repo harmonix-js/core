@@ -10,20 +10,20 @@ import {
 } from './scan'
 import { initCient, refreshApplicationCommands } from './discord'
 import {
-  registerCommands,
+  registerMessageCommands,
   registerContextMenu,
   registerEvents,
   registerPreconditions,
   registerSlashCommands
 } from './register'
-import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
-import { version } from '../package.json'
 import {
-  resolveCommand,
+  resolveMessageCommand,
   resolveContextMenu,
   resolveEvent,
   resolvePrecondition
 } from './resolve'
+import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
+import { version } from '../package.json'
 
 export const createHarmonix = async (
   config: HarmonixConfig = {},
@@ -37,7 +37,9 @@ export const createHarmonix = async (
 
   const scannedCommands = await scanCommands(harmonix)
   const _commands = [...(harmonix.options.commands || []), ...scannedCommands]
-  const commands = _commands.map((cmd) => resolveCommand(cmd, harmonix.options))
+  const commands = _commands.map((cmd) =>
+    resolveMessageCommand(cmd, harmonix.options)
+  )
 
   const scannedEvents = await scanEvents(harmonix)
   const _events = [...(harmonix.options.events || []), ...scannedEvents]
@@ -79,7 +81,7 @@ export const createHarmonix = async (
     ...commands.filter((cmd) => cmd.options.slash),
     ...contextMenus
   ])
-  registerCommands(
+  registerMessageCommands(
     harmonix,
     commands.filter((cmd) => !cmd.options.slash)
   )

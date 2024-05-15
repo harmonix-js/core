@@ -3,38 +3,145 @@ import type {
   Message,
   ChatInputCommandInteraction,
   CacheType,
-  PermissionsString
+  PermissionsString,
+  User,
+  GuildBasedChannel,
+  Role
 } from 'discord.js'
 
-export enum CommandArgType {
-  String = 'String',
-  Integer = 'Integer',
-  Boolean = 'Boolean',
-  User = 'User',
-  Channel = 'Channel',
-  Role = 'Role',
-  Number = 'Number'
-}
+export type ArgType =
+  | 'String'
+  | 'Integer'
+  | 'Boolean'
+  | 'User'
+  | 'Channel'
+  | 'Role'
+  | 'Number'
 
-export interface HarmonixCommandArgType {
-  String: []
-  Integer: []
-  Boolean: []
-  User: []
-  Channel: []
-  Role: []
-  Mentionable: []
-  Number: []
-  Attachment: []
-}
-
-export interface CommandArg {
-  type: CommandArgType
-  name: string
-  description: string
+type _ArgDef<T extends ArgType> = {
+  type: T
+  description?: string
   required?: boolean
   metadata?: Record<string, any>
 }
+
+type StringArgDef = _ArgDef<'String'>
+type IntegerArgDef = _ArgDef<'Integer'>
+type BooleanArgDef = _ArgDef<'Boolean'>
+type UserArgDef = _ArgDef<'User'>
+type ChannelArgDef = _ArgDef<'Channel'>
+type RoleArgDef = _ArgDef<'Role'>
+type NumberArgDef = _ArgDef<'Number'>
+
+type ArgDef =
+  | StringArgDef
+  | IntegerArgDef
+  | BooleanArgDef
+  | UserArgDef
+  | ChannelArgDef
+  | RoleArgDef
+  | NumberArgDef
+export type ArgsDef = Record<string, ArgDef>
+
+interface MessageCommandOptions<T extends ArgsDef = ArgsDef> {
+  name?: string
+  description?: string
+  slash?: boolean
+  category?: string
+  args?: T
+  preconditions?: string[]
+}
+
+interface SlashCommandOptions<T extends ArgsDef = ArgsDef> {
+  name?: string
+  description?: string
+  slash?: boolean
+  category?: string
+  args?: T
+  nsfw?: boolean
+  userPermissions?: PermissionsString[]
+  preconditions?: string[]
+}
+
+export type ParsedArgs<T extends ArgsDef = ArgsDef> = Record<
+  {
+    [K in keyof T]: T[K] extends {
+      type: 'String'
+    }
+      ? K
+      : never
+  }[keyof T],
+  string | undefined
+> &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Integer'
+      }
+        ? K
+        : never
+    }[keyof T],
+    number | undefined
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Boolean'
+      }
+        ? K
+        : never
+    }[keyof T],
+    boolean | undefined
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'User'
+      }
+        ? K
+        : never
+    }[keyof T],
+    User | undefined
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Channel'
+      }
+        ? K
+        : never
+    }[keyof T],
+    GuildBasedChannel | undefined
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Role'
+      }
+        ? K
+        : never
+    }[keyof T],
+    Role | undefined
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Number'
+      }
+        ? K
+        : never
+    }[keyof T],
+    number | undefined
+  >
+
+interface CommandContext<T extends ArgsDef = ArgsDef> {
+  slash: boolean
+  args: ParsedArgs<T>
+}
+
+export type CommandOptions<Slash extends boolean> = Slash extends true
+  ? SlashCommandOptions
+  : MessageCommandOptions
 
 export type MessageOrInteraction =
   | Message
@@ -46,51 +153,21 @@ type ExecuteArgument<Slash extends boolean> = Slash extends true
     ? Message
     : MessageOrInteraction
 
-type CommandExecuteOptions<Args extends CommandArg[]> = {
-  slash: boolean
-  args: {
-    [K in Args[number]['name']]: any
-  }
-}
-
-export type CommandExecute<Slash extends boolean, Args extends CommandArg[]> = (
+export type CommandExecute<
+  Slash extends boolean,
+  T extends ArgsDef = ArgsDef
+> = (
   client: Client,
   entity: ExecuteArgument<Slash>,
-  options: CommandExecuteOptions<Args>
+  context: CommandContext<T>
 ) => void
 
-interface MessageCommandOptions {
-  name?: string
-  description?: string
-  slash?: boolean
-  category?: string
-  args?: CommandArg[]
-  preconditions?: string[]
-}
-
-interface SlashCommandOptions {
-  name?: string
-  description?: string
-  slash?: boolean
-  category?: string
-  args?: CommandArg[]
-  nsfw?: boolean
-  userPermissions?: PermissionsString[]
-  preconditions?: string[]
-}
-
-export type CommandOptions<Slash extends boolean> = Slash extends true
-  ? SlashCommandOptions
-  : MessageCommandOptions
-
-export type HarmonixCommandInput =
-  | string
-  | HarmonixCommand<boolean, CommandArg[]>
+export type HarmonixCommandInput = string | HarmonixCommand<boolean, ArgsDef>
 
 export interface HarmonixCommand<
   Slash extends boolean,
-  Args extends CommandArg[]
+  T extends ArgsDef = ArgsDef
 > {
   options: CommandOptions<Slash>
-  execute: CommandExecute<Slash, Args>
+  execute: CommandExecute<Slash, T>
 }
