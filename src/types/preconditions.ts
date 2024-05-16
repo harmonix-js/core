@@ -4,7 +4,6 @@ import type {
   MessageContextMenuCommandInteraction,
   UserContextMenuCommandInteraction
 } from 'discord.js'
-import type { Harmonix } from './harmonix'
 
 type MessageEntity = {
   readonly type: 'message'
@@ -27,7 +26,6 @@ type ContextMenuEntity = {
 }
 
 export type PreconditionCallback = (
-  harmonixOptions: Harmonix['options'],
   entity: MessageEntity | SlashEntity | ContextMenuEntity
 ) => boolean
 

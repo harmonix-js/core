@@ -1,11 +1,6 @@
 import { Client, REST, Routes } from 'discord.js'
 import consola from 'consola'
-import type {
-  ArgsDef,
-  Harmonix,
-  HarmonixCommand,
-  HarmonixContextMenu
-} from './types'
+import type { Harmonix } from './types'
 import 'dotenv/config'
 import { createError } from './harmonix'
 import { contextMenuToJSON, isHarmonixCommand, slashToJSON } from './utils'
@@ -18,10 +13,11 @@ export const initCient = (harmonixOptions: Harmonix['options']) => {
   return client
 }
 
-export const refreshApplicationCommands = async (
-  harmonix: Harmonix,
-  commands: (HarmonixCommand<true, ArgsDef> | HarmonixContextMenu)[]
-) => {
+export const refreshApplicationCommands = async (harmonix: Harmonix) => {
+  const commands = [
+    ...harmonix.commands.filter((cmd) => cmd.options.slash).map((cmd) => cmd),
+    ...harmonix.contextMenus.map((cmd) => cmd)
+  ]
   const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN!)
 
   try {

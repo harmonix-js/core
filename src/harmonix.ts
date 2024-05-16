@@ -1,4 +1,6 @@
+import { Collection } from 'discord.js'
 import type { LoadConfigOptions } from 'c12'
+import { getContext } from 'unctx'
 import consola from 'consola'
 import { colors } from 'consola/utils'
 import { loadOptions } from './options'
@@ -8,12 +10,17 @@ import {
   scanEvents,
   scanPreconditions
 } from './scan'
+import {
+  loadCommands,
+  loadContextMenus,
+  loadEvents,
+  loadPreconditions
+} from './load'
 import { initCient, refreshApplicationCommands } from './discord'
 import {
   registerMessageCommands,
   registerContextMenu,
   registerEvents,
-  registerPreconditions,
   registerSlashCommands
 } from './register'
 import {
@@ -25,6 +32,10 @@ import {
 import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
 import { version } from '../package.json'
 
+export const ctx = getContext<Harmonix>('harmonix')
+
+export const useHarmonix = ctx.use
+
 export const createHarmonix = async (
   config: HarmonixConfig = {},
   opts: LoadConfigOptions = {}
@@ -32,8 +43,10 @@ export const createHarmonix = async (
   const options = await loadOptions(config, opts)
   const harmonix: Harmonix = {
     options: options as HarmonixOptions,
-    preconditions: new Map(),
-    commands: new Map()
+    events: new Collection(),
+    commands: new Collection(),
+    contextMenus: new Collection(),
+    preconditions: new Collection()
   }
 
   const scannedCommands = await scanCommands(harmonix)
@@ -75,22 +88,19 @@ export const createHarmonix = async (
     )
   }
   consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
+
+  loadEvents(harmonix, events)
+  loadCommands(harmonix, commands)
+  loadContextMenus(harmonix, contextMenus)
+  loadPreconditions(harmonix, preconditions)
+
   harmonix.client = initCient(harmonix.options)
-  registerEvents(harmonix, events)
-  registerPreconditions(harmonix, preconditions)
-  await refreshApplicationCommands(harmonix, [
-    ...commands.filter((cmd) => cmd.options.slash),
-    ...contextMenus
-  ])
-  registerMessageCommands(
-    harmonix,
-    commands.filter((cmd) => !cmd.options.slash)
-  )
-  registerSlashCommands(
-    harmonix,
-    commands.filter((cmd) => cmd.options.slash)
-  )
-  registerContextMenu(harmonix, contextMenus)
+
+  registerEvents(harmonix)
+  await refreshApplicationCommands(harmonix)
+  registerMessageCommands(harmonix)
+  registerSlashCommands(harmonix)
+  registerContextMenu(harmonix)
 
   return harmonix
 }

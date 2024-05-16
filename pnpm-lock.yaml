@@ -31,6 +31,9 @@ importers:
       pathe:
         specifier: ^1.1.2
         version: 1.1.2
+      unctx:
+        specifier: ^2.3.1
+        version: 2.3.1
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -1327,6 +1330,12 @@ packages:
         integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==
       }
 
+  estree-walker@3.0.3:
+    resolution:
+      {
+        integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==
+      }
+
   execa@5.1.1:
     resolution:
       {
@@ -2553,6 +2562,12 @@ packages:
       typescript:
         optional: true
 
+  unctx@2.3.1:
+    resolution:
+      {
+        integrity: sha512-PhKke8ZYauiqh3FEMVNm7ljvzQiph0Mt3GBRve03IJm7ukfaON2OBK795tLwhbyfzknuRRkW0+Ze+CQUmzOZ+A==
+      }
+
   undici-types@5.26.5:
     resolution:
       {
@@ -2579,6 +2594,13 @@ packages:
         integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==
       }
     engines: { node: '>= 10.0.0' }
+
+  unplugin@1.10.1:
+    resolution:
+      {
+        integrity: sha512-d6Mhq8RJeGA8UfKCu54Um4lFA0eSaRa3XxdAJg8tIdxbu1ubW0hBCZUL7yI2uGyYCRndvbK8FLHzqy2XKfeMsg==
+      }
+    engines: { node: '>=14.0.0' }
 
   untildify@4.0.0:
     resolution:
@@ -2607,6 +2629,19 @@ packages:
     resolution:
       {
         integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
+      }
+
+  webpack-sources@3.2.3:
+    resolution:
+      {
+        integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
+      }
+    engines: { node: '>=10.13.0' }
+
+  webpack-virtual-modules@0.6.1:
+    resolution:
+      {
+        integrity: sha512-poXpCylU7ExuvZK8z+On3kX+S8o/2dQ/SVYueKA0D4WEMXROXgY8Ez50/bQEUmvoSMMrWcrJqCHuhAbsiwg7Dg==
       }
 
   which@2.0.2:
@@ -3436,6 +3471,10 @@ snapshots:
 
   estree-walker@2.0.2: {}
 
+  estree-walker@3.0.3:
+    dependencies:
+      '@types/estree': 1.0.5
+
   execa@5.1.1:
     dependencies:
       cross-spawn: 7.0.3
@@ -4122,6 +4161,13 @@ snapshots:
       - supports-color
       - vue-tsc
 
+  unctx@2.3.1:
+    dependencies:
+      acorn: 8.11.3
+      estree-walker: 3.0.3
+      magic-string: 0.30.10
+      unplugin: 1.10.1
+
   undici-types@5.26.5: {}
 
   undici@6.13.0: {}
@@ -4129,6 +4175,13 @@ snapshots:
   unicorn-magic@0.1.0: {}
 
   universalify@2.0.1: {}
+
+  unplugin@1.10.1:
+    dependencies:
+      acorn: 8.11.3
+      chokidar: 3.6.0
+      webpack-sources: 3.2.3
+      webpack-virtual-modules: 0.6.1
 
   untildify@4.0.0: {}
 
@@ -4151,6 +4204,10 @@ snapshots:
       picocolors: 1.0.0
 
   util-deprecate@1.0.2: {}
+
+  webpack-sources@3.2.3: {}
+
+  webpack-virtual-modules@0.6.1: {}
 
   which@2.0.2:
     dependencies:

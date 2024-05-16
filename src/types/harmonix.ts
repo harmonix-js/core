@@ -2,11 +2,15 @@ import type { C12InputConfig } from 'c12'
 import type {
   Client,
   BitFieldResolvable,
-  GatewayIntentsString
+  GatewayIntentsString,
+  Collection
 } from 'discord.js'
 import type { HarmonixCommand, HarmonixCommandInput } from './commands'
-import type { HarmonixEventInput } from './events'
-import type { HarmonixContextMenuInput } from './contextMenus'
+import type { HarmonixEvent, HarmonixEventInput } from './events'
+import type {
+  HarmonixContextMenu,
+  HarmonixContextMenuInput
+} from './contextMenus'
 import type {
   HarmonixPrecondition,
   HarmonixPreconditionInput
@@ -39,6 +43,8 @@ export interface HarmonixConfig
 export interface Harmonix {
   options: HarmonixOptions
   client?: Client
-  preconditions: Map<string, HarmonixPrecondition>
-  commands: Map<string, HarmonixCommand>
+  events: Collection<string, HarmonixEvent>
+  commands: Collection<string, HarmonixCommand>
+  contextMenus: Collection<string, HarmonixContextMenu>
+  preconditions: Collection<string, HarmonixPrecondition>
 }
