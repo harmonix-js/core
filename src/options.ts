@@ -5,7 +5,11 @@ import { createError } from './harmonix'
 
 const HarmonixDefaults: HarmonixConfig = {
   scanDirs: [],
-  ignore: []
+  ignore: [],
+  commands: [],
+  events: [],
+  contextMenus: [],
+  preconditions: []
 }
 
 export const loadOptions = async (
@@ -36,11 +40,16 @@ export const loadOptions = async (
   )
   options.scanDirs = [...new Set(options.scanDirs)]
   options.defaultPrefix = options.defaultPrefix || '!'
-  options.intents = options.intents || [
+
+  const intents = options.clientOptions?.intents || [
     'Guilds',
     'GuildMessages',
-    'MessageContent'
+    'MessageContent',
+    'GuildMembers'
   ]
+
+  options.clientOptions = options.clientOptions || {}
+  options.clientOptions.intents = intents
 
   return options
 }

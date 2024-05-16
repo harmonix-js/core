@@ -1,10 +1,5 @@
 import type { C12InputConfig } from 'c12'
-import type {
-  Client,
-  BitFieldResolvable,
-  GatewayIntentsString,
-  Collection
-} from 'discord.js'
+import type { Client, Collection, ClientOptions } from 'discord.js'
 import type { HarmonixCommand, HarmonixCommandInput } from './commands'
 import type { HarmonixEvent, HarmonixEventInput } from './events'
 import type {
@@ -26,7 +21,7 @@ export interface HarmonixOptions {
   contextMenus: HarmonixContextMenuInput[]
   preconditions: HarmonixPreconditionInput[]
   defaultPrefix: string
-  intents: BitFieldResolvable<GatewayIntentsString, number>
+  clientOptions: ClientOptions
   clientId: string
   ownerId: string[]
 }

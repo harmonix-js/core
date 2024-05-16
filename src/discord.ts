@@ -6,7 +6,7 @@ import { createError } from './harmonix'
 import { contextMenuToJSON, isHarmonixCommand, slashToJSON } from './utils'
 
 export const initCient = (harmonixOptions: Harmonix['options']) => {
-  const client = new Client({ intents: harmonixOptions.intents })
+  const client = new Client(harmonixOptions.clientOptions)
 
   client.login(process.env.HARMONIX_CLIENT_TOKEN)
 
