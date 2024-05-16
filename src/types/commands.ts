@@ -138,13 +138,11 @@ interface CommandContext<T extends ArgsDef = ArgsDef> {
   args: ParsedArgs<T>
 }
 
-export type CommandOptions<Slash extends boolean> = Slash extends true
+export type CommandOptions<K extends boolean = boolean> = K extends true
   ? SlashCommandOptions
   : MessageCommandOptions
 
-export type MessageOrInteraction =
-  | Message
-  | ChatInputCommandInteraction
+export type MessageOrInteraction = Message | ChatInputCommandInteraction
 
 type ExecuteArgument<Slash extends boolean> = Slash extends true
   ? ChatInputCommandInteraction
@@ -161,12 +159,12 @@ export type CommandExecute<
   context: CommandContext<T>
 ) => void
 
-export type HarmonixCommandInput = string | HarmonixCommand<boolean, ArgsDef>
+export type HarmonixCommandInput = string | HarmonixCommand
 
 export interface HarmonixCommand<
-  Slash extends boolean,
+  K extends boolean = boolean,
   T extends ArgsDef = ArgsDef
 > {
-  options: CommandOptions<Slash>
-  execute: CommandExecute<Slash, T>
+  options: CommandOptions<K>
+  execute: CommandExecute<K, T>
 }

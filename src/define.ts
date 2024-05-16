@@ -59,12 +59,12 @@ export const defineEvent: DefineEvent & DefineEventWithOptions = <
 }
 
 export const defineCommand = <
-  Slash extends boolean,
+  K extends boolean = boolean,
   T extends ArgsDef = ArgsDef
 >(
-  options: CommandOptions<Slash> & { slash?: Slash; args?: T },
-  execute: CommandExecute<Slash, T>
-): HarmonixCommand<Slash, T> => {
+  options: CommandOptions<K> & { slash?: K; args?: T },
+  execute: CommandExecute<K, T>
+): HarmonixCommand<K, T> => {
   return { options, execute }
 }
 
