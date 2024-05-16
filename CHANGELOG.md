@@ -1,5 +1,36 @@
 # Changelog
 
+## v0.0.8
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.7...v0.0.8)
+
+### 🚀 Enhancements
+
+- Add a command map ([74bab6e](https://github.com/harmonix-js/core/commit/74bab6e))
+- Add useHamronix function to access to harmonix instance ([1339153](https://github.com/harmonix-js/core/commit/1339153))
+
+### 🩹 Fixes
+
+- Required is always true ([d2b2fc4](https://github.com/harmonix-js/core/commit/d2b2fc4))
+- Remove useless discord type ([a8036d7](https://github.com/harmonix-js/core/commit/a8036d7))
+- Add default type for slash generic type ([e71f2c9](https://github.com/harmonix-js/core/commit/e71f2c9))
+
+### ✅ Tests
+
+- Playground ([d39952e](https://github.com/harmonix-js/core/commit/d39952e))
+
+### 🎨 Styles
+
+- Lint ([cbbbcdd](https://github.com/harmonix-js/core/commit/cbbbcdd))
+
+### 🤖 CI
+
+- Fix update workflow ([6be5d01](https://github.com/harmonix-js/core/commit/6be5d01))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.7
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.6...v0.0.7)
