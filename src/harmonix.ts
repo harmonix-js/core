@@ -32,7 +32,8 @@ export const createHarmonix = async (
   const options = await loadOptions(config, opts)
   const harmonix: Harmonix = {
     options: options as HarmonixOptions,
-    preconditions: new Map()
+    preconditions: new Map(),
+    commands: new Map()
   }
 
   const scannedCommands = await scanCommands(harmonix)

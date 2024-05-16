@@ -4,7 +4,7 @@ import type {
   BitFieldResolvable,
   GatewayIntentsString
 } from 'discord.js'
-import type { HarmonixCommandInput } from './commands'
+import type { HarmonixCommand, HarmonixCommandInput } from './commands'
 import type { HarmonixEventInput } from './events'
 import type { HarmonixContextMenuInput } from './contextMenus'
 import type {
@@ -40,4 +40,5 @@ export interface Harmonix {
   options: HarmonixOptions
   client?: Client
   preconditions: Map<string, HarmonixPrecondition>
+  commands: Map<string, HarmonixCommand>
 }
