@@ -4,7 +4,8 @@ import { defineCommand, defineModal } from '../../../src'
 export default defineCommand(
   {
     slash: true,
-    description: 'Test the bot'
+    description: 'Test the bot',
+    preconditions: ['ownerOnly']
   },
   async (_, interaction) => {
     const modal = defineModal({
