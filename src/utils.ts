@@ -4,6 +4,9 @@ import {
   ContextMenuCommandBuilder,
   PermissionFlagsBits,
   SlashCommandBuilder,
+  channelMention,
+  roleMention,
+  userMention,
   type User
 } from 'discord.js'
 import type {
@@ -211,8 +214,8 @@ const resolveUser = async (
       member.user.username === value ||
       member.nickname === value ||
       member.id === value ||
-      value == `<@${member.id}>` ||
-      value == `<@!${member.id}>`
+      userMention(member.id) === value ||
+      `<@!${member.id}>` === value
   )?.user
 }
 
@@ -221,14 +224,14 @@ const resolveChannel = async (entity: MessageOrInteraction, value: string) => {
     (channel) =>
       channel.name === value ||
       channel.id === value ||
-      value == `<#${channel.id}>`
+      channelMention(channel.id) === value
   )
 }
 
 const resolveRole = async (entity: MessageOrInteraction, value: string) => {
   return entity.guild?.roles.cache.find(
     (role) =>
-      role.name === value || role.id === value || value == `<@&${role.id}>`
+      role.name === value || role.id === value || roleMention(role.id) === value
   )
 }
 
