@@ -1,32 +1,23 @@
 import type {
   ChatInputCommandInteraction,
-  Message,
   MessageContextMenuCommandInteraction,
   UserContextMenuCommandInteraction
 } from 'discord.js'
 
-type MessageEntity = {
-  readonly type: 'message'
-  readonly message: Message
-  readonly interaction?: undefined
-}
-
 type SlashEntity = {
   readonly type: 'slash'
-  readonly message?: undefined
   readonly interaction: ChatInputCommandInteraction
 }
 
 type ContextMenuEntity = {
   readonly type: 'context-menu'
-  readonly message?: undefined
   readonly interaction:
     | MessageContextMenuCommandInteraction
     | UserContextMenuCommandInteraction
 }
 
 export type PreconditionCallback = (
-  entity: MessageEntity | SlashEntity | ContextMenuEntity
+  entity: SlashEntity | ContextMenuEntity
 ) => boolean
 
 export interface PreconditionOptions {
