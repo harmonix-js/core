@@ -1,5 +1,44 @@
 # Changelog
 
+## v0.0.9
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.8...v0.0.9)
+
+### 🚀 Enhancements
+
+- Add defineEmbed and defineAttachment ([bc2a139](https://github.com/harmonix-js/core/commit/bc2a139))
+- Add clientOptions to config file ([dd3d9d2](https://github.com/harmonix-js/core/commit/dd3d9d2))
+- Add guildOnly command and all commands are slash ([824afca](https://github.com/harmonix-js/core/commit/824afca))
+
+### 🩹 Fixes
+
+- If no clientId is specify, client id of the bot will be automatically used ([7458310](https://github.com/harmonix-js/core/commit/7458310))
+- Use ready client argument instead of harmonix client ([b2c2f74](https://github.com/harmonix-js/core/commit/b2c2f74))
+- Change HARMONIX_CLIENT_TOKEN env variable to DISCORD_CLIENT_TOKEN ([6be6d93](https://github.com/harmonix-js/core/commit/6be6d93))
+- Remove useless logs ([29e8979](https://github.com/harmonix-js/core/commit/29e8979))
+- Remove useless types ([9ab460a](https://github.com/harmonix-js/core/commit/9ab460a))
+- Replace precondition object by name ([c64e65e](https://github.com/harmonix-js/core/commit/c64e65e))
+
+### 💅 Refactors
+
+- Use discord.js function for mentions ([621c622](https://github.com/harmonix-js/core/commit/621c622))
+
+### 📖 Documentation
+
+- Update command usage ([20263e1](https://github.com/harmonix-js/core/commit/20263e1))
+
+### ✅ Tests
+
+- Playground ([b48d895](https://github.com/harmonix-js/core/commit/b48d895))
+
+### 🤖 CI
+
+- Fix update workflow ([fff1b3a](https://github.com/harmonix-js/core/commit/fff1b3a))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.8
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.7...v0.0.8)
