@@ -59,7 +59,6 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
         ctx.call(harmonix, () => readyEvent.callback(client))
       }
     } catch (error: any) {
-      console.log(error)
       createError(error.message)
     }
   })
