@@ -20,17 +20,18 @@ export type PreconditionCallback = (
   entity: SlashEntity | ContextMenuEntity
 ) => boolean
 
-export interface PreconditionOptions {
-  name?: string
-}
-
 export type DefinePrecondition = (
+  callback: PreconditionCallback
+) => HarmonixPrecondition
+
+export type DefinePreconditionWithName = (
+  name: string,
   callback: PreconditionCallback
 ) => HarmonixPrecondition
 
 export type HarmonixPreconditionInput = string | HarmonixPrecondition
 
 export interface HarmonixPrecondition {
-  options: PreconditionOptions
+  name: string
   callback: PreconditionCallback
 }

@@ -18,6 +18,7 @@ import type {
   DefineEvent,
   DefineEventWithOptions,
   DefinePrecondition,
+  DefinePreconditionWithName,
   EmbedOptions,
   EmbedSetters,
   EventCallback,
@@ -101,10 +102,25 @@ export const defineContextMenu: DefineContextMenu &
   }
 }
 
-export const definePrecondition: DefinePrecondition = (
-  callback: PreconditionCallback
+export const definePrecondition: DefinePrecondition &
+  DefinePreconditionWithName = (
+  ...args: [PreconditionCallback | string, PreconditionCallback?]
 ) => {
-  return { options: {}, callback }
+  let name = ''
+  let callback: PreconditionCallback
+
+  if (args.length === 1) {
+    const [cb] = args as [PreconditionCallback]
+
+    callback = cb
+  } else {
+    const [nm, cb] = args as [string, PreconditionCallback]
+
+    name = nm
+    callback = cb
+  }
+
+  return { name, callback }
 }
 
 export const defineModal = (options: ModalOptions): ModalBuilder => {

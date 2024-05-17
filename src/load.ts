@@ -35,6 +35,6 @@ export const loadPreconditions = (
   preconditions: HarmonixPrecondition[]
 ) => {
   for (const prc of preconditions) {
-    harmonix.preconditions.set(prc.options.name!, prc)
+    harmonix.preconditions.set(prc.name!, prc)
   }
 }

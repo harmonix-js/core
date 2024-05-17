@@ -13,8 +13,7 @@ import type {
   HarmonixEvent,
   HarmonixEventInput,
   HarmonixPrecondition,
-  HarmonixPreconditionInput,
-  PreconditionOptions
+  HarmonixPreconditionInput
 } from './types'
 
 export const resolveEvent = (
@@ -96,11 +95,9 @@ export const resolvePrecondition = (
     })
     const _prcPath = _jiti.resolve(prc)
     const precondition = _jiti(_prcPath) as HarmonixPrecondition
-    const options: PreconditionOptions = {
-      name: precondition.options.name || filename(_prcPath).split('.')[0]
-    }
+    const name = precondition.name || filename(_prcPath).split('.')[0]
 
-    return { options, callback: precondition.callback }
+    return { name, callback: precondition.callback }
   } else {
     return prc
   }
