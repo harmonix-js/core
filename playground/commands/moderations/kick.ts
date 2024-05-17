@@ -3,7 +3,7 @@ import { defineCommand } from '../../../src'
 export default defineCommand(
   {
     description: 'Kick a user from the server',
-    args: {
+    options: {
       user: {
         type: 'User',
         description: 'The user to ban'
@@ -15,7 +15,7 @@ export default defineCommand(
     }
   },
   (_, interaction, context) => {
-    const { user, reason } = context.args
+    const { user, reason } = context.options
 
     interaction.reply(`Kicked user ${user} for ${reason}`)
   }

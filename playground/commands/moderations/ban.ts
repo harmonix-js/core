@@ -2,9 +2,8 @@ import { defineCommand } from '../../../src'
 
 export default defineCommand(
   {
-    slash: true,
     description: 'Ban a user from the server',
-    args: {
+    options: {
       user: {
         type: 'User',
         description: 'The user to ban'
@@ -17,7 +16,7 @@ export default defineCommand(
     userPermissions: ['Administrator']
   },
   (_, interaction, context) => {
-    const { user, reason } = context.args
+    const { user, reason } = context.options
 
     interaction.reply(`Banned user ${user} for ${reason}`)
   }

@@ -3,8 +3,8 @@ import { defineCommand, defineModal } from '../../../src'
 
 export default defineCommand(
   {
-    slash: true,
     description: 'Test the bot',
+    guildOnly: true,
     preconditions: ['ownerOnly']
   },
   async (_, interaction) => {
