@@ -20,13 +20,11 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
   ]
   const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN!)
 
-  harmonix.client?.once('ready', async () => {
+  harmonix.client?.once('ready', async (client) => {
     try {
       consola.info('Started refreshing application commands.')
       await rest.put(
-        Routes.applicationCommands(
-          harmonix.options.clientId || harmonix.client?.user?.id || ''
-        ),
+        Routes.applicationCommands(harmonix.options.clientId || client.user.id),
         {
           body: commands.map((cmd) =>
             isHarmonixCommand(cmd) ? slashToJSON(cmd) : contextMenuToJSON(cmd)
@@ -37,7 +35,7 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
       const readyEvent = harmonix.events.get('ready')
 
       if (readyEvent) {
-        ctx.call(harmonix, () => readyEvent.callback(harmonix.client as any))
+        ctx.call(harmonix, () => readyEvent.callback(client))
       }
     } catch (error: any) {
       createError(error.message)
