@@ -23,8 +23,8 @@ export default defineCommand(
   {
     description: 'Ping command'
   },
-  (client, message) => {
-    message.reply('Pong!')
+  (client, interaction) => {
+    interaction.reply('Pong!')
   }
 )
 ```
