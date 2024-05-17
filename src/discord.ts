@@ -8,7 +8,7 @@ import { contextMenuToJSON, isHarmonixCommand, slashToJSON } from './utils'
 export const initCient = (harmonixOptions: Harmonix['options']) => {
   const client = new Client(harmonixOptions.clientOptions)
 
-  client.login(process.env.HARMONIX_CLIENT_TOKEN)
+  client.login(process.env.DISCORD_CLIENT_TOKEN)
 
   return client
 }
@@ -18,7 +18,7 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
     ...harmonix.commands.filter((cmd) => cmd.options.slash).map((cmd) => cmd),
     ...harmonix.contextMenus.map((cmd) => cmd)
   ]
-  const rest = new REST().setToken(process.env.HARMONIX_CLIENT_TOKEN!)
+  const rest = new REST().setToken(process.env.DISCORD_CLIENT_TOKEN!)
 
   harmonix.client?.once('ready', async (client) => {
     try {

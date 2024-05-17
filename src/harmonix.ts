@@ -77,14 +77,9 @@ export const createHarmonix = async (
     resolvePrecondition(prc, harmonix.options)
   )
 
-  if (!process.env.HARMONIX_CLIENT_TOKEN) {
+  if (!process.env.DISCORD_CLIENT_TOKEN) {
     createError(
-      'Client token is required. Please provide it in the environment variable HARMONIX_CLIENT_TOKEN.'
-    )
-  }
-  if (!harmonix.options.clientId && !process.env.HARMONIX_CLIENT_ID) {
-    createError(
-      'Client ID is required. You can provide it in the configuration file or in the environment variable HARMONIX_CLIENT_ID.'
+      'Client token is required. Please provide it in the environment variable DISCORD_CLIENT_TOKEN.'
     )
   }
   consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
