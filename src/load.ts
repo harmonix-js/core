@@ -17,7 +17,7 @@ export const loadCommands = (
   commands: HarmonixCommand[]
 ) => {
   for (const cmd of commands) {
-    harmonix.commands.set(cmd.options.name!, cmd)
+    harmonix.commands.set(cmd.config.name!, cmd)
   }
 }
 
@@ -26,7 +26,7 @@ export const loadContextMenus = (
   contextMenus: HarmonixContextMenu[]
 ) => {
   for (const ctm of contextMenus) {
-    harmonix.contextMenus.set(ctm.options.name!, ctm)
+    harmonix.contextMenus.set(ctm.config.name!, ctm)
   }
 }
 

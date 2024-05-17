@@ -9,11 +9,10 @@ import {
 } from 'discord.js'
 import type { Stream } from 'node:stream'
 import type {
-  ArgsDef,
+  CommandConfig,
   CommandExecute,
-  CommandOptions,
   ContextMenuCallback,
-  ContextMenuOptions,
+  ContextMenuConfig,
   DefineContextMenu,
   DefineContextMenuWithOptions,
   DefineEvent,
@@ -29,6 +28,7 @@ import type {
   HarmonixEvent,
   HarmonixEvents,
   ModalOptions,
+  OptionsDef,
   PreconditionCallback
 } from './types'
 
@@ -64,41 +64,38 @@ export const defineEvent: DefineEvent & DefineEventWithOptions = <
   }
 }
 
-export const defineCommand = <
-  K extends boolean = boolean,
-  T extends ArgsDef = ArgsDef
->(
-  options: CommandOptions<K> & { slash?: K; args?: T },
-  execute: CommandExecute<K, T>
-): HarmonixCommand<K, T> => {
-  return { options, execute }
+export const defineCommand = <T extends OptionsDef = OptionsDef>(
+  config: CommandConfig & { options?: T },
+  execute: CommandExecute<T>
+): HarmonixCommand<T> => {
+  return { config, execute }
 }
 
 export const defineContextMenu: DefineContextMenu &
   DefineContextMenuWithOptions = <Type extends 'message' | 'user'>(
   ...args: [
-    ContextMenuOptions | ContextMenuCallback<Type>,
+    ContextMenuConfig | ContextMenuCallback<Type>,
     ContextMenuCallback<Type>?
   ]
 ): HarmonixContextMenu => {
-  let options: ContextMenuOptions = {}
+  let config: ContextMenuConfig = {}
 
   if (args.length === 1) {
     const [callback] = args as [ContextMenuCallback<Type>]
 
     return {
-      options,
+      config,
       callback
     }
   } else {
-    const [opts, callback] = args as [
-      ContextMenuOptions,
+    const [cfg, callback] = args as [
+      ContextMenuConfig,
       ContextMenuCallback<Type>
     ]
 
-    options = opts
+    config = cfg
     return {
-      options,
+      config,
       callback
     }
   }

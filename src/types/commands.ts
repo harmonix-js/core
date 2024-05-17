@@ -1,6 +1,5 @@
 import type {
   Client,
-  Message,
   ChatInputCommandInteraction,
   PermissionsString,
   User,
@@ -8,7 +7,7 @@ import type {
   Role
 } from 'discord.js'
 
-export type ArgType =
+export type OptionType =
   | 'String'
   | 'Integer'
   | 'Boolean'
@@ -17,52 +16,32 @@ export type ArgType =
   | 'Role'
   | 'Number'
 
-type _ArgDef<T extends ArgType> = {
+type _OptionDef<T extends OptionType> = {
   type: T
   description?: string
   required?: boolean
   metadata?: Record<string, any>
 }
 
-type StringArgDef = _ArgDef<'String'>
-type IntegerArgDef = _ArgDef<'Integer'>
-type BooleanArgDef = _ArgDef<'Boolean'>
-type UserArgDef = _ArgDef<'User'>
-type ChannelArgDef = _ArgDef<'Channel'>
-type RoleArgDef = _ArgDef<'Role'>
-type NumberArgDef = _ArgDef<'Number'>
+type StringOptionDef = _OptionDef<'String'>
+type IntegerOptionDef = _OptionDef<'Integer'>
+type BooleanOptionDef = _OptionDef<'Boolean'>
+type UserOptionDef = _OptionDef<'User'>
+type ChannelOptionDef = _OptionDef<'Channel'>
+type RoleOptionDef = _OptionDef<'Role'>
+type NumberOptionDef = _OptionDef<'Number'>
 
-type ArgDef =
-  | StringArgDef
-  | IntegerArgDef
-  | BooleanArgDef
-  | UserArgDef
-  | ChannelArgDef
-  | RoleArgDef
-  | NumberArgDef
-export type ArgsDef = Record<string, ArgDef>
+type OptionDef =
+  | StringOptionDef
+  | IntegerOptionDef
+  | BooleanOptionDef
+  | UserOptionDef
+  | ChannelOptionDef
+  | RoleOptionDef
+  | NumberOptionDef
+export type OptionsDef = Record<string, OptionDef>
 
-interface MessageCommandOptions<T extends ArgsDef = ArgsDef> {
-  name?: string
-  description?: string
-  slash?: boolean
-  category?: string
-  args?: T
-  preconditions?: string[]
-}
-
-interface SlashCommandOptions<T extends ArgsDef = ArgsDef> {
-  name?: string
-  description?: string
-  slash?: boolean
-  category?: string
-  args?: T
-  nsfw?: boolean
-  userPermissions?: PermissionsString[]
-  preconditions?: string[]
-}
-
-export type ParsedArgs<T extends ArgsDef = ArgsDef> = Record<
+export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
   {
     [K in keyof T]: T[K] extends {
       type: 'String'
@@ -133,38 +112,30 @@ export type ParsedArgs<T extends ArgsDef = ArgsDef> = Record<
     number | undefined
   >
 
-interface CommandContext<T extends ArgsDef = ArgsDef> {
-  slash: boolean
-  args: ParsedArgs<T>
+interface CommandContext<T extends OptionsDef = OptionsDef> {
+  options: ParsedOptions<T>
 }
 
-export type CommandOptions<K extends boolean = boolean> = K extends true
-  ? SlashCommandOptions
-  : MessageCommandOptions
+export interface CommandConfig<T extends OptionsDef = OptionsDef> {
+  name?: string
+  description?: string
+  category?: string
+  options?: T
+  nsfw?: boolean
+  userPermissions?: PermissionsString[]
+  guildOnly?: boolean
+  preconditions?: string[]
+}
 
-export type MessageOrInteraction = Message | ChatInputCommandInteraction
-
-type ExecuteArgument<Slash extends boolean> = Slash extends true
-  ? ChatInputCommandInteraction
-  : Slash extends false
-    ? Message
-    : MessageOrInteraction
-
-export type CommandExecute<
-  Slash extends boolean,
-  T extends ArgsDef = ArgsDef
-> = (
+export type CommandExecute<T extends OptionsDef = OptionsDef> = (
   client: Client,
-  entity: ExecuteArgument<Slash>,
+  interaction: ChatInputCommandInteraction,
   context: CommandContext<T>
 ) => void
 
 export type HarmonixCommandInput = string | HarmonixCommand
 
-export interface HarmonixCommand<
-  K extends boolean = boolean,
-  T extends ArgsDef = ArgsDef
-> {
-  options: CommandOptions<K>
-  execute: CommandExecute<K, T>
+export interface HarmonixCommand<T extends OptionsDef = OptionsDef> {
+  config: CommandConfig<T>
+  execute: CommandExecute<T>
 }

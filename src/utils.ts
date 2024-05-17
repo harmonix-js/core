@@ -1,6 +1,7 @@
 import {
   ApplicationCommandOptionType,
   ApplicationCommandType,
+  ChatInputCommandInteraction,
   ContextMenuCommandBuilder,
   PermissionFlagsBits,
   SlashCommandBuilder,
@@ -12,26 +13,25 @@ import {
 import type {
   HarmonixCommand,
   HarmonixContextMenu,
-  MessageOrInteraction,
-  ArgsDef,
-  ArgType
+  OptionType,
+  OptionsDef
 } from './types'
 
-export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
+export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
   const builder = new SlashCommandBuilder()
-    .setName(cmd.options.name!)
-    .setDescription(cmd.options.description || 'No description provided')
+    .setName(cmd.config.name!)
+    .setDescription(cmd.config.description || 'No description provided')
     .setDefaultMemberPermissions(
-      cmd.options.userPermissions?.reduce(
+      cmd.config.userPermissions?.reduce(
         (acc, perm) => acc | PermissionFlagsBits[perm],
         0n
       )
     )
-    .setNSFW(cmd.options.nsfw || false)
+    .setNSFW(cmd.config.nsfw || false)
 
-  if (cmd.options.args) {
-    for (const name in cmd.options.args) {
-      const arg = cmd.options.args[name]
+  if (cmd.config.options) {
+    for (const name in cmd.config.options) {
+      const arg = cmd.config.options[name]
 
       switch (arg.type) {
         case 'String':
@@ -152,16 +152,16 @@ export const slashToJSON = (cmd: HarmonixCommand<true, ArgsDef>) => {
 
 export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
   const builder = new ContextMenuCommandBuilder()
-    .setName(ctm.options.name!)
+    .setName(ctm.config.name!)
     .setType(
-      ctm.options.type === 'message'
+      ctm.config.type === 'message'
         ? ApplicationCommandType.Message
-        : ctm.options.type === 'user'
+        : ctm.config.type === 'user'
           ? ApplicationCommandType.User
           : ApplicationCommandType.Message
     )
     .setDefaultMemberPermissions(
-      ctm.options.userPermissions?.reduce(
+      ctm.config.userPermissions?.reduce(
         (acc, perm) => acc | PermissionFlagsBits[perm],
         0n
       )
@@ -171,14 +171,14 @@ export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
 }
 
 export const isHarmonixCommand = (
-  command: HarmonixCommand<true, ArgsDef> | HarmonixContextMenu
-): command is HarmonixCommand<true, ArgsDef> => {
-  return (command as HarmonixCommand<true, ArgsDef>).options.slash !== undefined
+  command: HarmonixCommand<OptionsDef> | HarmonixContextMenu
+): command is HarmonixCommand<OptionsDef> => {
+  return (command as HarmonixCommand<OptionsDef>).config.category !== undefined
 }
 
-export const resolveArgument = async (
-  entity: MessageOrInteraction,
-  type: ArgType | null,
+export const resolveOption = async (
+  interaction: ChatInputCommandInteraction,
+  type: OptionType | null,
   value: string
 ) => {
   switch (type) {
@@ -189,15 +189,15 @@ export const resolveArgument = async (
     case 'Boolean':
       return value === 'true'
     case 'User':
-      const user = await resolveUser(entity, value)
+      const user = await resolveUser(interaction, value)
 
       return user
     case 'Channel':
-      const channel = await resolveChannel(entity, value)
+      const channel = await resolveChannel(interaction, value)
 
       return channel
     case 'Role':
-      const role = await resolveRole(entity, value)
+      const role = await resolveRole(interaction, value)
 
       return role
     case 'Number':
@@ -206,10 +206,10 @@ export const resolveArgument = async (
 }
 
 const resolveUser = async (
-  entity: MessageOrInteraction,
+  interaction: ChatInputCommandInteraction,
   value: string
 ): Promise<User | undefined> => {
-  return entity.guild?.members.cache.find(
+  return interaction.guild?.members.cache.find(
     (member) =>
       member.user.username === value ||
       member.nickname === value ||
@@ -219,8 +219,11 @@ const resolveUser = async (
   )?.user
 }
 
-const resolveChannel = async (entity: MessageOrInteraction, value: string) => {
-  return entity.guild?.channels.cache.find(
+const resolveChannel = async (
+  interaction: ChatInputCommandInteraction,
+  value: string
+) => {
+  return interaction.guild?.channels.cache.find(
     (channel) =>
       channel.name === value ||
       channel.id === value ||
@@ -228,14 +231,17 @@ const resolveChannel = async (entity: MessageOrInteraction, value: string) => {
   )
 }
 
-const resolveRole = async (entity: MessageOrInteraction, value: string) => {
-  return entity.guild?.roles.cache.find(
+const resolveRole = async (
+  interaction: ChatInputCommandInteraction,
+  value: string
+) => {
+  return interaction.guild?.roles.cache.find(
     (role) =>
       role.name === value || role.id === value || roleMention(role.id) === value
   )
 }
 
-export const optionToArg = (type: ApplicationCommandOptionType | null) => {
+export const toOption = (type: ApplicationCommandOptionType | null) => {
   switch (type) {
     case ApplicationCommandOptionType.String:
       return 'String'

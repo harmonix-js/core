@@ -21,9 +21,10 @@ export interface HarmonixOptions {
   contextMenus: HarmonixContextMenuInput[]
   preconditions: HarmonixPreconditionInput[]
   defaultPrefix: string
-  clientOptions: ClientOptions
+  client: ClientOptions
   clientId: string
   ownerId: string[]
+  guildId: string[]
 }
 
 type DeepPartial<T> =

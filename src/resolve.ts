@@ -2,8 +2,8 @@ import jiti from 'jiti'
 import { dirname } from 'pathe'
 import { filename } from 'pathe/utils'
 import type {
-  CommandOptions,
-  ContextMenuOptions,
+  CommandConfig,
+  ContextMenuConfig,
   EventOptions,
   Harmonix,
   HarmonixCommand,
@@ -42,7 +42,7 @@ export const resolveEvent = (
   }
 }
 
-export const resolveMessageCommand = (
+export const resolveCommand = (
   cmd: HarmonixCommandInput,
   harmonixOptions: Harmonix['options']
 ): HarmonixCommand => {
@@ -52,14 +52,13 @@ export const resolveMessageCommand = (
     })
     const _cmdPath = _jiti.resolve(cmd)
     const command = _jiti(_cmdPath) as HarmonixCommand
-    const options: CommandOptions = {
-      name: command.options.name || filename(_cmdPath).split('.')[0],
-      category: command.options.category || filename(dirname(_cmdPath)),
-      slash: command.options.slash || filename(_cmdPath).endsWith('.slash'),
-      ...command.options
+    const config: CommandConfig = {
+      name: command.config.name || filename(_cmdPath).split('.')[0],
+      category: command.config.category || filename(dirname(_cmdPath)),
+      ...command.config
     }
 
-    return { options, execute: command.execute }
+    return { config, execute: command.execute }
   } else {
     return cmd
   }
@@ -75,13 +74,13 @@ export const resolveContextMenu = (
     })
     const _ctmPath = _jiti.resolve(ctm)
     const contextMenu = _jiti(_ctmPath) as HarmonixContextMenu
-    const options: ContextMenuOptions = {
-      name: contextMenu.options.name || filename(_ctmPath).split('.')[0],
-      type: contextMenu.options.type || 'message',
-      ...contextMenu.options
+    const config: ContextMenuConfig = {
+      name: contextMenu.config.name || filename(_ctmPath).split('.')[0],
+      type: contextMenu.config.type || 'message',
+      ...contextMenu.config
     }
 
-    return { options, callback: contextMenu.callback }
+    return { config, callback: contextMenu.callback }
   } else {
     return ctm
   }

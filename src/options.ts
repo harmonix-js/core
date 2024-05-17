@@ -41,15 +41,15 @@ export const loadOptions = async (
   options.scanDirs = [...new Set(options.scanDirs)]
   options.defaultPrefix = options.defaultPrefix || '!'
 
-  const intents = options.clientOptions?.intents || [
+  const intents = options.client?.intents || [
     'Guilds',
     'GuildMessages',
     'MessageContent',
     'GuildMembers'
   ]
 
-  options.clientOptions = options.clientOptions || {}
-  options.clientOptions.intents = intents
+  options.client = options.client || {}
+  options.client.intents = intents
 
   return options
 }
