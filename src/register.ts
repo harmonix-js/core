@@ -7,6 +7,7 @@ import type { Harmonix, HarmonixEvents, ParsedArgs } from './types'
 
 export const registerEvents = (harmonix: Harmonix) => {
   for (const [, event] of harmonix.events.filter((evt) => !evt.options.type)) {
+    if (event.options.name === 'ready') continue
     if (event.options.once) {
       harmonix.client?.once(event.options.name!, (...args) => {
         ctx.call(harmonix, () => {
