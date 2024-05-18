@@ -1,5 +1,31 @@
 # Changelog
 
+## v0.0.10
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.9...v0.0.10)
+
+### 🚀 Enhancements
+
+- Add button handling ([31b46e1](https://github.com/harmonix-js/core/commit/31b46e1))
+- Add select menu handling ([8589471](https://github.com/harmonix-js/core/commit/8589471))
+
+### 🩹 Fixes
+
+- Remove guildOnly commands ([7967c8a](https://github.com/harmonix-js/core/commit/7967c8a))
+
+### ✅ Tests
+
+- Playground ([8f504f7](https://github.com/harmonix-js/core/commit/8f504f7))
+- Playground ([95f8843](https://github.com/harmonix-js/core/commit/95f8843))
+
+### 🎨 Styles
+
+- Rename ownerId to ownerIds ([4271d1d](https://github.com/harmonix-js/core/commit/4271d1d))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.9
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.8...v0.0.9)
