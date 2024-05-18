@@ -23,7 +23,7 @@ export interface HarmonixOptions {
   defaultPrefix: string
   client: ClientOptions
   clientId: string
-  ownerId: string[]
+  ownerIds: string[]
 }
 
 type DeepPartial<T> =
