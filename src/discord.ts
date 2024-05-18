@@ -26,32 +26,11 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
       await rest.put(
         Routes.applicationCommands(harmonix.options.clientId || client.user.id),
         {
-          body: commands
-            .filter((cmd) => !cmd.config.guildOnly)
-            .map((cmd) =>
-              isHarmonixCommand(cmd) ? slashToJSON(cmd) : contextMenuToJSON(cmd)
-            )
-        }
-      )
-      if (harmonix.options.guildId) {
-        for (const guildId of harmonix.options.guildId) {
-          await rest.put(
-            Routes.applicationGuildCommands(
-              harmonix.options.clientId || client.user.id,
-              guildId
-            ),
-            {
-              body: commands
-                .filter((cmd) => cmd.config.guildOnly)
-                .map((cmd) =>
-                  isHarmonixCommand(cmd)
-                    ? slashToJSON(cmd)
-                    : contextMenuToJSON(cmd)
-                )
-            }
+          body: commands.map((cmd) =>
+            isHarmonixCommand(cmd) ? slashToJSON(cmd) : contextMenuToJSON(cmd)
           )
         }
-      }
+      )
       consola.success('Successfully reloaded application commands.\n')
       const readyEvent = harmonix.events.get('ready')
 

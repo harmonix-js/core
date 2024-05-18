@@ -123,7 +123,6 @@ export interface CommandConfig<T extends OptionsDef = OptionsDef> {
   options?: T
   nsfw?: boolean
   userPermissions?: PermissionsString[]
-  guildOnly?: boolean
   preconditions?: string[]
 }
 

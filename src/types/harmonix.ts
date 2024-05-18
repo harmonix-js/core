@@ -24,7 +24,6 @@ export interface HarmonixOptions {
   client: ClientOptions
   clientId: string
   ownerId: string[]
-  guildId: string[]
 }
 
 type DeepPartial<T> =
