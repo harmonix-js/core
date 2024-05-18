@@ -1,7 +1,12 @@
-import type { ClientEvents, ModalSubmitInteraction } from 'discord.js'
+import type {
+  ButtonInteraction,
+  ClientEvents,
+  ModalSubmitInteraction
+} from 'discord.js'
 
 export interface HarmonixEvents extends ClientEvents {
   modal: [interaction: ModalSubmitInteraction]
+  button: [interaction: ButtonInteraction]
 }
 
 export type EventCallback<Event extends keyof HarmonixEvents | any = any> = (
@@ -11,7 +16,7 @@ export type EventCallback<Event extends keyof HarmonixEvents | any = any> = (
 export interface EventOptions {
   name?: string
   once?: boolean
-  type?: 'modal'
+  type?: 'modal' | 'button'
 }
 
 export type DefineEvent = <Event extends keyof HarmonixEvents = any>(

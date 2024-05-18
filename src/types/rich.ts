@@ -1,9 +1,11 @@
-import {
-  type ColorResolvable,
-  type EmbedAuthorOptions,
-  type EmbedFooterOptions,
-  type APIEmbedField,
-  type TextInputStyle
+import type {
+  ColorResolvable,
+  EmbedAuthorOptions,
+  EmbedFooterOptions,
+  APIEmbedField,
+  TextInputStyle,
+  ButtonStyle,
+  ComponentEmojiResolvable
 } from 'discord.js'
 
 interface TextInput {
@@ -38,4 +40,13 @@ export interface EmbedOptions {
 
 export type EmbedSetters = {
   [K in keyof EmbedOptions]: (value: EmbedOptions[K]) => void
+}
+
+export interface ButtonOptions {
+  id: string
+  label?: string
+  style?: keyof typeof ButtonStyle
+  emoji?: ComponentEmojiResolvable
+  url?: string
+  disabled?: boolean
 }

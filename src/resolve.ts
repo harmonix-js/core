@@ -30,9 +30,10 @@ export const resolveEvent = (
       name: event.options.name || filename(_evtPath).split('.')[0],
       once: event.options.once || filename(_evtPath).endsWith('.once'),
       type:
-        event.options.type || filename(dirname(_evtPath)) === 'modals'
-          ? 'modal'
-          : undefined
+        event.options.type ||
+        ((['modals', 'buttons'].includes(filename(dirname(_evtPath)))
+          ? filename(dirname(_evtPath)).slice(0, -1)
+          : undefined) as EventOptions['type'])
     }
 
     return { options, callback: event.callback }

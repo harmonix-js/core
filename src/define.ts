@@ -1,14 +1,18 @@
 import {
   ActionRowBuilder,
-  type ModalActionRowComponentBuilder,
   ModalBuilder,
   TextInputBuilder,
   EmbedBuilder,
   AttachmentBuilder,
-  type BufferResolvable
+  type BufferResolvable,
+  ButtonBuilder,
+  ButtonStyle,
+  type AnyComponentBuilder,
+  type RestOrArray
 } from 'discord.js'
 import type { Stream } from 'node:stream'
 import type {
+  ButtonOptions,
   CommandConfig,
   CommandExecute,
   ContextMenuCallback,
@@ -123,6 +127,16 @@ export const definePrecondition: DefinePrecondition &
   return { name, callback }
 }
 
+export const defineActionRow = <
+  T extends AnyComponentBuilder = AnyComponentBuilder
+>(
+  ...components: RestOrArray<T>
+): ActionRowBuilder<T> => {
+  const builder = new ActionRowBuilder<T>().addComponents(...components)
+
+  return builder
+}
+
 export const defineModal = (options: ModalOptions): ModalBuilder => {
   const builder = new ModalBuilder()
     .setCustomId(options.id)
@@ -150,10 +164,7 @@ export const defineModal = (options: ModalOptions): ModalBuilder => {
       if (input.required) {
         inputBuilder.setRequired(input.required)
       }
-      const row =
-        new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-          inputBuilder
-        )
+      const row = defineActionRow(inputBuilder)
 
       builder.addComponents(row)
     }
@@ -188,4 +199,25 @@ export const defineEmbed = (options: EmbedOptions) => {
 
 export const defineAttachment = (args: BufferResolvable | Stream) => {
   return new AttachmentBuilder(args)
+}
+
+export const defineButton = (options: ButtonOptions) => {
+  const builder = new ButtonBuilder()
+    .setCustomId(options.id)
+    .setStyle(options.style ? ButtonStyle[options.style] : ButtonStyle.Primary)
+
+  if (options.label) {
+    builder.setLabel(options.label)
+  }
+  if (options.emoji) {
+    builder.setEmoji(options.emoji)
+  }
+  if (options.url) {
+    builder.setURL(options.url)
+  }
+  if (options.disabled) {
+    builder.setDisabled(options.disabled)
+  }
+
+  return builder
 }

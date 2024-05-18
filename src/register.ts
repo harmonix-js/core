@@ -34,6 +34,17 @@ export const registerEvents = (harmonix: Harmonix) => {
       event.callback(interaction)
     })
   })
+  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isButton()) return
+    const event = harmonix.events
+      .filter((evt) => evt.options.type === 'button')
+      .find((evt) => evt.options.name === interaction.customId)
+
+    if (!event) return
+    ctx.call(harmonix, () => {
+      event.callback(interaction)
+    })
+  })
 }
 
 export const registerCommands = (harmonix: Harmonix) => {
