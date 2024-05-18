@@ -5,7 +5,10 @@ import type {
   APIEmbedField,
   TextInputStyle,
   ButtonStyle,
-  ComponentEmojiResolvable
+  ComponentEmojiResolvable,
+  ChannelType,
+  APISelectMenuDefaultValue,
+  SelectMenuDefaultValueType
 } from 'discord.js'
 
 interface TextInput {
@@ -50,3 +53,54 @@ export interface ButtonOptions {
   url?: string
   disabled?: boolean
 }
+
+export interface StringSelectMenuOptions {
+  type: 'String'
+  options: {
+    label: string
+    value: string
+    description?: string
+    emoji?: ComponentEmojiResolvable
+    default?: boolean
+  }[]
+}
+
+export interface UserSelectMenuOptions {
+  type: 'User'
+  defaultUsers?: string[]
+}
+
+export interface ChannelSelectMenuOptions {
+  type: 'Channel'
+  channelTypes?: ChannelType[]
+  defaultChannels?: string[]
+}
+
+export interface RoleSelectMenuOptions {
+  type: 'Role'
+  defaultRoles?: string[]
+}
+
+export interface MentionableSelectMenuOptions {
+  type: 'Mentionable'
+  defaultValues?:
+    | APISelectMenuDefaultValue<SelectMenuDefaultValueType.Role>[]
+    | APISelectMenuDefaultValue<SelectMenuDefaultValueType.User>[]
+}
+
+export interface BaseSelectMenuOptions {
+  id: string
+  placeholder: string
+  disabled?: boolean
+  minValues?: number
+  maxValues?: number
+}
+
+export type SelectMenuOptions = BaseSelectMenuOptions &
+  (
+    | StringSelectMenuOptions
+    | UserSelectMenuOptions
+    | ChannelSelectMenuOptions
+    | RoleSelectMenuOptions
+    | MentionableSelectMenuOptions
+  )

@@ -8,11 +8,18 @@ import {
   ButtonBuilder,
   ButtonStyle,
   type AnyComponentBuilder,
-  type RestOrArray
+  type RestOrArray,
+  StringSelectMenuBuilder,
+  UserSelectMenuBuilder,
+  ChannelSelectMenuBuilder,
+  RoleSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+  MentionableSelectMenuBuilder
 } from 'discord.js'
 import type { Stream } from 'node:stream'
 import type {
   ButtonOptions,
+  ChannelSelectMenuOptions,
   CommandConfig,
   CommandExecute,
   ContextMenuCallback,
@@ -32,10 +39,16 @@ import type {
   HarmonixContextMenu,
   HarmonixEvent,
   HarmonixEvents,
+  MentionableSelectMenuOptions,
   ModalOptions,
   OptionsDef,
-  PreconditionCallback
+  PreconditionCallback,
+  RoleSelectMenuOptions,
+  SelectMenuOptions,
+  StringSelectMenuOptions,
+  UserSelectMenuOptions
 } from './types'
+import { createError } from './harmonix'
 
 export const defineHarmonixConfig = (config: HarmonixConfig) => {
   return config
@@ -220,4 +233,135 @@ export const defineButton = (options: ButtonOptions) => {
   }
 
   return builder
+}
+
+export const defineSelectMenu = (options: SelectMenuOptions) => {
+  const { id, placeholder, type, disabled, minValues, maxValues } = options
+
+  switch (type) {
+    case 'String': {
+      const stringOptions = options as StringSelectMenuOptions
+      const selectMenu = new StringSelectMenuBuilder()
+        .setCustomId(id)
+        .setPlaceholder(placeholder)
+
+      if (disabled) {
+        selectMenu.setDisabled(disabled)
+      }
+      if (minValues) {
+        selectMenu.setMinValues(minValues)
+      }
+      if (maxValues) {
+        selectMenu.setMaxValues(maxValues)
+      }
+      stringOptions.options.forEach((option) => {
+        const optionBuilder = new StringSelectMenuOptionBuilder()
+          .setLabel(option.label)
+          .setValue(option.value)
+
+        if (option.description) {
+          optionBuilder.setDescription(option.description)
+        }
+        if (option.emoji) {
+          optionBuilder.setEmoji(option.emoji)
+        }
+        if (option.default) {
+          optionBuilder.setDefault(true)
+        }
+
+        selectMenu.addOptions(optionBuilder)
+      })
+
+      return selectMenu
+    }
+    case 'User': {
+      const userOptions = options as UserSelectMenuOptions
+      const selectMenu = new UserSelectMenuBuilder()
+        .setCustomId(id)
+        .setPlaceholder(placeholder)
+
+      if (disabled) {
+        selectMenu.setDisabled(disabled)
+      }
+      if (minValues) {
+        selectMenu.setMinValues(minValues)
+      }
+      if (maxValues) {
+        selectMenu.setMaxValues(maxValues)
+      }
+      if (userOptions.defaultUsers) {
+        selectMenu.setDefaultUsers(userOptions.defaultUsers)
+      }
+
+      return selectMenu
+    }
+    case 'Channel': {
+      const channelOptions = options as ChannelSelectMenuOptions
+      const selectMenu = new ChannelSelectMenuBuilder()
+        .setCustomId(id)
+        .setPlaceholder(placeholder)
+
+      if (disabled) {
+        selectMenu.setDisabled(disabled)
+      }
+      if (minValues) {
+        selectMenu.setMinValues(minValues)
+      }
+      if (maxValues) {
+        selectMenu.setMaxValues(maxValues)
+      }
+      if (channelOptions.channelTypes) {
+        selectMenu.addChannelTypes(...channelOptions.channelTypes)
+      }
+      if (channelOptions.defaultChannels) {
+        selectMenu.setDefaultChannels(channelOptions.defaultChannels)
+      }
+
+      return selectMenu
+    }
+    case 'Role': {
+      const roleOptions = options as RoleSelectMenuOptions
+      const selectMenu = new RoleSelectMenuBuilder()
+        .setCustomId(id)
+        .setPlaceholder(placeholder)
+
+      if (disabled) {
+        selectMenu.setDisabled(disabled)
+      }
+      if (minValues) {
+        selectMenu.setMinValues(minValues)
+      }
+      if (maxValues) {
+        selectMenu.setMaxValues(maxValues)
+      }
+      if (roleOptions.defaultRoles) {
+        selectMenu.setDefaultRoles(roleOptions.defaultRoles)
+      }
+
+      return selectMenu
+    }
+    case 'Mentionable': {
+      const mentionableOptions = options as MentionableSelectMenuOptions
+      const selectMenu = new MentionableSelectMenuBuilder()
+        .setCustomId(id)
+        .setPlaceholder(placeholder)
+
+      if (disabled) {
+        selectMenu.setDisabled(disabled)
+      }
+      if (minValues) {
+        selectMenu.setMinValues(minValues)
+      }
+      if (maxValues) {
+        selectMenu.setMaxValues(maxValues)
+      }
+      if (mentionableOptions.defaultValues) {
+        selectMenu.setDefaultValues(mentionableOptions.defaultValues)
+      }
+
+      return selectMenu
+    }
+    default:
+      throw createError('Invalid select menu type')
+  }
 }

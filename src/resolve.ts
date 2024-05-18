@@ -31,7 +31,7 @@ export const resolveEvent = (
       once: event.options.once || filename(_evtPath).endsWith('.once'),
       type:
         event.options.type ||
-        ((['modals', 'buttons'].includes(filename(dirname(_evtPath)))
+        ((['modals', 'buttons', 'selects'].includes(filename(dirname(_evtPath)))
           ? filename(dirname(_evtPath)).slice(0, -1)
           : undefined) as EventOptions['type'])
     }
