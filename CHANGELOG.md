@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.0.11
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.10...v0.0.11)
+
+### 🚀 Enhancements
+
+- Define of buttons, modals and select menus are now defined in separate folder ([260da9f](https://github.com/harmonix-js/core/commit/260da9f))
+
+### 💅 Refactors
+
+- Use instead of define for discord rich builder ([2f5480e](https://github.com/harmonix-js/core/commit/2f5480e))
+
+### ✅ Tests
+
+- Playground ([ee9c065](https://github.com/harmonix-js/core/commit/ee9c065))
+
+### 🎨 Styles
+
+- Remove useless imports ([d5c57dd](https://github.com/harmonix-js/core/commit/d5c57dd))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.10
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.9...v0.0.10)
