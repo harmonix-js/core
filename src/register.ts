@@ -1,9 +1,9 @@
-import { Events } from 'discord.js'
+import { ClientEvents, Events } from 'discord.js'
 import consola from 'consola'
 import { colors } from 'consola/utils'
 import { toOption, resolveOption } from './utils'
 import { ctx } from './harmonix'
-import type { Harmonix, HarmonixEvents, ParsedOptions } from './types'
+import type { Harmonix, ParsedOptions } from './types'
 
 export const registerEvents = (harmonix: Harmonix) => {
   for (const [, event] of harmonix.events.filter((evt) => !evt.options.type)) {
@@ -11,51 +11,17 @@ export const registerEvents = (harmonix: Harmonix) => {
     if (event.options.once) {
       harmonix.client?.once(event.options.name!, (...args) => {
         ctx.call(harmonix, () => {
-          event.callback(...(args as HarmonixEvents[keyof HarmonixEvents]))
+          event.callback(...(args as ClientEvents[keyof ClientEvents]))
         })
       })
     } else {
       harmonix.client?.once(event.options.name!, (...args) => {
         ctx.call(harmonix, () => {
-          event.callback(...(args as HarmonixEvents[keyof HarmonixEvents]))
+          event.callback(...(args as ClientEvents[keyof ClientEvents]))
         })
       })
     }
   }
-
-  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
-    if (!interaction.isModalSubmit()) return
-    const event = harmonix.events
-      .filter((evt) => evt.options.type === 'modal')
-      .find((evt) => evt.options.name === interaction.customId)
-
-    if (!event) return
-    ctx.call(harmonix, () => {
-      event.callback(interaction)
-    })
-  })
-  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
-    if (!interaction.isButton()) return
-    const event = harmonix.events
-      .filter((evt) => evt.options.type === 'button')
-      .find((evt) => evt.options.name === interaction.customId)
-
-    if (!event) return
-    ctx.call(harmonix, () => {
-      event.callback(interaction)
-    })
-  })
-  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
-    if (!interaction.isAnySelectMenu()) return
-    const event = harmonix.events
-      .filter((evt) => evt.options.type === 'select')
-      .find((evt) => evt.options.name === interaction.customId)
-
-    if (!event) return
-    ctx.call(harmonix, () => {
-      event.callback(interaction)
-    })
-  })
 }
 
 export const registerCommands = (harmonix: Harmonix) => {
@@ -135,5 +101,41 @@ export const registerContextMenu = (harmonix: Harmonix) => {
       }
     }
     ctm.callback(interaction)
+  })
+}
+
+export const registerButtons = (harmonix: Harmonix) => {
+  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isButton()) return
+    const btn = harmonix.buttons.find(
+      (btn) => btn.config.id === interaction.customId
+    )
+
+    if (!btn) return
+    btn.callback(interaction)
+  })
+}
+
+export const registerModals = (harmonix: Harmonix) => {
+  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isModalSubmit()) return
+    const mdl = harmonix.modals.find(
+      (mdl) => mdl.config.id === interaction.customId
+    )
+
+    if (!mdl) return
+    mdl.callback(interaction)
+  })
+}
+
+export const registerSelectMenus = (harmonix: Harmonix) => {
+  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isAnySelectMenu()) return
+    const slm = harmonix.selectMenus.find(
+      (slm) => slm.config.id === interaction.customId
+    )
+
+    if (!slm) return
+    slm.callback(interaction)
   })
 }

@@ -20,10 +20,25 @@ export const scanEvents = async (harmonix: Harmonix) => {
 }
 
 export const scanContextMenus = async (harmonix: Harmonix) => {
-  const files = await Promise.all([
-    scanFiles(harmonix, 'context-menus'),
-    scanFiles(harmonix, 'contextMenus')
-  ]).then((r) => r.flat())
+  const files = await scanFiles(harmonix, 'context-menus')
+
+  return files.map((f) => f.fullPath)
+}
+
+export const scanButtons = async (harmonix: Harmonix) => {
+  const files = await scanFiles(harmonix, 'buttons')
+
+  return files.map((f) => f.fullPath)
+}
+
+export const scanModals = async (harmonix: Harmonix) => {
+  const files = await scanFiles(harmonix, 'modals')
+
+  return files.map((f) => f.fullPath)
+}
+
+export const scanSelectMenus = async (harmonix: Harmonix) => {
+  const files = await scanFiles(harmonix, 'select-menus')
 
   return files.map((f) => f.fullPath)
 }

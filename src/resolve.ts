@@ -2,19 +2,30 @@ import jiti from 'jiti'
 import { dirname } from 'pathe'
 import { filename } from 'pathe/utils'
 import type {
+  ButtonConfig,
   CommandConfig,
   ContextMenuConfig,
   EventOptions,
   Harmonix,
+  HarmonixButton,
+  HarmonixButtonInput,
   HarmonixCommand,
   HarmonixCommandInput,
   HarmonixContextMenu,
   HarmonixContextMenuInput,
   HarmonixEvent,
   HarmonixEventInput,
+  HarmonixModal,
+  HarmonixModalInput,
   HarmonixPrecondition,
-  HarmonixPreconditionInput
+  HarmonixPreconditionInput,
+  ModalConfig
 } from './types'
+import {
+  HarmonixSelectMenu,
+  HarmonixSelectMenuInput,
+  SelectMenuConfig
+} from './types/select-menus'
 
 export const resolveEvent = (
   evt: HarmonixEventInput,
@@ -28,12 +39,7 @@ export const resolveEvent = (
     const event = _jiti(_evtPath) as HarmonixEvent
     const options: EventOptions = {
       name: event.options.name || filename(_evtPath).split('.')[0],
-      once: event.options.once || filename(_evtPath).endsWith('.once'),
-      type:
-        event.options.type ||
-        ((['modals', 'buttons', 'selects'].includes(filename(dirname(_evtPath)))
-          ? filename(dirname(_evtPath)).slice(0, -1)
-          : undefined) as EventOptions['type'])
+      once: event.options.once || filename(_evtPath).endsWith('.once')
     }
 
     return { options, callback: event.callback }
@@ -83,6 +89,69 @@ export const resolveContextMenu = (
     return { config, callback: contextMenu.callback }
   } else {
     return ctm
+  }
+}
+
+export const resolveButton = (
+  btn: HarmonixButtonInput,
+  harmonixOptions: Harmonix['options']
+): HarmonixButton => {
+  if (typeof btn === 'string') {
+    const _jiti = jiti(harmonixOptions.rootDir, {
+      interopDefault: true
+    })
+    const _btnPath = _jiti.resolve(btn)
+    const button = _jiti(_btnPath) as HarmonixButton
+    const config: ButtonConfig = {
+      id: button.config.id || filename(_btnPath).split('.')[0],
+      ...button.config
+    }
+
+    return { config, callback: button.callback }
+  } else {
+    return btn
+  }
+}
+
+export const resolveModal = (
+  mdl: HarmonixModalInput,
+  harmonixOptions: Harmonix['options']
+): HarmonixModal => {
+  if (typeof mdl === 'string') {
+    const _jiti = jiti(harmonixOptions.rootDir, {
+      interopDefault: true
+    })
+    const _mdlPath = _jiti.resolve(mdl)
+    const modal = _jiti(_mdlPath) as HarmonixModal
+    const config: ModalConfig = {
+      id: modal.config.id || filename(_mdlPath).split('.')[0],
+      ...modal.config
+    }
+
+    return { config, callback: modal.callback }
+  } else {
+    return mdl
+  }
+}
+
+export const resolveSelectMenu = (
+  slm: HarmonixSelectMenuInput,
+  harmonixOptions: Harmonix['options']
+): HarmonixSelectMenu => {
+  if (typeof slm === 'string') {
+    const _jiti = jiti(harmonixOptions.rootDir, {
+      interopDefault: true
+    })
+    const _slmPath = _jiti.resolve(slm)
+    const selectMenu = _jiti(_slmPath) as HarmonixSelectMenu
+    const config: SelectMenuConfig = {
+      id: selectMenu.config.id || filename(_slmPath).split('.')[0],
+      ...selectMenu.config
+    }
+
+    return { config, callback: selectMenu.callback }
+  } else {
+    return slm
   }
 }
 

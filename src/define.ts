@@ -1,25 +1,14 @@
 import {
   ActionRowBuilder,
-  ModalBuilder,
-  TextInputBuilder,
   EmbedBuilder,
   AttachmentBuilder,
   type BufferResolvable,
-  ButtonBuilder,
-  ButtonStyle,
   type AnyComponentBuilder,
   type RestOrArray,
-  StringSelectMenuBuilder,
-  UserSelectMenuBuilder,
-  ChannelSelectMenuBuilder,
-  RoleSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
-  MentionableSelectMenuBuilder
+  ClientEvents
 } from 'discord.js'
 import type { Stream } from 'node:stream'
 import type {
-  ButtonOptions,
-  ChannelSelectMenuOptions,
   CommandConfig,
   CommandExecute,
   ContextMenuCallback,
@@ -28,6 +17,7 @@ import type {
   DefineContextMenuWithOptions,
   DefineEvent,
   DefineEventWithOptions,
+  DefineModal,
   DefinePrecondition,
   DefinePreconditionWithName,
   EmbedOptions,
@@ -38,31 +28,25 @@ import type {
   HarmonixConfig,
   HarmonixContextMenu,
   HarmonixEvent,
-  HarmonixEvents,
-  MentionableSelectMenuOptions,
-  ModalOptions,
   OptionsDef,
-  PreconditionCallback,
-  RoleSelectMenuOptions,
-  SelectMenuOptions,
-  StringSelectMenuOptions,
-  UserSelectMenuOptions
+  PreconditionCallback
 } from './types'
-import { createError } from './harmonix'
+import { DefineButton } from './types'
+import { DefineSelectMenu } from './types/select-menus'
 
 export const defineHarmonixConfig = (config: HarmonixConfig) => {
   return config
 }
 
 export const defineEvent: DefineEvent & DefineEventWithOptions = <
-  Event extends keyof HarmonixEvents = any
+  Event extends keyof ClientEvents = any
 >(
   ...args: [EventOptions | EventCallback<Event>, EventCallback<Event>?]
 ): HarmonixEvent => {
   let options: EventOptions = {}
 
   if (args.length === 1) {
-    const [callback] = args as [EventCallback<keyof HarmonixEvents>]
+    const [callback] = args as [EventCallback<keyof ClientEvents>]
 
     return {
       options,
@@ -71,7 +55,7 @@ export const defineEvent: DefineEvent & DefineEventWithOptions = <
   } else {
     const [opts, callback] = args as [
       EventOptions,
-      EventCallback<keyof HarmonixEvents>
+      EventCallback<keyof ClientEvents>
     ]
 
     options = opts
@@ -150,42 +134,6 @@ export const defineActionRow = <
   return builder
 }
 
-export const defineModal = (options: ModalOptions): ModalBuilder => {
-  const builder = new ModalBuilder()
-    .setCustomId(options.id)
-    .setTitle(options.title)
-
-  if (options.textInputs) {
-    for (const input of options.textInputs) {
-      const inputBuilder = new TextInputBuilder()
-        .setCustomId(input.id)
-        .setLabel(input.label)
-        .setStyle(input.style)
-
-      if (input.maxLength) {
-        inputBuilder.setMaxLength(input.maxLength)
-      }
-      if (input.minLength) {
-        inputBuilder.setMinLength(input.minLength)
-      }
-      if (input.placeholder) {
-        inputBuilder.setPlaceholder(input.placeholder)
-      }
-      if (input.value) {
-        inputBuilder.setValue(input.value)
-      }
-      if (input.required) {
-        inputBuilder.setRequired(input.required)
-      }
-      const row = defineActionRow(inputBuilder)
-
-      builder.addComponents(row)
-    }
-  }
-
-  return builder
-}
-
 export const defineEmbed = (options: EmbedOptions) => {
   const builder = new EmbedBuilder()
   const setters: EmbedSetters = {
@@ -214,154 +162,14 @@ export const defineAttachment = (args: BufferResolvable | Stream) => {
   return new AttachmentBuilder(args)
 }
 
-export const defineButton = (options: ButtonOptions) => {
-  const builder = new ButtonBuilder()
-    .setCustomId(options.id)
-    .setStyle(options.style ? ButtonStyle[options.style] : ButtonStyle.Primary)
-
-  if (options.label) {
-    builder.setLabel(options.label)
-  }
-  if (options.emoji) {
-    builder.setEmoji(options.emoji)
-  }
-  if (options.url) {
-    builder.setURL(options.url)
-  }
-  if (options.disabled) {
-    builder.setDisabled(options.disabled)
-  }
-
-  return builder
+export const defineButton: DefineButton = (config, callback) => {
+  return { config, callback }
 }
 
-export const defineSelectMenu = (options: SelectMenuOptions) => {
-  const { id, placeholder, type, disabled, minValues, maxValues } = options
+export const defineModal: DefineModal = (config, callback) => {
+  return { config, callback }
+}
 
-  switch (type) {
-    case 'String': {
-      const stringOptions = options as StringSelectMenuOptions
-      const selectMenu = new StringSelectMenuBuilder()
-        .setCustomId(id)
-        .setPlaceholder(placeholder)
-
-      if (disabled) {
-        selectMenu.setDisabled(disabled)
-      }
-      if (minValues) {
-        selectMenu.setMinValues(minValues)
-      }
-      if (maxValues) {
-        selectMenu.setMaxValues(maxValues)
-      }
-      stringOptions.options.forEach((option) => {
-        const optionBuilder = new StringSelectMenuOptionBuilder()
-          .setLabel(option.label)
-          .setValue(option.value)
-
-        if (option.description) {
-          optionBuilder.setDescription(option.description)
-        }
-        if (option.emoji) {
-          optionBuilder.setEmoji(option.emoji)
-        }
-        if (option.default) {
-          optionBuilder.setDefault(true)
-        }
-
-        selectMenu.addOptions(optionBuilder)
-      })
-
-      return selectMenu
-    }
-    case 'User': {
-      const userOptions = options as UserSelectMenuOptions
-      const selectMenu = new UserSelectMenuBuilder()
-        .setCustomId(id)
-        .setPlaceholder(placeholder)
-
-      if (disabled) {
-        selectMenu.setDisabled(disabled)
-      }
-      if (minValues) {
-        selectMenu.setMinValues(minValues)
-      }
-      if (maxValues) {
-        selectMenu.setMaxValues(maxValues)
-      }
-      if (userOptions.defaultUsers) {
-        selectMenu.setDefaultUsers(userOptions.defaultUsers)
-      }
-
-      return selectMenu
-    }
-    case 'Channel': {
-      const channelOptions = options as ChannelSelectMenuOptions
-      const selectMenu = new ChannelSelectMenuBuilder()
-        .setCustomId(id)
-        .setPlaceholder(placeholder)
-
-      if (disabled) {
-        selectMenu.setDisabled(disabled)
-      }
-      if (minValues) {
-        selectMenu.setMinValues(minValues)
-      }
-      if (maxValues) {
-        selectMenu.setMaxValues(maxValues)
-      }
-      if (channelOptions.channelTypes) {
-        selectMenu.addChannelTypes(...channelOptions.channelTypes)
-      }
-      if (channelOptions.defaultChannels) {
-        selectMenu.setDefaultChannels(channelOptions.defaultChannels)
-      }
-
-      return selectMenu
-    }
-    case 'Role': {
-      const roleOptions = options as RoleSelectMenuOptions
-      const selectMenu = new RoleSelectMenuBuilder()
-        .setCustomId(id)
-        .setPlaceholder(placeholder)
-
-      if (disabled) {
-        selectMenu.setDisabled(disabled)
-      }
-      if (minValues) {
-        selectMenu.setMinValues(minValues)
-      }
-      if (maxValues) {
-        selectMenu.setMaxValues(maxValues)
-      }
-      if (roleOptions.defaultRoles) {
-        selectMenu.setDefaultRoles(roleOptions.defaultRoles)
-      }
-
-      return selectMenu
-    }
-    case 'Mentionable': {
-      const mentionableOptions = options as MentionableSelectMenuOptions
-      const selectMenu = new MentionableSelectMenuBuilder()
-        .setCustomId(id)
-        .setPlaceholder(placeholder)
-
-      if (disabled) {
-        selectMenu.setDisabled(disabled)
-      }
-      if (minValues) {
-        selectMenu.setMinValues(minValues)
-      }
-      if (maxValues) {
-        selectMenu.setMaxValues(maxValues)
-      }
-      if (mentionableOptions.defaultValues) {
-        selectMenu.setDefaultValues(mentionableOptions.defaultValues)
-      }
-
-      return selectMenu
-    }
-    default:
-      throw createError('Invalid select menu type')
-  }
+export const defineSelectMenu: DefineSelectMenu = (config, callback) => {
+  return { config, callback }
 }

@@ -5,7 +5,10 @@ import type { HarmonixEvent, HarmonixEventInput } from './events'
 import type {
   HarmonixContextMenu,
   HarmonixContextMenuInput
-} from './contextMenus'
+} from './context-menus'
+import { HarmonixButton, HarmonixButtonInput } from './buttons'
+import { HarmonixModal, HarmonixModalInput } from './modals'
+import { HarmonixSelectMenu, HarmonixSelectMenuInput } from './select-menus'
 import type {
   HarmonixPrecondition,
   HarmonixPreconditionInput
@@ -19,6 +22,9 @@ export interface HarmonixOptions {
   commands: HarmonixCommandInput[]
   events: HarmonixEventInput[]
   contextMenus: HarmonixContextMenuInput[]
+  buttons: HarmonixButtonInput[]
+  modals: HarmonixModalInput[]
+  selectMenus: HarmonixSelectMenuInput[]
   preconditions: HarmonixPreconditionInput[]
   defaultPrefix: string
   client: ClientOptions
@@ -41,5 +47,8 @@ export interface Harmonix {
   events: Collection<string, HarmonixEvent>
   commands: Collection<string, HarmonixCommand>
   contextMenus: Collection<string, HarmonixContextMenu>
+  buttons: Collection<string, HarmonixButton>
+  modals: Collection<string, HarmonixModal>
+  selectMenus: Collection<string, HarmonixSelectMenu>
   preconditions: Collection<string, HarmonixPrecondition>
 }
