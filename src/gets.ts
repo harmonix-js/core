@@ -12,7 +12,7 @@ import {
   UserSelectMenuBuilder
 } from 'discord.js'
 import { createError, useHarmonix } from './harmonix'
-import { defineActionRow } from './define'
+import { useActionRow } from './uses'
 import type {
   ChannelSelectMenuConfig,
   MentionableSelectMenuConfig,
@@ -81,7 +81,7 @@ export const getModal = (id: string) => {
       if (input.required) {
         inputBuilder.setRequired(input.required)
       }
-      builder.addComponents(defineActionRow(inputBuilder))
+      builder.addComponents(useActionRow(inputBuilder))
     }
   }
 
