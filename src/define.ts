@@ -13,6 +13,7 @@ import type {
   CommandExecute,
   ContextMenuCallback,
   ContextMenuConfig,
+  DefineButton,
   DefineContextMenu,
   DefineContextMenuWithOptions,
   DefineEvent,
@@ -20,6 +21,7 @@ import type {
   DefineModal,
   DefinePrecondition,
   DefinePreconditionWithName,
+  DefineSelectMenu,
   EmbedOptions,
   EmbedSetters,
   EventCallback,
@@ -31,8 +33,6 @@ import type {
   OptionsDef,
   PreconditionCallback
 } from './types'
-import { DefineButton } from './types'
-import { DefineSelectMenu } from './types/select-menus'
 
 export const defineHarmonixConfig = (config: HarmonixConfig) => {
   return config
@@ -103,6 +103,18 @@ export const defineContextMenu: DefineContextMenu &
   }
 }
 
+export const defineButton: DefineButton = (config, callback) => {
+  return { config, callback }
+}
+
+export const defineModal: DefineModal = (config, callback) => {
+  return { config, callback }
+}
+
+export const defineSelectMenu: DefineSelectMenu = (config, callback) => {
+  return { config, callback }
+}
+
 export const definePrecondition: DefinePrecondition &
   DefinePreconditionWithName = (
   ...args: [PreconditionCallback | string, PreconditionCallback?]
@@ -160,16 +172,4 @@ export const defineEmbed = (options: EmbedOptions) => {
 
 export const defineAttachment = (args: BufferResolvable | Stream) => {
   return new AttachmentBuilder(args)
-}
-
-export const defineButton: DefineButton = (config, callback) => {
-  return { config, callback }
-}
-
-export const defineModal: DefineModal = (config, callback) => {
-  return { config, callback }
-}
-
-export const defineSelectMenu: DefineSelectMenu = (config, callback) => {
-  return { config, callback }
 }
