@@ -1,9 +1,6 @@
 import type { ModalSubmitInteraction, TextInputStyle } from 'discord.js'
 
-type ModalCallback = (interaction: ModalSubmitInteraction) => void
-
 interface TextInput {
-  id: string
   label: string
   style: keyof typeof TextInputStyle
   maxLength?: number
@@ -13,20 +10,31 @@ interface TextInput {
   required?: boolean
 }
 
-export interface ModalConfig {
+export type ModalInputs = Record<string, TextInput>
+
+export interface ModalConfig<T extends ModalInputs = ModalInputs> {
   id?: string
   title: string
-  textInputs?: TextInput[]
+  inputs?: T
 }
 
-export type DefineModal = (
-  config: ModalConfig,
-  callback: ModalCallback
-) => HarmonixModal
+export type ParsedInputs<T extends ModalInputs = ModalInputs> = Record<
+  { [K in keyof T]: K }[keyof T],
+  string
+>
+
+interface ModalContext<T extends ModalInputs = ModalInputs> {
+  inputs: ParsedInputs<T>
+}
+
+export type ModalCallback<T extends ModalInputs = ModalInputs> = (
+  interaction: ModalSubmitInteraction,
+  context: ModalContext<T>
+) => void
 
 export type HarmonixModalInput = string | HarmonixModal
 
-export interface HarmonixModal {
-  config: ModalConfig
-  callback: ModalCallback
+export interface HarmonixModal<T extends ModalInputs = ModalInputs> {
+  config: ModalConfig<T>
+  callback: ModalCallback<T>
 }

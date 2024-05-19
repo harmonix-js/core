@@ -57,10 +57,11 @@ export const getModal = (id: string) => {
     .setCustomId(modal.config.id!)
     .setTitle(modal.config.title)
 
-  if (modal.config.textInputs) {
-    for (const input of modal.config.textInputs) {
+  if (modal.config.inputs) {
+    for (const id in modal.config.inputs) {
+      const input = modal.config.inputs[id]
       const inputBuilder = new TextInputBuilder()
-        .setCustomId(input.id)
+        .setCustomId(id)
         .setLabel(input.label)
         .setStyle(
           input.style ? TextInputStyle[input.style] : TextInputStyle.Short

@@ -3,7 +3,7 @@ import consola from 'consola'
 import { colors } from 'consola/utils'
 import { toOption, resolveOption } from './utils'
 import { ctx } from './harmonix'
-import type { Harmonix, ParsedOptions } from './types'
+import { ParsedInputs, type Harmonix, type ParsedOptions } from './types'
 
 export const registerEvents = (harmonix: Harmonix) => {
   for (const [, event] of harmonix.events.filter((evt) => !evt.options.type)) {
@@ -117,14 +117,22 @@ export const registerButtons = (harmonix: Harmonix) => {
 }
 
 export const registerModals = (harmonix: Harmonix) => {
-  harmonix.client?.on(Events.InteractionCreate, (interaction) => {
+  harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isModalSubmit()) return
     const mdl = harmonix.modals.find(
       (mdl) => mdl.config.id === interaction.customId
     )
 
     if (!mdl) return
-    mdl.callback(interaction)
+    const inputs = Object.keys(mdl.config.inputs ?? {}).reduce<ParsedInputs>(
+      (acc, input) => ({
+        ...acc,
+        [input]: interaction.fields.getTextInputValue(input)
+      }),
+      {}
+    )
+
+    mdl.callback(interaction, { inputs })
   })
 }
 

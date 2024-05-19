@@ -9,7 +9,6 @@ import type {
   DefineContextMenuWithOptions,
   DefineEvent,
   DefineEventWithOptions,
-  DefineModal,
   DefinePrecondition,
   DefinePreconditionWithName,
   DefineSelectMenu,
@@ -19,6 +18,10 @@ import type {
   HarmonixConfig,
   HarmonixContextMenu,
   HarmonixEvent,
+  HarmonixModal,
+  ModalCallback,
+  ModalConfig,
+  ModalInputs,
   OptionsDef,
   PreconditionCallback
 } from './types'
@@ -96,7 +99,10 @@ export const defineButton: DefineButton = (config, callback) => {
   return { config, callback }
 }
 
-export const defineModal: DefineModal = (config, callback) => {
+export const defineModal = <T extends ModalInputs = ModalInputs>(
+  config: ModalConfig & { inputs?: T },
+  callback: ModalCallback<T>
+): HarmonixModal<T> => {
   return { config, callback }
 }
 
