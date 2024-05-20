@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.0.12
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.11...v0.0.12)
+
+### 🚀 Enhancements
+
+- Add context to defineModal callback ([46cbaa6](https://github.com/harmonix-js/core/commit/46cbaa6))
+
+### 🩹 Fixes
+
+- Register all events has once bug ([44ad734](https://github.com/harmonix-js/core/commit/44ad734))
+- Use regex for suffix ([7a624e8](https://github.com/harmonix-js/core/commit/7a624e8))
+- Add getters to export list ([023cb1a](https://github.com/harmonix-js/core/commit/023cb1a))
+- Remove unused defaultPrefix config ([abf4b5b](https://github.com/harmonix-js/core/commit/abf4b5b))
+- Select menu interaction type according to select menu type ([b438645](https://github.com/harmonix-js/core/commit/b438645))
+- Context menu type ([865cae4](https://github.com/harmonix-js/core/commit/865cae4))
+
+### ✅ Tests
+
+- Playground ([78209fe](https://github.com/harmonix-js/core/commit/78209fe))
+
+### 🎨 Styles
+
+- Rename gets to getters ([07ef2b0](https://github.com/harmonix-js/core/commit/07ef2b0))
+- Make defineContextMenu parameters more readable ([17846a6](https://github.com/harmonix-js/core/commit/17846a6))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.11
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.10...v0.0.11)
