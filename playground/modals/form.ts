@@ -3,23 +3,21 @@ import { defineModal } from '../../src'
 export default defineModal(
   {
     title: 'Form',
-    textInputs: [
-      {
-        id: 'color',
+    inputs: {
+      color: {
         label: 'Favorite color',
-        placeholder: 'Enter your favorite color',
-        style: 'Short'
+        style: 'Short',
+        placeholder: 'Enter your favorite color'
       },
-      {
-        id: 'hobbies',
+      hobbies: {
         label: 'Hobbies',
-        placeholder: 'Enter your hobbies',
-        style: 'Paragraph'
+        style: 'Paragraph',
+        placeholder: 'Enter your hobbies'
       }
-    ]
+    }
   },
-  (interaction) => {
-    const color = interaction.fields.getTextInputValue('color')
+  (interaction, context) => {
+    const { color } = context.inputs
 
     interaction.reply(`Submitted color: ${color}`)
   }

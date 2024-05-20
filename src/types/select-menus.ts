@@ -1,12 +1,33 @@
 import type {
   APISelectMenuDefaultValue,
-  AnySelectMenuInteraction,
+  ChannelSelectMenuInteraction,
   ChannelType,
   ComponentEmojiResolvable,
-  SelectMenuDefaultValueType
+  MentionableSelectMenuInteraction,
+  RoleSelectMenuInteraction,
+  SelectMenuDefaultValueType,
+  StringSelectMenuInteraction,
+  UserSelectMenuInteraction
 } from 'discord.js'
 
-type SelectMenuCallback = (interaction: AnySelectMenuInteraction) => void
+export type SelectMenuType =
+  | 'String'
+  | 'User'
+  | 'Channel'
+  | 'Role'
+  | 'Mentionable'
+
+export type SelectMenuCallback<T extends SelectMenuType = SelectMenuType> = (
+  interaction: T extends 'String'
+    ? StringSelectMenuInteraction
+    : T extends 'User'
+      ? UserSelectMenuInteraction
+      : T extends 'Channel'
+        ? ChannelSelectMenuInteraction
+        : T extends 'Role'
+          ? RoleSelectMenuInteraction
+          : MentionableSelectMenuInteraction
+) => void
 
 export interface StringSelectMenuConfig {
   type: 'String'
@@ -59,14 +80,9 @@ export type SelectMenuConfig = BaseSelectMenuConfig &
     | MentionableSelectMenuConfig
   )
 
-export type DefineSelectMenu = (
-  config: SelectMenuConfig,
-  callback: SelectMenuCallback
-) => HarmonixSelectMenu
-
 export type HarmonixSelectMenuInput = string | HarmonixSelectMenu
 
-export interface HarmonixSelectMenu {
+export interface HarmonixSelectMenu<T extends SelectMenuType = SelectMenuType> {
   config: SelectMenuConfig
-  callback: SelectMenuCallback
+  callback: SelectMenuCallback<T>
 }
