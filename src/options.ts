@@ -39,17 +39,7 @@ export const loadOptions = async (
     resolve(options.srcDir!, dir!)
   )
   options.scanDirs = [...new Set(options.scanDirs)]
-  options.defaultPrefix = options.defaultPrefix || '!'
-
-  const intents = options.client?.intents || [
-    'Guilds',
-    'GuildMessages',
-    'MessageContent',
-    'GuildMembers'
-  ]
-
   options.client = options.client || {}
-  options.client.intents = intents
 
   return options
 }

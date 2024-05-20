@@ -26,7 +26,6 @@ export interface HarmonixOptions {
   modals: HarmonixModalInput[]
   selectMenus: HarmonixSelectMenuInput[]
   preconditions: HarmonixPreconditionInput[]
-  defaultPrefix: string
   client: ClientOptions
   clientId: string
   ownerIds: string[]
