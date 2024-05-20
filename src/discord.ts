@@ -6,11 +6,15 @@ import { createError, ctx } from './harmonix'
 import { contextMenuToJSON, isHarmonixCommand, slashToJSON } from './utils'
 
 export const initCient = (harmonixOptions: Harmonix['options']) => {
-  const client = new Client(harmonixOptions.client)
+  try {
+    const client = new Client(harmonixOptions.client)
 
-  client.login(process.env.DISCORD_CLIENT_TOKEN)
+    client.login(process.env.DISCORD_CLIENT_TOKEN)
 
-  return client
+    return client
+  } catch (error: any) {
+    createError(error.message)
+  }
 }
 
 export const refreshApplicationCommands = async (harmonix: Harmonix) => {

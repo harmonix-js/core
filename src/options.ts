@@ -39,7 +39,10 @@ export const loadOptions = async (
     resolve(options.srcDir!, dir!)
   )
   options.scanDirs = [...new Set(options.scanDirs)]
+  const intents = options.client?.intents || []
+
   options.client = options.client || {}
+  options.client.intents = intents
 
   return options
 }
