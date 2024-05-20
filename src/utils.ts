@@ -4,17 +4,13 @@ import {
   ChatInputCommandInteraction,
   ContextMenuCommandBuilder,
   PermissionFlagsBits,
-  SlashCommandBuilder,
-  channelMention,
-  roleMention,
-  userMention,
-  type User
+  SlashCommandBuilder
 } from 'discord.js'
 import type {
   HarmonixCommand,
   HarmonixContextMenu,
-  OptionType,
-  OptionsDef
+  OptionsDef,
+  ParsedOptionType
 } from './types'
 
 export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
@@ -143,6 +139,22 @@ export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
             return opt
           })
           break
+        case 'Mentionable':
+          builder.addMentionableOption((opt) =>
+            opt
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required ?? true)
+          )
+          break
+        case 'Attachment':
+          builder.addAttachmentOption((opt) =>
+            opt
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required ?? true)
+          )
+          break
       }
     }
   }
@@ -176,87 +188,30 @@ export const isHarmonixCommand = (
   return (command as HarmonixCommand<OptionsDef>).config.category !== undefined
 }
 
-export const resolveOption = async (
+export const resolveOption = (
   interaction: ChatInputCommandInteraction,
-  type: OptionType | null,
-  value: string
-) => {
-  switch (type) {
-    case 'String':
-      return value
-    case 'Integer':
-      return parseInt(value)
-    case 'Boolean':
-      return value === 'true'
-    case 'User':
-      const user = await resolveUser(interaction, value)
-
-      return user
-    case 'Channel':
-      const channel = await resolveChannel(interaction, value)
-
-      return channel
-    case 'Role':
-      const role = await resolveRole(interaction, value)
-
-      return role
-    case 'Number':
-      return parseFloat(value)
-  }
-}
-
-const resolveUser = async (
-  interaction: ChatInputCommandInteraction,
-  value: string
-): Promise<User | undefined> => {
-  return interaction.guild?.members.cache.find(
-    (member) =>
-      member.user.username === value ||
-      member.nickname === value ||
-      member.id === value ||
-      userMention(member.id) === value ||
-      `<@!${member.id}>` === value
-  )?.user
-}
-
-const resolveChannel = async (
-  interaction: ChatInputCommandInteraction,
-  value: string
-) => {
-  return interaction.guild?.channels.cache.find(
-    (channel) =>
-      channel.name === value ||
-      channel.id === value ||
-      channelMention(channel.id) === value
-  )
-}
-
-const resolveRole = async (
-  interaction: ChatInputCommandInteraction,
-  value: string
-) => {
-  return interaction.guild?.roles.cache.find(
-    (role) =>
-      role.name === value || role.id === value || roleMention(role.id) === value
-  )
-}
-
-export const toOption = (type: ApplicationCommandOptionType | null) => {
+  type: ApplicationCommandOptionType,
+  name: string
+): ParsedOptionType => {
   switch (type) {
     case ApplicationCommandOptionType.String:
-      return 'String'
+      return interaction.options.getString(name)
     case ApplicationCommandOptionType.Integer:
-      return 'Integer'
+      return interaction.options.getInteger(name)
     case ApplicationCommandOptionType.Boolean:
-      return 'Boolean'
+      return interaction.options.getBoolean(name)
     case ApplicationCommandOptionType.User:
-      return 'User'
+      return interaction.options.getUser(name)
     case ApplicationCommandOptionType.Channel:
-      return 'Channel'
+      return interaction.options.getChannel(name)
     case ApplicationCommandOptionType.Role:
-      return 'Role'
+      return interaction.options.getRole(name)
     case ApplicationCommandOptionType.Number:
-      return 'Number'
+      return interaction.options.getNumber(name)
+    case ApplicationCommandOptionType.Mentionable:
+      return interaction.options.getMentionable(name)
+    case ApplicationCommandOptionType.Attachment:
+      return interaction.options.getAttachment(name)
     default:
       return null
   }

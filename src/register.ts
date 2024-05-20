@@ -1,7 +1,7 @@
 import { ClientEvents, Events } from 'discord.js'
 import consola from 'consola'
 import { colors } from 'consola/utils'
-import { toOption, resolveOption } from './utils'
+import { resolveOption } from './utils'
 import { ctx } from './harmonix'
 import type { Harmonix, ParsedInputs, ParsedOptions } from './types'
 
@@ -36,11 +36,7 @@ export const registerCommands = (harmonix: Harmonix) => {
       Promise<ParsedOptions>
     >(async (acc, opt) => {
       const resolvedAcc = await acc
-      const resolvedOption = await resolveOption(
-        interaction,
-        toOption(opt.type),
-        String(opt.value)
-      )
+      const resolvedOption = resolveOption(interaction, opt.type, opt.name)
 
       return {
         ...resolvedAcc,

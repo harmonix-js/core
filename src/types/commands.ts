@@ -4,10 +4,15 @@ import type {
   PermissionsString,
   User,
   GuildBasedChannel,
-  Role
+  Role,
+  APIRole,
+  APIInteractionDataResolvedChannel,
+  GuildMember,
+  APIInteractionDataResolvedGuildMember,
+  Attachment
 } from 'discord.js'
 
-export type OptionType =
+type OptionType =
   | 'String'
   | 'Integer'
   | 'Boolean'
@@ -15,6 +20,8 @@ export type OptionType =
   | 'Channel'
   | 'Role'
   | 'Number'
+  | 'Mentionable'
+  | 'Attachment'
 
 type _OptionDef<T extends OptionType> = {
   type: T
@@ -30,6 +37,8 @@ type UserOptionDef = _OptionDef<'User'>
 type ChannelOptionDef = _OptionDef<'Channel'>
 type RoleOptionDef = _OptionDef<'Role'>
 type NumberOptionDef = _OptionDef<'Number'>
+type MentionableOptionDef = _OptionDef<'Mentionable'>
+type AttachmentOptionDef = _OptionDef<'Attachment'>
 
 type OptionDef =
   | StringOptionDef
@@ -39,7 +48,23 @@ type OptionDef =
   | ChannelOptionDef
   | RoleOptionDef
   | NumberOptionDef
+  | MentionableOptionDef
+  | AttachmentOptionDef
 export type OptionsDef = Record<string, OptionDef>
+
+export type ParsedOptionType =
+  | string
+  | number
+  | boolean
+  | User
+  | GuildBasedChannel
+  | APIInteractionDataResolvedChannel
+  | Role
+  | APIRole
+  | GuildMember
+  | APIInteractionDataResolvedGuildMember
+  | Attachment
+  | null
 
 export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
   {
@@ -49,7 +74,7 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
       ? K
       : never
   }[keyof T],
-  string | undefined
+  string | null
 > &
   Record<
     {
@@ -59,7 +84,7 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         ? K
         : never
     }[keyof T],
-    number | undefined
+    number | null
   > &
   Record<
     {
@@ -69,7 +94,7 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         ? K
         : never
     }[keyof T],
-    boolean | undefined
+    boolean | null
   > &
   Record<
     {
@@ -79,7 +104,7 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         ? K
         : never
     }[keyof T],
-    User | undefined
+    User | null
   > &
   Record<
     {
@@ -89,7 +114,7 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         ? K
         : never
     }[keyof T],
-    GuildBasedChannel | undefined
+    GuildBasedChannel | APIInteractionDataResolvedChannel | null
   > &
   Record<
     {
@@ -99,7 +124,7 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         ? K
         : never
     }[keyof T],
-    Role | undefined
+    Role | APIRole | null
   > &
   Record<
     {
@@ -109,7 +134,27 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         ? K
         : never
     }[keyof T],
-    number | undefined
+    number | null
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Mentionable'
+      }
+        ? K
+        : never
+    }[keyof T],
+    GuildMember | APIInteractionDataResolvedGuildMember | null
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Attachment'
+      }
+        ? K
+        : never
+    }[keyof T],
+    Attachment | null
   >
 
 interface CommandContext<T extends OptionsDef = OptionsDef> {
