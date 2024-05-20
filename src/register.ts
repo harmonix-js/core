@@ -3,7 +3,7 @@ import consola from 'consola'
 import { colors } from 'consola/utils'
 import { toOption, resolveOption } from './utils'
 import { ctx } from './harmonix'
-import { ParsedInputs, type Harmonix, type ParsedOptions } from './types'
+import type { Harmonix, ParsedInputs, ParsedOptions } from './types'
 
 export const registerEvents = (harmonix: Harmonix) => {
   for (const [, event] of harmonix.events.filter((evt) => !evt.options.type)) {
@@ -15,7 +15,7 @@ export const registerEvents = (harmonix: Harmonix) => {
         })
       })
     } else {
-      harmonix.client?.once(event.options.name!, (...args) => {
+      harmonix.client?.on(event.options.name!, (...args) => {
         ctx.call(harmonix, () => {
           event.callback(...(args as ClientEvents[keyof ClientEvents]))
         })
