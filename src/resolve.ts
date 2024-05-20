@@ -37,9 +37,12 @@ export const resolveEvent = (
     })
     const _evtPath = _jiti.resolve(evt)
     const event = _jiti(_evtPath) as HarmonixEvent
+    const matchSuffix = filename(_evtPath).match(/\.(on|once)?$/)
+    const type = event.options.type ?? (matchSuffix ? matchSuffix[1] : null)
     const options: EventOptions = {
-      name: event.options.name || filename(_evtPath).split('.')[0],
-      once: event.options.once || filename(_evtPath).endsWith('.once')
+      name:
+        event.options.name || filename(_evtPath).replace(/\.(on|once)?$/, ''),
+      once: event.options.once || type === 'once'
     }
 
     return { options, callback: event.callback }
@@ -59,7 +62,7 @@ export const resolveCommand = (
     const _cmdPath = _jiti.resolve(cmd)
     const command = _jiti(_cmdPath) as HarmonixCommand
     const config: CommandConfig = {
-      name: command.config.name || filename(_cmdPath).split('.')[0],
+      name: command.config.name || filename(_cmdPath),
       category: command.config.category || filename(dirname(_cmdPath)),
       ...command.config
     }
@@ -80,9 +83,16 @@ export const resolveContextMenu = (
     })
     const _ctmPath = _jiti.resolve(ctm)
     const contextMenu = _jiti(_ctmPath) as HarmonixContextMenu
+    const matchSuffix = filename(_ctmPath).match(/\.(user|message)?$/)
+    const type =
+      contextMenu.config.type ??
+      (matchSuffix ? (matchSuffix[1] as 'message' | 'user') : null)
+    const name =
+      contextMenu.config.name ??
+      filename(_ctmPath).replace(/\.(user|message)?$/, '')
     const config: ContextMenuConfig = {
-      name: contextMenu.config.name || filename(_ctmPath).split('.')[0],
-      type: contextMenu.config.type || 'message',
+      name,
+      type: type ?? 'message',
       ...contextMenu.config
     }
 
@@ -103,7 +113,7 @@ export const resolveButton = (
     const _btnPath = _jiti.resolve(btn)
     const button = _jiti(_btnPath) as HarmonixButton
     const config: ButtonConfig = {
-      id: button.config.id || filename(_btnPath).split('.')[0],
+      id: button.config.id || filename(_btnPath),
       ...button.config
     }
 
@@ -124,7 +134,7 @@ export const resolveModal = (
     const _mdlPath = _jiti.resolve(mdl)
     const modal = _jiti(_mdlPath) as HarmonixModal
     const config: ModalConfig = {
-      id: modal.config.id || filename(_mdlPath).split('.')[0],
+      id: modal.config.id || filename(_mdlPath),
       ...modal.config
     }
 
@@ -145,7 +155,7 @@ export const resolveSelectMenu = (
     const _slmPath = _jiti.resolve(slm)
     const selectMenu = _jiti(_slmPath) as HarmonixSelectMenu
     const config: SelectMenuConfig = {
-      id: selectMenu.config.id || filename(_slmPath).split('.')[0],
+      id: selectMenu.config.id || filename(_slmPath),
       ...selectMenu.config
     }
 
@@ -165,7 +175,7 @@ export const resolvePrecondition = (
     })
     const _prcPath = _jiti.resolve(prc)
     const precondition = _jiti(_prcPath) as HarmonixPrecondition
-    const name = precondition.name || filename(_prcPath).split('.')[0]
+    const name = precondition.name || filename(_prcPath)
 
     return { name, callback: precondition.callback }
   } else {
