@@ -4,9 +4,8 @@ import type {
   CommandExecute,
   ContextMenuCallback,
   ContextMenuConfig,
+  ContextMenuType,
   DefineButton,
-  DefineContextMenu,
-  DefineContextMenuWithOptions,
   DefineEvent,
   DefineEventWithOptions,
   DefinePrecondition,
@@ -68,17 +67,16 @@ export const defineCommand = <T extends OptionsDef = OptionsDef>(
   return { config, execute }
 }
 
-export const defineContextMenu: DefineContextMenu &
-  DefineContextMenuWithOptions = <Type extends 'message' | 'user'>(
+export const defineContextMenu = <T extends ContextMenuType = 'Message'>(
   ...args: [
-    ContextMenuConfig | ContextMenuCallback<Type>,
-    ContextMenuCallback<Type>?
+    (ContextMenuConfig & { type?: T }) | ContextMenuCallback<T>,
+    ContextMenuCallback<T>?
   ]
 ): HarmonixContextMenu => {
   let config: ContextMenuConfig = {}
 
   if (args.length === 1) {
-    const [callback] = args as [ContextMenuCallback<Type>]
+    const [callback] = args as [ContextMenuCallback<T>]
 
     return {
       config,
@@ -86,8 +84,8 @@ export const defineContextMenu: DefineContextMenu &
     }
   } else {
     const [cfg, callback] = args as [
-      ContextMenuConfig,
-      ContextMenuCallback<Type>
+      ContextMenuConfig<T>,
+      ContextMenuCallback<T>
     ]
 
     config = cfg

@@ -4,31 +4,29 @@ import type {
   UserContextMenuCommandInteraction
 } from 'discord.js'
 
-export type ContextMenuCallback<Type extends 'message' | 'user'> = (
-  interaction: Type extends 'message'
+export type ContextMenuType = 'Message' | 'User'
+
+export type ContextMenuCallback<T extends ContextMenuType = ContextMenuType> = (
+  interaction: T extends 'Message'
     ? MessageContextMenuCommandInteraction
     : UserContextMenuCommandInteraction
 ) => void
 
-export interface ContextMenuConfig {
+export interface ContextMenuConfig<
+  T extends ContextMenuType = ContextMenuType
+> {
   name?: string
-  type?: 'message' | 'user'
+  type?: T
   userPermissions?: PermissionsString[]
   guildOnly?: boolean
   preconditions?: string[]
 }
 
-export type DefineContextMenu = <Type extends 'message' | 'user'>(
-  callback: ContextMenuCallback<Type>
-) => HarmonixContextMenu
-export type DefineContextMenuWithOptions = <Type extends 'message' | 'user'>(
-  config: ContextMenuConfig,
-  callback: ContextMenuCallback<Type>
-) => HarmonixContextMenu
-
 export type HarmonixContextMenuInput = string | HarmonixContextMenu
 
-export interface HarmonixContextMenu {
-  config: ContextMenuConfig
-  callback: ContextMenuCallback<'message' | 'user'>
+export interface HarmonixContextMenu<
+  T extends ContextMenuType = ContextMenuType
+> {
+  config: ContextMenuConfig<T>
+  callback: ContextMenuCallback<T>
 }
