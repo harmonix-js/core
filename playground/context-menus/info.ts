@@ -1,6 +1,6 @@
 import { defineContextMenu } from '../../src'
 
-export default defineContextMenu<'message'>(
+export default defineContextMenu(
   {
     name: 'Get message author',
     preconditions: ['ownerOnly']
