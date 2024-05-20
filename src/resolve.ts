@@ -5,6 +5,7 @@ import type {
   ButtonConfig,
   CommandConfig,
   ContextMenuConfig,
+  ContextMenuType,
   EventOptions,
   Harmonix,
   HarmonixButton,
@@ -86,13 +87,13 @@ export const resolveContextMenu = (
     const matchSuffix = filename(_ctmPath).match(/\.(user|message)?$/)
     const type =
       contextMenu.config.type ??
-      (matchSuffix ? (matchSuffix[1] as 'message' | 'user') : null)
+      (matchSuffix ? (matchSuffix[1] as ContextMenuType) : null)
     const name =
       contextMenu.config.name ??
       filename(_ctmPath).replace(/\.(user|message)?$/, '')
     const config: ContextMenuConfig = {
       name,
-      type: type ?? 'message',
+      type: type ?? 'Message',
       ...contextMenu.config
     }
 

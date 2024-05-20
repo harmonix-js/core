@@ -29,15 +29,17 @@ export type SelectMenuCallback<T extends SelectMenuType = SelectMenuType> = (
           : MentionableSelectMenuInteraction
 ) => void
 
+interface StringOptionDef {
+  label: string
+  value: string
+  description?: string
+  emoji?: ComponentEmojiResolvable
+  default?: boolean
+}
+
 export interface StringSelectMenuConfig {
   type: 'String'
-  options: {
-    label: string
-    value: string
-    description?: string
-    emoji?: ComponentEmojiResolvable
-    default?: boolean
-  }[]
+  options: StringOptionDef[]
 }
 
 export interface UserSelectMenuConfig {

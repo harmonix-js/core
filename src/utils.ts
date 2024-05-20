@@ -154,9 +154,9 @@ export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
   const builder = new ContextMenuCommandBuilder()
     .setName(ctm.config.name!)
     .setType(
-      ctm.config.type === 'message'
+      ctm.config.type === 'Message'
         ? ApplicationCommandType.Message
-        : ctm.config.type === 'user'
+        : ctm.config.type === 'User'
           ? ApplicationCommandType.User
           : ApplicationCommandType.Message
     )
