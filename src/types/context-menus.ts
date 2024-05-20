@@ -22,6 +22,16 @@ export interface ContextMenuConfig<
   preconditions?: string[]
 }
 
+export type DefineContextMenu = <T extends ContextMenuType = 'Message'>(
+  callback: ContextMenuCallback<T>
+) => HarmonixContextMenu<T>
+export type DefineContextMenuWithOptions = <
+  T extends ContextMenuType = 'Message'
+>(
+  config: ContextMenuConfig<T>,
+  callback: ContextMenuCallback<T>
+) => HarmonixContextMenu<T>
+
 export type HarmonixContextMenuInput = string | HarmonixContextMenu
 
 export interface HarmonixContextMenu<
