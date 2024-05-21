@@ -13,11 +13,7 @@ export interface EmbedOptions {
   description?: string
   thumbnail?: string
   image?: string
-  timestamp?: number | Date | null
+  timestamp?: number | Date
   footer?: EmbedFooterOptions
   fields?: APIEmbedField[]
-}
-
-export type EmbedSetters = {
-  [K in keyof EmbedOptions]: (value: EmbedOptions[K]) => void
 }

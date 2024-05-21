@@ -6,8 +6,8 @@ import {
   EmbedBuilder,
   type RestOrArray
 } from 'discord.js'
-import { Stream } from 'node:stream'
-import { EmbedOptions, EmbedSetters } from './types'
+import type { Stream } from 'node:stream'
+import type { EmbedOptions } from './types'
 
 export const useActionRow = <
   T extends AnyComponentBuilder = AnyComponentBuilder
@@ -21,24 +21,37 @@ export const useActionRow = <
 
 export const useEmbed = (options: EmbedOptions) => {
   const builder = new EmbedBuilder()
-  const setters: EmbedSetters = {
-    color: (value) => builder.setColor(value ?? null),
-    title: (value) => builder.setTitle(value ?? null),
-    url: (value) => builder.setURL(value ?? null),
-    author: (value) => builder.setAuthor(value ?? null),
-    description: (value) => builder.setDescription(value ?? null),
-    thumbnail: (value) => builder.setThumbnail(value ?? null),
-    image: (value) => builder.setImage(value ?? null),
-    timestamp: () => builder.setTimestamp(),
-    footer: (value) => builder.setFooter(value ?? null),
-    fields: (value) => builder.addFields(...(value ?? []))
+
+  if (options.color) {
+    builder.setColor(options.color)
   }
-
-  Object.entries(options).forEach(([key, value]) => {
-    const _key = key as keyof EmbedOptions
-
-    setters[_key]!(value)
-  })
+  if (options.title) {
+    builder.setTitle(options.title)
+  }
+  if (options.url) {
+    builder.setURL(options.url)
+  }
+  if (options.author) {
+    builder.setAuthor(options.author)
+  }
+  if (options.description) {
+    builder.setDescription(options.description)
+  }
+  if (options.thumbnail) {
+    builder.setThumbnail(options.thumbnail)
+  }
+  if (options.image) {
+    builder.setImage(options.image)
+  }
+  if (options.timestamp) {
+    builder.setTimestamp(options.timestamp)
+  }
+  if (options.footer) {
+    builder.setFooter(options.footer)
+  }
+  if (options.fields) {
+    builder.addFields(...options.fields)
+  }
 
   return builder
 }
