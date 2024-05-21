@@ -1,4 +1,4 @@
-import { defineSelectMenu } from '../../src'
+import { defineSelectMenu, useEmbed } from '../../src'
 
 export default defineSelectMenu(
   {
@@ -6,6 +6,10 @@ export default defineSelectMenu(
     placeholder: 'Choose a user'
   },
   (interaction) => {
-    interaction.reply(`You selected an user!`)
+    const embed = useEmbed({
+      color: 0x2c2d31,
+      description: `You selected ${interaction.users.first()}!`
+    })
+    interaction.reply({ embeds: [embed] })
   }
 )

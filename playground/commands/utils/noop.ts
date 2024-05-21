@@ -2,12 +2,13 @@ import { defineCommand, getSelectMenu, useActionRow } from '../../../src'
 
 export default defineCommand(
   {
-    description: 'NOOP!'
+    description: 'NOOP!',
+    dm: true
   },
   (_, interaction) => {
     const selectMenu = getSelectMenu('choose')
     const row = useActionRow(selectMenu!)
 
-    interaction.reply({ content: 'Say hello:', components: [row] })
+    interaction.reply({ content: 'Noop', components: [row] })
   }
 )
