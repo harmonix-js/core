@@ -3,7 +3,7 @@
   "version": "0.0.13",
   "repository": "harmonix-js/core",
   "homepage": "https://harmonix-js.netlify.app/",
-  "description": "⚡ Next-gen Discord Bot Framework",
+  "description": "🤖 Open-source framework to make Discord bots",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.mjs",
