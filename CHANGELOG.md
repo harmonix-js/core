@@ -1,5 +1,31 @@
 # Changelog
 
+## v0.0.13
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.12...v0.0.13)
+
+### 🚀 Enhancements
+
+- Add mentionable and attachment to command option type ([ec7ded8](https://github.com/harmonix-js/core/commit/ec7ded8))
+- Add possibility to set command available in dm or not ([26dc7d5](https://github.com/harmonix-js/core/commit/26dc7d5))
+
+### 🩹 Fixes
+
+- Context menu config type ([e847eb5](https://github.com/harmonix-js/core/commit/e847eb5))
+- Client error when giving no intents ([245723b](https://github.com/harmonix-js/core/commit/245723b))
+
+### 💅 Refactors
+
+- UseEmbed function ([4243263](https://github.com/harmonix-js/core/commit/4243263))
+
+### ✅ Tests
+
+- Playground ([2fe0953](https://github.com/harmonix-js/core/commit/2fe0953))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.12
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.11...v0.0.12)
