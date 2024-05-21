@@ -10,7 +10,7 @@
 
 # Harmonix
 
-🤖 Open-source framework to make Discord bots.
+Open-source framework to make Discord bots.
 
 ## ⚡ Quick Start
 
@@ -20,11 +20,12 @@ This will set up a starter project complete with all the essential files and dep
 npx @harmonix-js/cli init <my-bot>
 ```
 
-## 📡 Development
+## 🤖 Development
 
 Harmonix offers a straightforward, user-friendly, and robust solution for writing commands naturally. It automates all repetitive tasks, allowing you to concentrate on developing your bot features with assurance.
 
 Example of an `commands/ping.ts`:
+
 ```ts
 import { defineCommand } from '@harmonix-js/core'
 
@@ -55,4 +56,3 @@ Published under the [MIT](https://github.com/harmonix-js/core/blob/main/LICENSE)
 <a href="https://github.com/harmonix-js/core/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=harmonix-js/core" />
 </a>
-
