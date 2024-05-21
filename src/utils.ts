@@ -24,6 +24,7 @@ export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
       )
     )
     .setNSFW(cmd.config.nsfw || false)
+    .setDMPermission(cmd.config.dm || false)
 
   if (cmd.config.options) {
     for (const name in cmd.config.options) {

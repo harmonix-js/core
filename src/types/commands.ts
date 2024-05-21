@@ -169,6 +169,7 @@ export interface CommandConfig<T extends OptionsDef = OptionsDef> {
   nsfw?: boolean
   userPermissions?: PermissionsString[]
   preconditions?: string[]
+  dm?: boolean
 }
 
 export type CommandExecute<T extends OptionsDef = OptionsDef> = (
