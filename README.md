@@ -24,7 +24,7 @@ npx @harmonix-js/cli init <my-bot>
 
 Harmonix offers a straightforward, user-friendly, and robust solution for writing commands naturally. It automates all repetitive tasks, allowing you to concentrate on developing your bot features with assurance.
 
-Example of an `commands/ping.ts`:
+Example of a `commands/ping.ts`:
 
 ```ts
 import { defineCommand } from '@harmonix-js/core'
