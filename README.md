@@ -14,7 +14,7 @@ Open-source framework to make Discord bots.
 
 ## ⚡ Quick Start
 
-This will set up a starter project complete with all the essential files and dependencies:
+This will set up a starter project with all the required files and dependencies:
 
 ```bash
 npx @harmonix-js/cli init <my-bot>
