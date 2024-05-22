@@ -1,5 +1,44 @@
 # Changelog
 
+## v0.0.14
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.13...v0.0.14)
+
+### 🚀 Enhancements
+
+- Add autocomplete command ([f4d1723](https://github.com/harmonix-js/core/commit/f4d1723))
+
+### 🩹 Fixes
+
+- Category set to undefined if command file is not in category folder ([ab9fa35](https://github.com/harmonix-js/core/commit/ab9fa35))
+
+### 📖 Documentation
+
+- Add harmonix banner asset ([5f5db1f](https://github.com/harmonix-js/core/commit/5f5db1f))
+- Add harmonix banner asset ([d9053d5](https://github.com/harmonix-js/core/commit/d9053d5))
+- Improve README ([3edf9c5](https://github.com/harmonix-js/core/commit/3edf9c5))
+- Correct error ([0167343](https://github.com/harmonix-js/core/commit/0167343))
+- Fix ([88617c6](https://github.com/harmonix-js/core/commit/88617c6))
+- Replacing svg by png ([6915ca9](https://github.com/harmonix-js/core/commit/6915ca9))
+- Change description ([b169baf](https://github.com/harmonix-js/core/commit/b169baf))
+- Change description ([3e46f8d](https://github.com/harmonix-js/core/commit/3e46f8d))
+- Issue template ([e37f247](https://github.com/harmonix-js/core/commit/e37f247))
+- Improve issue template ([ff68a8e](https://github.com/harmonix-js/core/commit/ff68a8e))
+- Change banner ([e009fd6](https://github.com/harmonix-js/core/commit/e009fd6))
+- Change banner ([d7b8335](https://github.com/harmonix-js/core/commit/d7b8335))
+
+### 🎨 Styles
+
+- Lint ([0454d97](https://github.com/harmonix-js/core/commit/0454d97))
+- Add grain on banner ([0157d24](https://github.com/harmonix-js/core/commit/0157d24))
+- Fix banner grain ([b6312b4](https://github.com/harmonix-js/core/commit/b6312b4))
+- Rename slashToJSON in commandToJSON ([e0ddbd3](https://github.com/harmonix-js/core/commit/e0ddbd3))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+- David ([@nethriis](http://github.com/nethriis))
+
 ## v0.0.13
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.12...v0.0.13)
