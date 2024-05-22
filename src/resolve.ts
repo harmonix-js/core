@@ -1,5 +1,5 @@
 import jiti from 'jiti'
-import { dirname } from 'pathe'
+import { resolve } from 'pathe'
 import { filename } from 'pathe/utils'
 import type {
   ButtonConfig,
@@ -62,9 +62,14 @@ export const resolveCommand = (
     })
     const _cmdPath = _jiti.resolve(cmd)
     const command = _jiti(_cmdPath) as HarmonixCommand
+    const relativePath = resolve(_cmdPath).replace(harmonixOptions.rootDir, '')
+    const categoryMatch = relativePath.match(
+      /\/commands\/(.+?)\/[^\/]+\.(ts|js)/
+    )
+    const category = categoryMatch ? categoryMatch[1] : undefined
     const config: CommandConfig = {
       name: command.config.name || filename(_cmdPath),
-      category: command.config.category || filename(dirname(_cmdPath)),
+      category: command.config.category ?? category,
       ...command.config
     }
 
