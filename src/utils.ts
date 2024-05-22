@@ -13,7 +13,7 @@ import type {
   ParsedOptionType
 } from './types'
 
-export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
+export const commandToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.config.name!)
     .setDescription(cmd.config.description || 'No description provided')
