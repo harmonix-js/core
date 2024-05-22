@@ -2,7 +2,7 @@ import { ClientEvents, Events } from 'discord.js'
 import consola from 'consola'
 import { colors } from 'consola/utils'
 import { resolveOption } from './utils'
-import { ctx } from './harmonix'
+import { createError, ctx } from './harmonix'
 import type { Harmonix, ParsedInputs, ParsedOptions } from './types'
 
 export const registerEvents = (harmonix: Harmonix) => {
@@ -141,5 +141,19 @@ export const registerSelectMenus = (harmonix: Harmonix) => {
 
     if (!slm) return
     slm.callback(interaction)
+  })
+}
+
+export const registerAutocomplete = (harmonix: Harmonix) => {
+  harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isAutocomplete()) return
+    const cmd = harmonix.commands.get(interaction.commandName)
+
+    if (!cmd || !cmd.config.autocomplete) return
+    try {
+      await cmd.config.autocomplete(interaction)
+    } catch (error: any) {
+      createError(error.message)
+    }
   })
 }

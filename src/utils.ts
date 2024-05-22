@@ -37,6 +37,7 @@ export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
               .setRequired(arg.required ?? true)
+              .setAutocomplete(arg.autocomplete ?? false)
 
             if (arg.metadata?.minLength) {
               opt.setMinLength(arg.metadata.minLength)
@@ -60,6 +61,7 @@ export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
               .setRequired(arg.required ?? true)
+              .setAutocomplete(arg.autocomplete ?? false)
 
             if (arg.metadata?.minValue) {
               opt.setMinValue(arg.metadata.minValue)
@@ -123,6 +125,7 @@ export const slashToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
               .setName(name)
               .setDescription(arg.description ?? 'No description provided')
               .setRequired(arg.required ?? true)
+              .setAutocomplete(arg.autocomplete ?? false)
 
             if (arg.metadata?.minValue) {
               opt.setMinValue(arg.metadata.minValue)

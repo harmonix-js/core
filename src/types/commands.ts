@@ -9,7 +9,8 @@ import type {
   APIInteractionDataResolvedChannel,
   GuildMember,
   APIInteractionDataResolvedGuildMember,
-  Attachment
+  Attachment,
+  AutocompleteInteraction
 } from 'discord.js'
 
 type OptionType =
@@ -28,7 +29,9 @@ type _OptionDef<T extends OptionType> = {
   description?: string
   required?: boolean
   metadata?: Record<string, any>
-}
+} & (T extends 'String' | 'Integer' | 'Number'
+  ? { autocomplete?: boolean }
+  : {})
 
 type StringOptionDef = _OptionDef<'String'>
 type IntegerOptionDef = _OptionDef<'Integer'>
@@ -170,6 +173,7 @@ export interface CommandConfig<T extends OptionsDef = OptionsDef> {
   userPermissions?: PermissionsString[]
   preconditions?: string[]
   dm?: boolean
+  autocomplete?: (interaction: AutocompleteInteraction) => Promise<void> | void
 }
 
 export type CommandExecute<T extends OptionsDef = OptionsDef> = (

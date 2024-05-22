@@ -29,7 +29,8 @@ import {
   registerCommands,
   registerButtons,
   registerModals,
-  registerSelectMenus
+  registerSelectMenus,
+  registerAutocomplete
 } from './register'
 import {
   resolveButton,
@@ -130,6 +131,7 @@ export const createHarmonix = async (
   registerButtons(harmonix)
   registerModals(harmonix)
   registerSelectMenus(harmonix)
+  registerAutocomplete(harmonix)
 
   return harmonix
 }
