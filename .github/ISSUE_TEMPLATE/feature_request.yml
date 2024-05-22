@@ -1,0 +1,11 @@
+name: 🚀 Feature request
+description: Suggest a feature that will improve Harmonix
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      description: A clear and concise description of what you think would improve Harmonix.
+      placeholder: Feature description
+    validations:
+      required: true
