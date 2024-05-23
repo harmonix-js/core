@@ -18,7 +18,7 @@ type ContextMenuEntity = {
 
 export type PreconditionCallback = (
   entity: SlashEntity | ContextMenuEntity
-) => boolean
+) => boolean | void
 
 export type DefinePrecondition = (
   callback: PreconditionCallback

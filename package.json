@@ -23,12 +23,14 @@
   },
   "dependencies": {
     "c12": "^1.10.0",
+    "chokidar": "^3.6.0",
     "consola": "^3.2.3",
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",
     "globby": "^14.0.1",
     "jiti": "^1.21.0",
     "pathe": "^1.1.2",
+    "perfect-debounce": "^1.0.0",
     "unctx": "^2.3.1"
   },
   "devDependencies": {

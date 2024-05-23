@@ -3,6 +3,9 @@ import type { LoadConfigOptions } from 'c12'
 import { getContext } from 'unctx'
 import consola from 'consola'
 import { colors } from 'consola/utils'
+import { watch } from 'chokidar'
+import { resolve } from 'pathe'
+import { debounce } from 'perfect-debounce'
 import { loadOptions } from './options'
 import {
   scanButtons,
@@ -43,6 +46,7 @@ import {
 } from './resolve'
 import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
 import { version } from '../package.json'
+import { Stats } from 'fs'
 
 export const ctx = getContext<Harmonix>('harmonix')
 
@@ -52,6 +56,11 @@ export const createHarmonix = async (
   config: HarmonixConfig = {},
   opts: LoadConfigOptions = {}
 ) => {
+  if (!process.env.DISCORD_CLIENT_TOKEN) {
+    createError(
+      'Client token is required. Please provide it in the environment variable DISCORD_CLIENT_TOKEN.'
+    )
+  }
   const options = await loadOptions(config, opts)
   const harmonix: Harmonix = {
     options: options as HarmonixOptions,
@@ -64,6 +73,54 @@ export const createHarmonix = async (
     preconditions: new Collection()
   }
 
+  consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
+  const watcher = watch(harmonix.options.scanDirs, {
+    ignored: harmonix.options.ignore,
+    ignoreInitial: true
+  })
+
+  const reload = debounce(
+    async (event: string, path: string, stats: Stats | undefined) => {
+      if (stats?.size === 0) return
+      consola.info(
+        `${colors.blue(`lr: ${event}`)}`,
+        `${colors.gray(resolve(path).replace(harmonix.options.rootDir, ''))}`
+      )
+      clearHarmonix(harmonix)
+      try {
+        await loadHarmonix(harmonix, config, opts)
+      } catch (error: any) {
+        createError(error.message)
+      }
+    },
+    100
+  )
+
+  await loadHarmonix(harmonix, config, opts)
+  watcher.on('all', (event, path, stats) => reload(event, path, stats))
+
+  return harmonix
+}
+
+export const clearHarmonix = async (harmonix: Harmonix) => {
+  harmonix.client?.destroy()
+  harmonix.events.clear()
+  harmonix.commands.clear()
+  harmonix.contextMenus.clear()
+  harmonix.buttons.clear()
+  harmonix.modals.clear()
+  harmonix.selectMenus.clear()
+  harmonix.preconditions.clear()
+}
+
+export const loadHarmonix = async (
+  harmonix: Harmonix,
+  config: HarmonixConfig,
+  opts: LoadConfigOptions
+) => {
+  const options = await loadOptions(config, opts)
+
+  harmonix.options = options as HarmonixOptions
   const scannedCommands = await scanCommands(harmonix)
   const _commands = [...(harmonix.options.commands || []), ...scannedCommands]
   const commands = _commands.map((cmd) => resolveCommand(cmd, harmonix.options))
@@ -107,13 +164,6 @@ export const createHarmonix = async (
     resolvePrecondition(prc, harmonix.options)
   )
 
-  if (!process.env.DISCORD_CLIENT_TOKEN) {
-    createError(
-      'Client token is required. Please provide it in the environment variable DISCORD_CLIENT_TOKEN.'
-    )
-  }
-  consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
-
   loadEvents(harmonix, events)
   loadCommands(harmonix, commands)
   loadContextMenus(harmonix, contextMenus)
@@ -132,8 +182,6 @@ export const createHarmonix = async (
   registerModals(harmonix)
   registerSelectMenus(harmonix)
   registerAutocomplete(harmonix)
-
-  return harmonix
 }
 
 export const createError = (message: string) => {

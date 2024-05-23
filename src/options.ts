@@ -19,9 +19,7 @@ export const loadOptions = async (
   const { config } = await loadConfig<HarmonixConfig>({
     name: 'harmonix',
     configFile: 'harmonix.config',
-    rcFile: '.harmonixrc',
     dotenv: true,
-    globalRc: true,
     overrides: configOverrides,
     defaults: HarmonixDefaults,
     ...opts
