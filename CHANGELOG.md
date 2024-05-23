@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.0.15
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.14...v0.0.15)
+
+### 🚀 Enhancements
+
+- Add live reloading ([50cc4a0](https://github.com/harmonix-js/core/commit/50cc4a0))
+- Add creating of dev instance of Harmonix ([d0ebe4d](https://github.com/harmonix-js/core/commit/d0ebe4d))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.14
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.13...v0.0.14)
