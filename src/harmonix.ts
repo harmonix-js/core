@@ -6,6 +6,7 @@ import { colors } from 'consola/utils'
 import { watch } from 'chokidar'
 import { resolve } from 'pathe'
 import { debounce } from 'perfect-debounce'
+import type { Stats } from 'node:fs'
 import { loadOptions } from './options'
 import {
   scanButtons,
@@ -46,7 +47,6 @@ import {
 } from './resolve'
 import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
 import { version } from '../package.json'
-import { Stats } from 'fs'
 
 export const ctx = getContext<Harmonix>('harmonix')
 
@@ -74,11 +74,37 @@ export const createHarmonix = async (
   }
 
   consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
+  await loadHarmonix(harmonix, config, opts)
+
+  return harmonix
+}
+
+export const createDevHarmonix = async (
+  config: HarmonixConfig = {},
+  opts: LoadConfigOptions = {}
+) => {
+  if (!process.env.DISCORD_CLIENT_TOKEN) {
+    createError(
+      'Client token is required. Please provide it in the environment variable DISCORD_CLIENT_TOKEN.'
+    )
+  }
+  const options = await loadOptions(config, opts)
+  const harmonix: Harmonix = {
+    options: options as HarmonixOptions,
+    events: new Collection(),
+    commands: new Collection(),
+    contextMenus: new Collection(),
+    buttons: new Collection(),
+    modals: new Collection(),
+    selectMenus: new Collection(),
+    preconditions: new Collection()
+  }
+
+  consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
   const watcher = watch(harmonix.options.scanDirs, {
     ignored: harmonix.options.ignore,
     ignoreInitial: true
   })
-
   const reload = debounce(
     async (event: string, path: string, stats: Stats | undefined) => {
       if (stats?.size === 0) return
