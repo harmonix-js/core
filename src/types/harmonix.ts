@@ -14,13 +14,24 @@ import type {
   HarmonixPreconditionInput
 } from './preconditions'
 
+interface HarmonixDirs {
+  events: string
+  commands: string
+  contextMenus: string
+  buttons: string
+  modals: string
+  selectMenus: string
+  preconditions: string
+}
+
 export interface HarmonixOptions {
   rootDir: string
   srcDir: string
   scanDirs: string[]
+  dirs: HarmonixDirs
   ignore: string[]
-  commands: HarmonixCommandInput[]
   events: HarmonixEventInput[]
+  commands: HarmonixCommandInput[]
   contextMenus: HarmonixContextMenuInput[]
   buttons: HarmonixButtonInput[]
   modals: HarmonixModalInput[]
@@ -41,6 +52,7 @@ export interface HarmonixConfig
     C12InputConfig<HarmonixConfig> {}
 
 export interface Harmonix {
+  configFile: string
   options: HarmonixOptions
   client?: Client
   events: Collection<string, HarmonixEvent>

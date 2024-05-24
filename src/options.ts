@@ -2,6 +2,7 @@ import { LoadConfigOptions, loadConfig } from 'c12'
 import { resolve } from 'pathe'
 import type { HarmonixConfig } from './types'
 import { createError } from './harmonix'
+import defu from 'defu'
 
 const HarmonixDefaults: HarmonixConfig = {
   scanDirs: [],
@@ -16,7 +17,7 @@ export const loadOptions = async (
   configOverrides: HarmonixConfig = {},
   opts: LoadConfigOptions
 ) => {
-  const { config } = await loadConfig<HarmonixConfig>({
+  const { config, configFile } = await loadConfig<HarmonixConfig>({
     name: 'harmonix',
     configFile: 'harmonix.config',
     dotenv: true,
@@ -41,6 +42,15 @@ export const loadOptions = async (
 
   options.client = options.client || {}
   options.client.intents = intents
+  options.dirs = defu(options.dirs, {
+    commands: 'commands',
+    events: 'events',
+    contextMenus: 'context-menus',
+    buttons: 'buttons',
+    modals: 'modals',
+    selectMenus: 'select-menus',
+    preconditions: 'preconditions'
+  })
 
-  return options
+  return { options, configFile }
 }

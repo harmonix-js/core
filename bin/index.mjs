@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
-import { createDevHarmonix, createHarmonix } from '../dist/index.mjs'
+import { createHarmonix } from '../dist/index.mjs'
 import 'dotenv/config'
 
-const initHarmonix = async () => {
-  await createDevHarmonix({ rootDir: './playground' }, { cwd: './playground' })
+const init = async () => {
+  await createHarmonix(
+    { rootDir: './playground' },
+    { cwd: './playground' },
+    true
+  )
 }
 
-initHarmonix()
+init()

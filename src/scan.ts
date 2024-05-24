@@ -4,47 +4,46 @@ import { Harmonix } from './types'
 
 const GLOB_SCAN_PATTERN = '**/*.{js,ts}'
 
-export const scanCommands = async (harmonix: Harmonix) => {
-  const files = await scanFiles(harmonix, 'commands')
-
-  return files.map((f) => f.fullPath)
-}
-
 export const scanEvents = async (harmonix: Harmonix) => {
   const files = await Promise.all([
-    scanFiles(harmonix, 'events'),
-    scanFiles(harmonix, 'listeners')
+    scanFiles(harmonix, harmonix.options.dirs.events)
   ]).then((r) => r.flat())
 
   return files.map((f) => f.fullPath)
 }
 
+export const scanCommands = async (harmonix: Harmonix) => {
+  const files = await scanFiles(harmonix, harmonix.options.dirs.commands)
+
+  return files.map((f) => f.fullPath)
+}
+
 export const scanContextMenus = async (harmonix: Harmonix) => {
-  const files = await scanFiles(harmonix, 'context-menus')
+  const files = await scanFiles(harmonix, harmonix.options.dirs.contextMenus)
 
   return files.map((f) => f.fullPath)
 }
 
 export const scanButtons = async (harmonix: Harmonix) => {
-  const files = await scanFiles(harmonix, 'buttons')
+  const files = await scanFiles(harmonix, harmonix.options.dirs.buttons)
 
   return files.map((f) => f.fullPath)
 }
 
 export const scanModals = async (harmonix: Harmonix) => {
-  const files = await scanFiles(harmonix, 'modals')
+  const files = await scanFiles(harmonix, harmonix.options.dirs.modals)
 
   return files.map((f) => f.fullPath)
 }
 
 export const scanSelectMenus = async (harmonix: Harmonix) => {
-  const files = await scanFiles(harmonix, 'select-menus')
+  const files = await scanFiles(harmonix, harmonix.options.dirs.selectMenus)
 
   return files.map((f) => f.fullPath)
 }
 
 export const scanPreconditions = async (harmonix: Harmonix) => {
-  const files = await scanFiles(harmonix, 'preconditions')
+  const files = await scanFiles(harmonix, harmonix.options.dirs.preconditions)
 
   return files.map((f) => f.fullPath)
 }
