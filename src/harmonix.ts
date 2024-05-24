@@ -110,8 +110,7 @@ const watchReload = (
 
 export const createHarmonix = async (
   config: HarmonixConfig = {},
-  opts: LoadConfigOptions = {},
-  devMode: boolean = false
+  opts: LoadConfigOptions = {}
 ) => {
   if (!process.env.DISCORD_CLIENT_TOKEN) {
     createError(
@@ -122,7 +121,7 @@ export const createHarmonix = async (
 
   consola.log(colors.blue(`Harmonix ${colors.bold(version)}\n`))
   await loadHarmonix(harmonix, config, opts)
-  if (devMode) {
+  if (process.env.NODE_ENV === 'development') {
     watchReload(harmonix, config, opts)
   }
 
