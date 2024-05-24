@@ -128,7 +128,7 @@ export const createHarmonix = async (
   return harmonix
 }
 
-export const clearHarmonix = async (harmonix: Harmonix) => {
+const clearHarmonix = async (harmonix: Harmonix) => {
   harmonix.client?.destroy()
   harmonix.events.clear()
   harmonix.commands.clear()
@@ -139,7 +139,7 @@ export const clearHarmonix = async (harmonix: Harmonix) => {
   harmonix.preconditions.clear()
 }
 
-export const loadHarmonix = async (
+const loadHarmonix = async (
   harmonix: Harmonix,
   config: HarmonixConfig,
   options: LoadConfigOptions
