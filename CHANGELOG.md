@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.0.16
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.15...v0.0.16)
+
+### 🚀 Enhancements
+
+- Add dirs configuration ([3897cc4](https://github.com/harmonix-js/core/commit/3897cc4))
+- Development mode using NODE_ENV ([bea8053](https://github.com/harmonix-js/core/commit/bea8053))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.15
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.14...v0.0.15)

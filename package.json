@@ -1,6 +1,6 @@
 {
   "name": "@harmonix-js/core",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "repository": "harmonix-js/core",
   "homepage": "https://harmonix-js.netlify.app",
   "description": "🤖 Open-source framework to make Discord bots.",
