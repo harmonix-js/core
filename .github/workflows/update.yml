@@ -27,7 +27,7 @@ jobs:
         run: |
           git config user.email ${{secrets.EMAIL}}
           git config user.name ${{secrets.NAME}}
-          git commit -am "fix: update dependencies" || echo "No changes to commit"
+          git commit -am "chore(deps): update dependencies" || echo "No changes to commit"
           git push
 
   cli:
@@ -49,5 +49,5 @@ jobs:
         run: |
           git config user.email ${{secrets.EMAIL}}
           git config user.name ${{secrets.NAME}}
-          git commit -am "fix: update dependencies" || echo "No changes to commit"
+          git commit -am "chore(deps): update dependencies" || echo "No changes to commit"
           git push
