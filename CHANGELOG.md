@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.0.17
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.16...v0.0.17)
+
+### 🩹 Fixes
+
+- Remove useless export ([5c3161e](https://github.com/harmonix-js/core/commit/5c3161e))
+
+### 💅 Refactors
+
+- Some define functions ([94e0d8a](https://github.com/harmonix-js/core/commit/94e0d8a))
+
+### 🤖 CI
+
+- Change commit message for deps update ([33b6996](https://github.com/harmonix-js/core/commit/33b6996))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.16
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.15...v0.0.16)
