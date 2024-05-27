@@ -171,9 +171,9 @@ export interface CommandConfig<T extends OptionsDef = OptionsDef> {
   options?: T
   nsfw?: boolean
   userPermissions?: PermissionsString[]
-  preconditions?: string[]
   dm?: boolean
   autocomplete?: (interaction: AutocompleteInteraction) => Promise<void> | void
+  preconditions?: string[]
 }
 
 export type CommandExecute<T extends OptionsDef = OptionsDef> = (

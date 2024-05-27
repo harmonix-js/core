@@ -1,26 +1,27 @@
 import type { ClientEvents } from 'discord.js'
 
-export type EventCallback<Event extends keyof ClientEvents | any = any> = (
+export type EventCallback<Event extends keyof ClientEvents = any> = (
   ...args: Event extends keyof ClientEvents ? ClientEvents[Event] : any[]
 ) => void
 
-export interface EventOptions {
+export interface EventConfig {
   name?: string
   once?: boolean
-  type?: 'modal' | 'button' | 'select'
 }
 
-export type DefineEvent = <Event extends keyof ClientEvents = any>(
-  callback: EventCallback<Event>
-) => HarmonixEvent
-export type DefineEventWithOptions = <Event extends keyof ClientEvents = any>(
-  options: EventOptions,
-  callback: EventCallback<Event>
-) => HarmonixEvent
+export interface DefineEvent {
+  <Event extends keyof ClientEvents = any>(
+    callback: EventCallback<Event>
+  ): HarmonixEvent
+  <Event extends keyof ClientEvents = any>(
+    config: EventConfig,
+    callback: EventCallback<Event>
+  ): HarmonixEvent
+}
 
 export type HarmonixEventInput = string | HarmonixEvent
 
 export interface HarmonixEvent {
-  options: EventOptions
+  config: EventConfig
   callback: EventCallback<keyof ClientEvents>
 }

@@ -4,34 +4,31 @@ import type {
   UserContextMenuCommandInteraction
 } from 'discord.js'
 
-type SlashEntity = {
-  readonly type: 'slash'
-  readonly interaction: ChatInputCommandInteraction
-}
+export type PreconditionType = 'ChatInput' | 'ContextMenu'
 
-type ContextMenuEntity = {
-  readonly type: 'context-menu'
-  readonly interaction:
-    | MessageContextMenuCommandInteraction
-    | UserContextMenuCommandInteraction
-}
-
-export type PreconditionCallback = (
-  entity: SlashEntity | ContextMenuEntity
+export type PreconditionCallback<
+  T extends PreconditionType = PreconditionType
+> = (
+  interaction: T extends 'ChatInput'
+    ? ChatInputCommandInteraction
+    : MessageContextMenuCommandInteraction | UserContextMenuCommandInteraction
 ) => boolean | void
 
-export type DefinePrecondition = (
-  callback: PreconditionCallback
-) => HarmonixPrecondition
-
-export type DefinePreconditionWithName = (
-  name: string,
-  callback: PreconditionCallback
-) => HarmonixPrecondition
+export interface DefinePrecondition {
+  <T extends PreconditionType>(
+    callback: PreconditionCallback<T>
+  ): HarmonixPrecondition<T>
+  <T extends PreconditionType>(
+    name: string,
+    callback: PreconditionCallback<T>
+  ): HarmonixPrecondition<T>
+}
 
 export type HarmonixPreconditionInput = string | HarmonixPrecondition
 
-export interface HarmonixPrecondition {
+export interface HarmonixPrecondition<
+  T extends PreconditionType = PreconditionType
+> {
   name: string
-  callback: PreconditionCallback
+  callback: PreconditionCallback<T>
 }

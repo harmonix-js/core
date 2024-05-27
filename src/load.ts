@@ -5,13 +5,13 @@ import type {
   HarmonixContextMenu,
   HarmonixEvent,
   HarmonixModal,
-  HarmonixPrecondition
+  HarmonixPrecondition,
+  HarmonixSelectMenu
 } from './types'
-import { HarmonixSelectMenu } from './types/select-menus'
 
 export const loadEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
   for (const evt of events) {
-    harmonix.events.set(evt.options.name!, evt)
+    harmonix.events.set(evt.config.name!, evt)
   }
 }
 

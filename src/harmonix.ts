@@ -165,13 +165,13 @@ const loadHarmonix = async (
     scanSelectMenus(harmonix),
     scanPreconditions(harmonix)
   ])
+  const events = [...(harmonix.options.events || []), ...scannedEvents].map(
+    (evt) => resolveEvent(evt, harmonix.options)
+  )
   const commands = [
     ...(harmonix.options.commands || []),
     ...scannedCommands
   ].map((cmd) => resolveCommand(cmd, harmonix.options))
-  const events = [...(harmonix.options.events || []), ...scannedEvents].map(
-    (evt) => resolveEvent(evt, harmonix.options)
-  )
   const contextMenus = [
     ...(harmonix.options.contextMenus || []),
     ...scannedContextMenus

@@ -18,19 +18,18 @@ export interface ContextMenuConfig<
   name?: string
   type?: T
   userPermissions?: PermissionsString[]
-  guildOnly?: boolean
   preconditions?: string[]
 }
 
-export type DefineContextMenu = <T extends ContextMenuType = 'Message'>(
-  callback: ContextMenuCallback<T>
-) => HarmonixContextMenu<T>
-export type DefineContextMenuWithOptions = <
-  T extends ContextMenuType = 'Message'
->(
-  config: ContextMenuConfig<T>,
-  callback: ContextMenuCallback<T>
-) => HarmonixContextMenu<T>
+export interface DefineContextMenu {
+  <T extends ContextMenuType = 'Message'>(
+    callback: ContextMenuCallback<T>
+  ): HarmonixContextMenu<T>
+  <T extends ContextMenuType = 'Message'>(
+    config: ContextMenuConfig<T>,
+    callback: ContextMenuCallback<T>
+  ): HarmonixContextMenu<T>
+}
 
 export type HarmonixContextMenuInput = string | HarmonixContextMenu
 

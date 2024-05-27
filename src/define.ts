@@ -7,13 +7,10 @@ import type {
   ContextMenuType,
   DefineButton,
   DefineContextMenu,
-  DefineContextMenuWithOptions,
   DefineEvent,
-  DefineEventWithOptions,
   DefinePrecondition,
-  DefinePreconditionWithName,
   EventCallback,
-  EventOptions,
+  EventConfig,
   HarmonixCommand,
   HarmonixConfig,
   HarmonixContextMenu,
@@ -25,6 +22,7 @@ import type {
   ModalInputs,
   OptionsDef,
   PreconditionCallback,
+  PreconditionType,
   SelectMenuCallback,
   SelectMenuConfig,
   SelectMenuType
@@ -34,29 +32,29 @@ export const defineHarmonixConfig = (config: HarmonixConfig) => {
   return config
 }
 
-export const defineEvent: DefineEvent & DefineEventWithOptions = <
+export const defineEvent: DefineEvent = <
   Event extends keyof ClientEvents = any
 >(
-  ...args: [EventOptions | EventCallback<Event>, EventCallback<Event>?]
+  ...args: [EventConfig | EventCallback<Event>, EventCallback<Event>?]
 ): HarmonixEvent => {
-  let options: EventOptions = {}
+  let config: EventConfig = {}
 
   if (args.length === 1) {
     const [callback] = args as [EventCallback<keyof ClientEvents>]
 
     return {
-      options,
+      config,
       callback
     }
   } else {
-    const [opts, callback] = args as [
-      EventOptions,
+    const [cfg, callback] = args as [
+      EventConfig,
       EventCallback<keyof ClientEvents>
     ]
 
-    options = opts
+    config = cfg
     return {
-      options,
+      config,
       callback
     }
   }
@@ -69,8 +67,9 @@ export const defineCommand = <T extends OptionsDef = OptionsDef>(
   return { config, execute }
 }
 
-export const defineContextMenu: DefineContextMenu &
-  DefineContextMenuWithOptions = <T extends ContextMenuType = 'Message'>(
+export const defineContextMenu: DefineContextMenu = <
+  T extends ContextMenuType = 'Message'
+>(
   ...args: [
     (ContextMenuConfig & { type?: T }) | ContextMenuCallback<T>,
     ContextMenuCallback<T>?
@@ -117,19 +116,20 @@ export const defineSelectMenu = <T extends SelectMenuType = SelectMenuType>(
   return { config, callback }
 }
 
-export const definePrecondition: DefinePrecondition &
-  DefinePreconditionWithName = (
-  ...args: [PreconditionCallback | string, PreconditionCallback?]
+export const definePrecondition: DefinePrecondition = <
+  T extends PreconditionType = PreconditionType
+>(
+  ...args: [PreconditionCallback<T> | string, PreconditionCallback<T>?]
 ) => {
   let name = ''
-  let callback: PreconditionCallback
+  let callback: PreconditionCallback<T>
 
   if (args.length === 1) {
-    const [cb] = args as [PreconditionCallback]
+    const [cb] = args as [PreconditionCallback<T>]
 
     callback = cb
   } else {
-    const [nm, cb] = args as [string, PreconditionCallback]
+    const [nm, cb] = args as [string, PreconditionCallback<T>]
 
     name = nm
     callback = cb

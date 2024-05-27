@@ -1,6 +1,6 @@
 import { definePrecondition, useHarmonix } from '../../src'
 
-export default definePrecondition(({ interaction }) => {
+export default definePrecondition((interaction) => {
   const harmonix = useHarmonix()
   const authorId = interaction.member?.user.id
 

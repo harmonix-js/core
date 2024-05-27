@@ -6,7 +6,7 @@ import type {
   CommandConfig,
   ContextMenuConfig,
   ContextMenuType,
-  EventOptions,
+  EventConfig,
   Harmonix,
   HarmonixButton,
   HarmonixButtonInput,
@@ -43,20 +43,19 @@ export const resolveEvent = (
     const _evtPath = jiti.resolve(evt)
     const event = jiti(_evtPath) as HarmonixEvent
 
-    if (!event.options || !event.callback) {
+    if (!event.config || !event.callback) {
       consola.warn(`Event ${filename(_evtPath)} does not export a valid event.`)
-      return { options: { name: filename(_evtPath) }, callback: () => {} }
+      return { config: { name: filename(_evtPath) }, callback: () => {} }
     }
     const matchSuffix = filename(_evtPath).match(/\.(on|once)?$/)
-    const once =
-      event.options.once ?? (matchSuffix ? matchSuffix[1] === 'once' : false)
-    const options: EventOptions = {
-      name:
-        event.options.name || filename(_evtPath).replace(/\.(on|once)?$/, ''),
-      once: event.options.once || once
+    const name = filename(_evtPath).replace(/\.(on|once)$/, '')
+    const once = matchSuffix ? matchSuffix[1] === 'once' : undefined
+    const config: EventConfig = {
+      name: event.config.name ?? name,
+      once: event.config.once ?? once
     }
 
-    return { options, callback: event.callback }
+    return { config, callback: event.callback }
   } else {
     return evt
   }
@@ -86,9 +85,10 @@ export const resolveCommand = (
     const categoryMatch = relativePath.match(
       /\/commands\/(.+?)\/[^\/]+\.(ts|js)/
     )
+    const name = filename(_cmdPath)
     const category = categoryMatch ? categoryMatch[1] : undefined
     const config: CommandConfig = {
-      name: command.config.name || filename(_cmdPath),
+      name: command.config.name ?? name,
       category: command.config.category ?? category,
       ...command.config
     }
@@ -119,16 +119,12 @@ export const resolveContextMenu = (
       )
       return { config: { name: filename(_ctmPath) }, callback: () => {} }
     }
-    const matchSuffix = filename(_ctmPath).match(/\.(user|message)?$/)
-    const type =
-      contextMenu.config.type ??
-      (matchSuffix ? (matchSuffix[1] as ContextMenuType) : null)
-    const name =
-      contextMenu.config.name ??
-      filename(_ctmPath).replace(/\.(user|message)?$/, '')
+    const matchSuffix = filename(_ctmPath).match(/\.(user|message)$/)
+    const name = filename(_ctmPath).replace(/\.(user|message)$/, '')
+    const type = matchSuffix ? (matchSuffix[1] as ContextMenuType) : 'Message'
     const config: ContextMenuConfig = {
-      name,
-      type: type ?? 'Message',
+      name: contextMenu.config.name ?? name,
+      type: contextMenu.config.type ?? type,
       ...contextMenu.config
     }
 

@@ -6,16 +6,16 @@ import { createError, ctx } from './harmonix'
 import type { Harmonix, ParsedInputs, ParsedOptions } from './types'
 
 export const registerEvents = (harmonix: Harmonix) => {
-  for (const [, event] of harmonix.events.filter((evt) => !evt.options.type)) {
-    if (event.options.name === 'ready') continue
-    if (event.options.once) {
-      harmonix.client?.once(event.options.name!, (...args) => {
+  for (const [, event] of harmonix.events) {
+    if (event.config.name === 'ready') continue
+    if (event.config.once) {
+      harmonix.client?.once(event.config.name!, (...args) => {
         ctx.call(harmonix, () => {
           event.callback(...(args as ClientEvents[keyof ClientEvents]))
         })
       })
     } else {
-      harmonix.client?.on(event.options.name!, (...args) => {
+      harmonix.client?.on(event.config.name!, (...args) => {
         ctx.call(harmonix, () => {
           event.callback(...(args as ClientEvents[keyof ClientEvents]))
         })
@@ -53,10 +53,7 @@ export const registerCommands = (harmonix: Harmonix) => {
           continue
         }
         const result = ctx.call(harmonix, () => {
-          return precondition.callback({
-            type: 'slash',
-            interaction
-          })
+          return precondition.callback(interaction)
         })
 
         if (!result) return
@@ -87,10 +84,7 @@ export const registerContextMenu = (harmonix: Harmonix) => {
           continue
         }
         const result = ctx.call(harmonix, () => {
-          return precondition.callback({
-            type: 'context-menu',
-            interaction
-          })
+          return precondition.callback(interaction)
         })
 
         if (!result) return
