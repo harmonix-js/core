@@ -189,7 +189,7 @@ export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
 export const isHarmonixCommand = (
   command: HarmonixCommand<OptionsDef> | HarmonixContextMenu
 ): command is HarmonixCommand<OptionsDef> => {
-  return (command as HarmonixCommand<OptionsDef>).config.category !== undefined
+  return 'execute' in command && 'config' in command
 }
 
 export const resolveOption = (
