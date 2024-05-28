@@ -13,7 +13,7 @@ import type {
   ParsedOptionType
 } from './types'
 
-export const commandToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
+const commandToJSON = (cmd: HarmonixCommand) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.config.name!)
     .setDescription(cmd.config.description || 'No description provided')
@@ -166,7 +166,7 @@ export const commandToJSON = (cmd: HarmonixCommand<OptionsDef>) => {
   return builder.toJSON()
 }
 
-export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
+const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
   const builder = new ContextMenuCommandBuilder()
     .setName(ctm.config.name!)
     .setType(
@@ -186,10 +186,16 @@ export const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
   return builder.toJSON()
 }
 
-export const isHarmonixCommand = (
+const isHarmonixCommand = (
   command: HarmonixCommand<OptionsDef> | HarmonixContextMenu
 ): command is HarmonixCommand<OptionsDef> => {
   return 'execute' in command && 'config' in command
+}
+
+export const toJSON = (cmd: HarmonixCommand<OptionsDef> | HarmonixContextMenu) => {
+  return isHarmonixCommand(cmd)
+    ? commandToJSON(cmd)
+    : contextMenuToJSON(cmd)
 }
 
 export const resolveOption = (

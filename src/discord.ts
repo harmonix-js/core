@@ -3,7 +3,7 @@ import consola from 'consola'
 import type { Harmonix } from './types'
 import 'dotenv/config'
 import { createError, ctx } from './harmonix'
-import { contextMenuToJSON, isHarmonixCommand, commandToJSON } from './utils'
+import { toJSON } from './utils'
 
 export const initCient = (harmonixOptions: Harmonix['options']) => {
   try {
@@ -30,9 +30,7 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
       await rest.put(
         Routes.applicationCommands(harmonix.options.clientId || client.user.id),
         {
-          body: commands.map((cmd) =>
-            isHarmonixCommand(cmd) ? commandToJSON(cmd) : contextMenuToJSON(cmd)
-          )
+          body: commands.map((cmd) => toJSON(cmd))
         }
       )
       consola.success('Successfully reloaded application commands.\n')
