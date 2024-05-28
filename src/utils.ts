@@ -192,10 +192,10 @@ const isHarmonixCommand = (
   return 'execute' in command && 'config' in command
 }
 
-export const toJSON = (cmd: HarmonixCommand<OptionsDef> | HarmonixContextMenu) => {
-  return isHarmonixCommand(cmd)
-    ? commandToJSON(cmd)
-    : contextMenuToJSON(cmd)
+export const toJSON = (
+  cmd: HarmonixCommand<OptionsDef> | HarmonixContextMenu
+) => {
+  return isHarmonixCommand(cmd) ? commandToJSON(cmd) : contextMenuToJSON(cmd)
 }
 
 export const resolveOption = (

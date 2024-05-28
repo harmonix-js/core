@@ -10,15 +10,15 @@ export const registerEvents = (harmonix: Harmonix) => {
     if (event.config.name === 'ready') continue
     if (event.config.once) {
       harmonix.client?.once(event.config.name!, (...args) => {
-        ctx.call(harmonix, () => {
+        ctx.call(harmonix, () =>
           event.callback(...(args as ClientEvents[keyof ClientEvents]))
-        })
+        )
       })
     } else {
       harmonix.client?.on(event.config.name!, (...args) => {
-        ctx.call(harmonix, () => {
+        ctx.call(harmonix, () =>
           event.callback(...(args as ClientEvents[keyof ClientEvents]))
-        })
+        )
       })
     }
   }
@@ -52,18 +52,18 @@ export const registerCommands = (harmonix: Harmonix) => {
           consola.warn(`Precondition ${colors.cyan(prc)} not found.`)
           continue
         }
-        const result = ctx.call(harmonix, () => {
-          return precondition.callback(interaction)
-        })
+        const result = ctx.call(harmonix, () =>
+          precondition.callback(interaction)
+        )
 
         if (!result) return
       }
     }
-    ctx.call(harmonix, () => {
+    ctx.call(harmonix, () =>
       cmd.execute(harmonix.client!, interaction, {
         options
       })
-    })
+    )
   })
 }
 
@@ -83,9 +83,9 @@ export const registerContextMenu = (harmonix: Harmonix) => {
           consola.warn(`Precondition ${colors.cyan(prc)} not found.`)
           continue
         }
-        const result = ctx.call(harmonix, () => {
-          return precondition.callback(interaction)
-        })
+        const result = ctx.call(harmonix, () =>
+          precondition.callback(interaction)
+        )
 
         if (!result) return
       }
