@@ -16,15 +16,15 @@ import type {
 const commandToJSON = (cmd: HarmonixCommand) => {
   const builder = new SlashCommandBuilder()
     .setName(cmd.config.name!)
-    .setDescription(cmd.config.description || 'No description provided')
+    .setDescription(cmd.config.description ?? 'No description provided')
     .setDefaultMemberPermissions(
       cmd.config.userPermissions?.reduce(
         (acc, perm) => acc | PermissionFlagsBits[perm],
         0n
       )
     )
-    .setNSFW(cmd.config.nsfw || false)
-    .setDMPermission(cmd.config.dm || false)
+    .setNSFW(cmd.config.nsfw ?? false)
+    .setDMPermission(cmd.config.dm ?? false)
 
   if (cmd.config.options) {
     for (const name in cmd.config.options) {
@@ -182,6 +182,7 @@ const contextMenuToJSON = (ctm: HarmonixContextMenu) => {
         0n
       )
     )
+    .setDMPermission(ctm.config.dm ?? false)
 
   return builder.toJSON()
 }
