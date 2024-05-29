@@ -103,7 +103,7 @@ export const helpCommand = defineCommand(
               cmdOptions
                 ?.map(
                   ([name, option]) =>
-                    `\`${name}\`${option.required === false ? '' : '*'} - ${option.description}`
+                    `\`${name}\`${option.required ? '*' : ''} - ${option.description}`
                 )
                 .join('\n') ?? 'None'
           }

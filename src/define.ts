@@ -64,6 +64,16 @@ export const defineCommand = <T extends OptionsDef = OptionsDef>(
   config: CommandConfig & { options?: T },
   execute: CommandExecute<T>
 ): HarmonixCommand<T> => {
+  if (config.options) {
+    for (const [key, value] of Object.entries(config.options)) {
+      if (value.required === undefined) {
+        ;(config.options as Record<string, typeof value>)[key] = {
+          ...value,
+          required: true
+        }
+      }
+    }
+  }
   return { config, execute }
 }
 
