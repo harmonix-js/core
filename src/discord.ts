@@ -1,4 +1,4 @@
-import { Client, REST, Routes } from 'discord.js'
+import { APIApplicationCommand, Client, REST, Routes } from 'discord.js'
 import consola from 'consola'
 import type { Harmonix } from './types'
 import 'dotenv/config'
@@ -27,12 +27,23 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
   harmonix.client?.once('ready', async (client) => {
     try {
       consola.info('Started refreshing application commands.')
-      await rest.put(
+      const apiCommands = (await rest.put(
         Routes.applicationCommands(harmonix.options.clientId || client.user.id),
         {
           body: commands.map((cmd) => toJSON(cmd))
         }
-      )
+      )) as APIApplicationCommand[]
+
+      consola.info('Syncing commands with API.')
+      for (const cmd of commands) {
+        const command = apiCommands.find((c) => c.name === cmd.config.name)
+
+        if (!command) {
+          consola.warn(`Command ${cmd.config.name} not found in API.`)
+          continue
+        }
+        cmd.config.id = command.id
+      }
       consola.success('Successfully reloaded application commands.\n')
       const readyEvent = harmonix.events.get('ready')
 

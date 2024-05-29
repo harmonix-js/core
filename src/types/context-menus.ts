@@ -15,9 +15,11 @@ export type ContextMenuCallback<T extends ContextMenuType = ContextMenuType> = (
 export interface ContextMenuConfig<
   T extends ContextMenuType = ContextMenuType
 > {
+  id?: string
   name?: string
   type?: T
   userPermissions?: PermissionsString[]
+  dm?: boolean
   preconditions?: string[]
 }
 

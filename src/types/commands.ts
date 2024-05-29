@@ -165,6 +165,7 @@ interface CommandContext<T extends OptionsDef = OptionsDef> {
 }
 
 export interface CommandConfig<T extends OptionsDef = OptionsDef> {
+  id?: string
   name?: string
   description?: string
   category?: string
