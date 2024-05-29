@@ -13,7 +13,7 @@ export interface EmbedOptions {
   description?: string
   thumbnail?: string
   image?: string
-  timestamp?: number | Date
+  timestamp?: number | Date | boolean
   footer?: EmbedFooterOptions
   fields?: APIEmbedField[]
 }

@@ -44,7 +44,9 @@ export const useEmbed = (options: EmbedOptions) => {
     builder.setImage(options.image)
   }
   if (options.timestamp) {
-    builder.setTimestamp(options.timestamp)
+    builder.setTimestamp(
+      options.timestamp === true ? new Date() : options.timestamp
+    )
   }
   if (options.footer) {
     builder.setFooter(options.footer)
