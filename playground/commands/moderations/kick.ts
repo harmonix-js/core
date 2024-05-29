@@ -10,7 +10,8 @@ export default defineCommand(
       },
       reason: {
         type: 'String',
-        description: 'The reason for the ban'
+        description: 'The reason for the ban',
+        required: false
       }
     }
   },
