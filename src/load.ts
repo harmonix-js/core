@@ -1,3 +1,4 @@
+import { helpCommand } from './builtins'
 import type {
   Harmonix,
   HarmonixButton,
@@ -21,6 +22,9 @@ export const loadCommands = (
 ) => {
   for (const cmd of commands) {
     harmonix.commands.set(cmd.config.name!, cmd)
+  }
+  if (!harmonix.commands.has('help')) {
+    harmonix.commands.set('help', helpCommand as HarmonixCommand<any>)
   }
 }
 
