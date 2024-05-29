@@ -1,5 +1,40 @@
 # Changelog
 
+## v0.0.18
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.17...v0.0.18)
+
+### 🚀 Enhancements
+
+- Add 'id' to context-menus and commandּ ([3c10066](https://github.com/harmonix-js/core/commit/3c10066))
+- Add dm permissions to context-menus ([2424393](https://github.com/harmonix-js/core/commit/2424393))
+- Timestamp embed can be boolean ([d33af9e](https://github.com/harmonix-js/core/commit/d33af9e))
+- Add useHarmonix to autocomplete context ([1df0132](https://github.com/harmonix-js/core/commit/1df0132))
+- Add help command default builtin ([6adc4cb](https://github.com/harmonix-js/core/commit/6adc4cb))
+
+### 🩹 Fixes
+
+- No category commands ([2084955](https://github.com/harmonix-js/core/commit/2084955))
+- Set option required to true if not defined ([f5a7821](https://github.com/harmonix-js/core/commit/f5a7821))
+
+### 💅 Refactors
+
+- ToJSON function ([1eba4c7](https://github.com/harmonix-js/core/commit/1eba4c7))
+
+### 🏡 Chore
+
+- **playground:** Set ban and kick reason option to not required ([a832bfe](https://github.com/harmonix-js/core/commit/a832bfe))
+
+### 🎨 Styles
+
+- Import ClientEvents as type ([78e4a26](https://github.com/harmonix-js/core/commit/78e4a26))
+- Return directly content inside ctx.call ([ee3cee5](https://github.com/harmonix-js/core/commit/ee3cee5))
+- Remove disposable 'if' ([69e4e8d](https://github.com/harmonix-js/core/commit/69e4e8d))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.0.17
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.16...v0.0.17)
