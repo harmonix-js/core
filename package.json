@@ -13,6 +13,7 @@
     "*.d.ts"
   ],
   "scripts": {
+    "knip": "knip",
     "lint": "prettier --write .",
     "prepack": "unbuild",
     "start": "node ./bin/index.mjs",
@@ -37,11 +38,12 @@
   "devDependencies": {
     "@types/node": "^20.12.8",
     "changelogen": "^0.5.5",
+    "knip": "^5.17.3",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "unbuild": "^2.0.0"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@9.1.4+sha256.30a1801ac4e723779efed13a21f4c39f9eb6c9fbb4ced101bce06b422593d7c9",
   "engines": {
     "node": "^16.0.0 || >=18.0.0"
   }
