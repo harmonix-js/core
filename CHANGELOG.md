@@ -1,5 +1,30 @@
 # Changelog
 
+## v0.1.0
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.0.18...v0.1.0)
+
+### 🚀 Enhancements
+
+- Add subcommand handling ([26dfcf3](https://github.com/harmonix-js/core/commit/26dfcf3))
+
+### 📖 Documentation
+
+- Change links color ([ce4ba76](https://github.com/harmonix-js/core/commit/ce4ba76))
+
+### 🏡 Chore
+
+- **playground:** Test command that use subcommands ([bda5497](https://github.com/harmonix-js/core/commit/bda5497))
+
+### 🤖 CI
+
+- Add knip ([3deb631](https://github.com/harmonix-js/core/commit/3deb631))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+- David ([@nethriis](http://github.com/nethriis))
+
 ## v0.0.18
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.17...v0.0.18)
