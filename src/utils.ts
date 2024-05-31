@@ -159,6 +159,15 @@ const commandToJSON = (cmd: HarmonixCommand) => {
               .setRequired(arg.required ?? true)
           )
           break
+        case 'SubCommand':
+          builder.addSubcommand((sub) => {
+            sub
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+
+            return sub
+          })
+          break
       }
     }
   }
@@ -223,6 +232,8 @@ export const resolveOption = (
       return interaction.options.getMentionable(name)
     case ApplicationCommandOptionType.Attachment:
       return interaction.options.getAttachment(name)
+    case ApplicationCommandOptionType.Subcommand:
+      return interaction.options.getSubcommand() === name
     default:
       return null
   }

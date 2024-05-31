@@ -23,25 +23,33 @@ type OptionType =
   | 'Number'
   | 'Mentionable'
   | 'Attachment'
+  | 'SubCommand'
 
-type _OptionDef<T extends OptionType> = {
+interface _OptionDef<T extends OptionType> {
   type: T
   description?: string
   required?: boolean
   metadata?: Record<string, any>
-} & (T extends 'String' | 'Integer' | 'Number'
-  ? { autocomplete?: boolean }
-  : {})
+}
 
-type StringOptionDef = _OptionDef<'String'>
-type IntegerOptionDef = _OptionDef<'Integer'>
+interface _AutocompleteOptionDef {
+  autocomplete?: boolean
+}
+
+interface _SubCommandOptionDef {
+  options?: Record<string, Exclude<OptionDef, SubCommandOptionDef>>
+}
+
+type StringOptionDef = _OptionDef<'String'> & _AutocompleteOptionDef
+type IntegerOptionDef = _OptionDef<'Integer'> & _AutocompleteOptionDef
 type BooleanOptionDef = _OptionDef<'Boolean'>
 type UserOptionDef = _OptionDef<'User'>
 type ChannelOptionDef = _OptionDef<'Channel'>
 type RoleOptionDef = _OptionDef<'Role'>
-type NumberOptionDef = _OptionDef<'Number'>
+type NumberOptionDef = _OptionDef<'Number'> & _AutocompleteOptionDef
 type MentionableOptionDef = _OptionDef<'Mentionable'>
 type AttachmentOptionDef = _OptionDef<'Attachment'>
+type SubCommandOptionDef = _OptionDef<'SubCommand'> & _SubCommandOptionDef
 
 type OptionDef =
   | StringOptionDef
@@ -53,6 +61,8 @@ type OptionDef =
   | NumberOptionDef
   | MentionableOptionDef
   | AttachmentOptionDef
+  | SubCommandOptionDef
+
 export type OptionsDef = Record<string, OptionDef>
 
 export type ParsedOptionType =
@@ -158,6 +168,16 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         : never
     }[keyof T],
     Attachment | null
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'SubCommand'
+      }
+        ? K
+        : never
+    }[keyof T],
+    boolean | null
   >
 
 interface CommandContext<T extends OptionsDef = OptionsDef> {
