@@ -289,11 +289,11 @@ const resolveMessage = async (
   resolvable: string
 ) => {
   const match = resolvable.match(
-    /https:\/\/(ptb\.|canary\.)?discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)/
+    /^(?:https:\/\/)?(?:ptb\.|canary\.)?discord(?:app)?\.com\/channels\/(?:\d{17,20}|@me)\/(?<channelId>\d{17,20})\/(?<messageId>\d{17,20})$/
   )
 
-  if (match) {
-    const [, , , channelId, messageId] = match
+  if (match && match.groups) {
+    const { channelId, messageId } = match.groups
     const channel = interaction.guild?.channels.cache.get(channelId) as
       | TextBasedChannel
       | undefined
@@ -335,7 +335,7 @@ const resolveEmoji = async (
     return emoji
   }
 
-  return resolvable.match(/[\d]+/)
+  return resolvable.match(/^\d{17,20}$/)
     ? interaction.client.emojis.cache.get(resolvable) ?? null
     : null
 }
