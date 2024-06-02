@@ -44,7 +44,9 @@ export const resolveEvent = (
     const event = jiti(_evtPath) as HarmonixEvent
 
     if (!event.config || !event.callback) {
-      consola.warn(`Event ${filename(_evtPath)} does not export a valid event.`)
+      consola.warn(
+        `Event \`${filename(_evtPath)}\` does not export a valid event.`
+      )
       return { config: { name: filename(_evtPath) }, callback: () => {} }
     }
     const matchSuffix = filename(_evtPath).match(/\.(on|once)?$/)
@@ -77,7 +79,7 @@ export const resolveCommand = (
 
     if (!command.config || !command.execute) {
       consola.warn(
-        `Command ${filename(_cmdPath)} does not export a valid command.`
+        `Command \`${filename(_cmdPath)}\` does not export a valid command.`
       )
       return { config: { name: filename(_cmdPath) }, execute: () => {} }
     }
@@ -115,7 +117,7 @@ export const resolveContextMenu = (
 
     if (!contextMenu.config || !contextMenu.callback) {
       consola.warn(
-        `Context Menu ${filename(_ctmPath)} does not export a valid context menu.`
+        `Context Menu \`${filename(_ctmPath)}\` does not export a valid context menu.`
       )
       return { config: { name: filename(_ctmPath) }, callback: () => {} }
     }
@@ -150,7 +152,7 @@ export const resolveButton = (
 
     if (!button.config || !button.callback) {
       consola.warn(
-        `Button ${filename(_btnPath)} does not export a valid button.`
+        `Button \`${filename(_btnPath)}\` does not export a valid button.`
       )
       return {
         config: { id: filename(_btnPath), label: '' },
@@ -183,7 +185,9 @@ export const resolveModal = (
     const modal = jiti(_mdlPath) as HarmonixModal
 
     if (!modal.config || !modal.callback) {
-      consola.warn(`Modal ${filename(_mdlPath)} does not export a valid modal.`)
+      consola.warn(
+        `Modal \`${filename(_mdlPath)}\` does not export a valid modal.`
+      )
       return {
         config: { id: filename(_mdlPath), title: '' },
         callback: () => {}
@@ -216,7 +220,7 @@ export const resolveSelectMenu = (
 
     if (!selectMenu.config || !selectMenu.callback) {
       consola.warn(
-        `Select Menu ${filename(_slmPath)} does not export a valid select menu.`
+        `Select Menu \`${filename(_slmPath)}\` does not export a valid select menu.`
       )
       return {
         config: {
@@ -255,7 +259,7 @@ export const resolvePrecondition = (
 
     if (!precondition.callback) {
       consola.warn(
-        `Precondition ${filename(_prcPath)} does not export a valid precondition.`
+        `Precondition \`${filename(_prcPath)}\` does not export a valid precondition.`
       )
       return { name: filename(_prcPath), callback: () => {} }
     }

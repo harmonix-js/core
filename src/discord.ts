@@ -39,7 +39,7 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
         const command = apiCommands.find((c) => c.name === cmd.config.name)
 
         if (!command) {
-          consola.warn(`Command ${cmd.config.name} not found in API.`)
+          consola.warn(`Command \`${cmd.config.name}\` not found in API.`)
           continue
         }
         cmd.config.id = command.id

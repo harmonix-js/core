@@ -1,6 +1,5 @@
 import { ClientEvents, Events } from 'discord.js'
 import consola from 'consola'
-import { colors } from 'consola/utils'
 import { resolveOption } from './utils'
 import { createError, ctx } from './harmonix'
 import type { Harmonix, ParsedInputs, ParsedOptions } from './types'
@@ -51,7 +50,7 @@ export const registerCommands = (harmonix: Harmonix) => {
         const precondition = harmonix.preconditions.get(prc)
 
         if (!precondition) {
-          consola.warn(`Precondition ${colors.cyan(prc)} not found.`)
+          consola.warn(`Precondition \`${prc}\` not found.`)
           continue
         }
         const result = ctx.call(harmonix, () =>
@@ -80,7 +79,7 @@ export const registerContextMenu = (harmonix: Harmonix) => {
         const precondition = harmonix.preconditions.get(prc)
 
         if (!precondition) {
-          consola.warn(`Precondition ${colors.cyan(prc)} not found.`)
+          consola.warn(`Precondition \`${prc}\` not found.`)
           continue
         }
         const result = ctx.call(harmonix, () =>
