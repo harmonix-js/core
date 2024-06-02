@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.1.1
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.1.0...v0.1.1)
+
+### 🚀 Enhancements
+
+- Add message, emoji, date and url option type and enhance other types ([8b73113](https://github.com/harmonix-js/core/commit/8b73113))
+
+### 🩹 Fixes
+
+- Change regex to make more accurate ([7f8b762](https://github.com/harmonix-js/core/commit/7f8b762))
+
+### 🏡 Chore
+
+- **playground:** Replace abbreviate context to ctx ([8d4af38](https://github.com/harmonix-js/core/commit/8d4af38))
+
+### 🎨 Styles
+
+- Remove ':' from hot reloading ([01b668d](https://github.com/harmonix-js/core/commit/01b668d))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.1.0
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.0.18...v0.1.0)
