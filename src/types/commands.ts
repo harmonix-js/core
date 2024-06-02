@@ -10,10 +10,17 @@ import type {
   GuildMember,
   APIInteractionDataResolvedGuildMember,
   Attachment,
-  AutocompleteInteraction
+  AutocompleteInteraction,
+  Message,
+  GuildEmoji,
+  PartialEmoji,
+  RestOrArray,
+  APIApplicationCommandOptionChoice,
+  ChannelType
 } from 'discord.js'
+import type { URL } from 'node:url'
 
-type OptionType =
+export type OptionType =
   | 'String'
   | 'Integer'
   | 'Boolean'
@@ -24,6 +31,10 @@ type OptionType =
   | 'Mentionable'
   | 'Attachment'
   | 'SubCommand'
+  | 'Message'
+  | 'Emoji'
+  | 'Date'
+  | 'Url'
 
 interface _OptionDef<T extends OptionType> {
   type: T
@@ -32,24 +43,60 @@ interface _OptionDef<T extends OptionType> {
   metadata?: Record<string, any>
 }
 
-interface _AutocompleteOptionDef {
+interface _StringOptionDef {
   autocomplete?: boolean
+  minLength?: number
+  maxLength?: number
+  choices?: RestOrArray<APIApplicationCommandOptionChoice<string>>
+}
+
+interface _IntegerOptionDef {
+  autocomplete?: boolean
+  minValue?: number
+  maxValue?: number
+  choices?: RestOrArray<APIApplicationCommandOptionChoice<number>>
+}
+
+interface _ChannelOptionDef {
+  types: RestOrArray<
+    | ChannelType.GuildText
+    | ChannelType.GuildVoice
+    | ChannelType.GuildCategory
+    | ChannelType.GuildAnnouncement
+    | ChannelType.AnnouncementThread
+    | ChannelType.PublicThread
+    | ChannelType.PrivateThread
+    | ChannelType.GuildStageVoice
+    | ChannelType.GuildForum
+    | ChannelType.GuildMedia
+  >
+}
+
+interface _NumberOptionDef {
+  autocomplete?: boolean
+  minValue?: number
+  maxValue?: number
+  choices?: RestOrArray<APIApplicationCommandOptionChoice<number>>
 }
 
 interface _SubCommandOptionDef {
   options?: Record<string, Exclude<OptionDef, SubCommandOptionDef>>
 }
 
-type StringOptionDef = _OptionDef<'String'> & _AutocompleteOptionDef
-type IntegerOptionDef = _OptionDef<'Integer'> & _AutocompleteOptionDef
+type StringOptionDef = _OptionDef<'String'> & _StringOptionDef
+type IntegerOptionDef = _OptionDef<'Integer'> & _IntegerOptionDef
 type BooleanOptionDef = _OptionDef<'Boolean'>
 type UserOptionDef = _OptionDef<'User'>
-type ChannelOptionDef = _OptionDef<'Channel'>
+type ChannelOptionDef = _OptionDef<'Channel'> & _ChannelOptionDef
 type RoleOptionDef = _OptionDef<'Role'>
-type NumberOptionDef = _OptionDef<'Number'> & _AutocompleteOptionDef
+type NumberOptionDef = _OptionDef<'Number'> & _NumberOptionDef
 type MentionableOptionDef = _OptionDef<'Mentionable'>
 type AttachmentOptionDef = _OptionDef<'Attachment'>
 type SubCommandOptionDef = _OptionDef<'SubCommand'> & _SubCommandOptionDef
+type MessageOptionDef = _OptionDef<'Message'> & _StringOptionDef
+type EmojiOptionDef = _OptionDef<'Emoji'> & _StringOptionDef
+type DateOptionDef = _OptionDef<'Date'> & _StringOptionDef
+type UrlOptionDef = _OptionDef<'Url'> & _StringOptionDef
 
 type OptionDef =
   | StringOptionDef
@@ -62,6 +109,10 @@ type OptionDef =
   | MentionableOptionDef
   | AttachmentOptionDef
   | SubCommandOptionDef
+  | MessageOptionDef
+  | EmojiOptionDef
+  | DateOptionDef
+  | UrlOptionDef
 
 export type OptionsDef = Record<string, OptionDef>
 
@@ -77,6 +128,11 @@ export type ParsedOptionType =
   | GuildMember
   | APIInteractionDataResolvedGuildMember
   | Attachment
+  | Message
+  | GuildEmoji
+  | PartialEmoji
+  | Date
+  | URL
   | null
 
 export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
@@ -178,6 +234,46 @@ export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
         : never
     }[keyof T],
     boolean | null
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Message'
+      }
+        ? K
+        : never
+    }[keyof T],
+    Message | null
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Emoji'
+      }
+        ? K
+        : never
+    }[keyof T],
+    GuildEmoji | PartialEmoji | null
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Date'
+      }
+        ? K
+        : never
+    }[keyof T],
+    Date | null
+  > &
+  Record<
+    {
+      [K in keyof T]: T[K] extends {
+        type: 'Url'
+      }
+        ? K
+        : never
+    }[keyof T],
+    URL | null
   >
 
 interface CommandContext<T extends OptionsDef = OptionsDef> {

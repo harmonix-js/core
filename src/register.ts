@@ -34,7 +34,11 @@ export const registerCommands = (harmonix: Harmonix) => {
       Promise<ParsedOptions>
     >(async (acc, opt) => {
       const resolvedAcc = await acc
-      const resolvedOption = resolveOption(interaction, opt.type, opt.name)
+      const resolvedOption = await resolveOption(
+        interaction,
+        cmd.config.options![opt.name]?.type,
+        opt.name
+      )
 
       return {
         ...resolvedAcc,

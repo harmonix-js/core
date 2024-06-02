@@ -1,14 +1,17 @@
 import {
-  ApplicationCommandOptionType,
   ApplicationCommandType,
-  ChatInputCommandInteraction,
+  type ChatInputCommandInteraction,
+  type Collection,
   ContextMenuCommandBuilder,
   PermissionFlagsBits,
-  SlashCommandBuilder
+  SlashCommandBuilder,
+  type TextBasedChannel,
+  parseEmoji
 } from 'discord.js'
 import type {
   HarmonixCommand,
   HarmonixContextMenu,
+  OptionType,
   OptionsDef,
   ParsedOptionType
 } from './types'
@@ -39,17 +42,14 @@ const commandToJSON = (cmd: HarmonixCommand) => {
               .setRequired(arg.required ?? true)
               .setAutocomplete(arg.autocomplete ?? false)
 
-            if (arg.metadata?.minLength) {
-              opt.setMinLength(arg.metadata.minLength)
+            if (arg.minLength) {
+              opt.setMinLength(arg.minLength)
             }
-            if (arg.metadata?.maxLength) {
-              opt.setMaxLength(arg.metadata.maxLength)
+            if (arg.maxLength) {
+              opt.setMaxLength(arg.maxLength)
             }
-            if (arg.metadata?.autocomplete) {
-              opt.setAutocomplete(arg.metadata.autocomplete)
-            }
-            if (arg.metadata?.choices) {
-              opt.addChoices(arg.metadata.choices)
+            if (arg.choices) {
+              opt.addChoices(...arg.choices)
             }
 
             return opt
@@ -63,17 +63,14 @@ const commandToJSON = (cmd: HarmonixCommand) => {
               .setRequired(arg.required ?? true)
               .setAutocomplete(arg.autocomplete ?? false)
 
-            if (arg.metadata?.minValue) {
-              opt.setMinValue(arg.metadata.minValue)
+            if (arg.minValue) {
+              opt.setMinValue(arg.minValue)
             }
-            if (arg.metadata?.maxValue) {
-              opt.setMaxValue(arg.metadata.maxValue)
+            if (arg.maxValue) {
+              opt.setMaxValue(arg.maxValue)
             }
-            if (arg.metadata?.autocomplete) {
-              opt.setAutocomplete(arg.metadata.autocomplete)
-            }
-            if (arg.metadata?.choices) {
-              opt.addChoices(arg.metadata.choices)
+            if (arg.choices) {
+              opt.addChoices(...arg.choices)
             }
 
             return opt
@@ -102,10 +99,8 @@ const commandToJSON = (cmd: HarmonixCommand) => {
               .setDescription(arg.description ?? 'No description provided')
               .setRequired(arg.required ?? true)
 
-            if (arg.metadata?.channelTypes) {
-              for (const type of arg.metadata.channelTypes) {
-                opt.addChannelTypes(type)
-              }
+            if (arg.types) {
+              opt.addChannelTypes(...arg.types)
             }
 
             return opt
@@ -127,17 +122,14 @@ const commandToJSON = (cmd: HarmonixCommand) => {
               .setRequired(arg.required ?? true)
               .setAutocomplete(arg.autocomplete ?? false)
 
-            if (arg.metadata?.minValue) {
-              opt.setMinValue(arg.metadata.minValue)
+            if (arg.minValue) {
+              opt.setMinValue(arg.minValue)
             }
-            if (arg.metadata?.maxValue) {
-              opt.setMaxValue(arg.metadata.maxValue)
+            if (arg.maxValue) {
+              opt.setMaxValue(arg.maxValue)
             }
-            if (arg.metadata?.autocomplete) {
-              opt.setAutocomplete(arg.metadata.autocomplete)
-            }
-            if (arg.metadata?.choices) {
-              opt.addChoices(arg.metadata.choices)
+            if (arg.choices) {
+              opt.addChoices(...arg.choices)
             }
 
             return opt
@@ -166,6 +158,90 @@ const commandToJSON = (cmd: HarmonixCommand) => {
               .setDescription(arg.description ?? 'No description provided')
 
             return sub
+          })
+          break
+        case 'Message':
+          builder.addStringOption((opt) => {
+            opt
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required ?? true)
+              .setAutocomplete(arg.autocomplete ?? false)
+
+            if (arg.minLength) {
+              opt.setMinLength(arg.minLength)
+            }
+            if (arg.maxLength) {
+              opt.setMaxLength(arg.maxLength)
+            }
+            if (arg.choices) {
+              opt.addChoices(...arg.choices)
+            }
+
+            return opt
+          })
+          break
+        case 'Emoji':
+          builder.addStringOption((opt) => {
+            opt
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required ?? true)
+              .setAutocomplete(arg.autocomplete ?? false)
+
+            if (arg.minLength) {
+              opt.setMinLength(arg.minLength)
+            }
+            if (arg.maxLength) {
+              opt.setMaxLength(arg.maxLength)
+            }
+            if (arg.choices) {
+              opt.addChoices(...arg.choices)
+            }
+
+            return opt
+          })
+          break
+        case 'Date':
+          builder.addStringOption((opt) => {
+            opt
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required ?? true)
+              .setAutocomplete(arg.autocomplete ?? false)
+
+            if (arg.minLength) {
+              opt.setMinLength(arg.minLength)
+            }
+            if (arg.maxLength) {
+              opt.setMaxLength(arg.maxLength)
+            }
+            if (arg.choices) {
+              opt.addChoices(...arg.choices)
+            }
+
+            return opt
+          })
+          break
+        case 'Url':
+          builder.addStringOption((opt) => {
+            opt
+              .setName(name)
+              .setDescription(arg.description ?? 'No description provided')
+              .setRequired(arg.required ?? true)
+              .setAutocomplete(arg.autocomplete ?? false)
+
+            if (arg.minLength) {
+              opt.setMinLength(arg.minLength)
+            }
+            if (arg.maxLength) {
+              opt.setMaxLength(arg.maxLength)
+            }
+            if (arg.choices) {
+              opt.addChoices(...arg.choices)
+            }
+
+            return opt
           })
           break
       }
@@ -208,32 +284,127 @@ export const toJSON = (
   return isHarmonixCommand(cmd) ? commandToJSON(cmd) : contextMenuToJSON(cmd)
 }
 
-export const resolveOption = (
+const resolveMessage = async (
   interaction: ChatInputCommandInteraction,
-  type: ApplicationCommandOptionType,
+  resolvable: string
+) => {
+  const match = resolvable.match(
+    /https:\/\/(ptb\.|canary\.)?discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)/
+  )
+
+  if (match) {
+    const [, , , channelId, messageId] = match
+    const channel = interaction.guild?.channels.cache.get(channelId) as
+      | TextBasedChannel
+      | undefined
+
+    if (channel?.isTextBased()) {
+      try {
+        return await channel.messages.fetch(messageId)
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+  const channels = interaction.guild?.channels.cache.filter((channel) =>
+    channel.isTextBased()
+  ) as Collection<string, TextBasedChannel> | undefined
+
+  if (!channels) return null
+  for (const [, channel] of channels) {
+    try {
+      return await channel.messages.fetch(resolvable)
+    } catch {
+      continue
+    }
+  }
+  return null
+}
+
+const resolveEmoji = async (
+  interaction: ChatInputCommandInteraction,
+  resolvable: string
+) => {
+  const emoji = parseEmoji(resolvable)
+
+  if (emoji?.id) {
+    return interaction.client.emojis.cache.get(emoji.id) ?? emoji
+  }
+  if (emoji?.name?.match(/\p{Extended_Pictographic}/gu)) {
+    return emoji
+  }
+
+  return resolvable.match(/[\d]+/)
+    ? interaction.client.emojis.cache.get(resolvable) ?? null
+    : null
+}
+
+export const resolveDate = () => {}
+
+export const resolveOption = async (
+  interaction: ChatInputCommandInteraction,
+  type: OptionType,
   name: string
-): ParsedOptionType => {
+): Promise<ParsedOptionType> => {
   switch (type) {
-    case ApplicationCommandOptionType.String:
+    case 'String':
       return interaction.options.getString(name)
-    case ApplicationCommandOptionType.Integer:
+    case 'Integer':
       return interaction.options.getInteger(name)
-    case ApplicationCommandOptionType.Boolean:
+    case 'Boolean':
       return interaction.options.getBoolean(name)
-    case ApplicationCommandOptionType.User:
+    case 'User':
       return interaction.options.getUser(name)
-    case ApplicationCommandOptionType.Channel:
+    case 'Channel':
       return interaction.options.getChannel(name)
-    case ApplicationCommandOptionType.Role:
+    case 'Role':
       return interaction.options.getRole(name)
-    case ApplicationCommandOptionType.Number:
+    case 'Number':
       return interaction.options.getNumber(name)
-    case ApplicationCommandOptionType.Mentionable:
+    case 'Mentionable':
       return interaction.options.getMentionable(name)
-    case ApplicationCommandOptionType.Attachment:
+    case 'Attachment':
       return interaction.options.getAttachment(name)
-    case ApplicationCommandOptionType.Subcommand:
+    case 'SubCommand':
       return interaction.options.getSubcommand() === name
+    case 'Message': {
+      const string = interaction.options.getString(name)
+
+      if (!string) return null
+      const message = await resolveMessage(interaction, string)
+
+      return message
+    }
+    case 'Emoji': {
+      const string = interaction.options.getString(name)
+
+      if (!string) return null
+      const emoji = await resolveEmoji(interaction, string)
+
+      return emoji
+    }
+    case 'Date': {
+      const string = interaction.options.getString(name)
+
+      if (!string) return null
+      const date = new Date(string)
+
+      if (isNaN(date.getTime())) return null
+      return date
+    }
+    case 'Url': {
+      const string = interaction.options.getString(name)
+
+      if (!string) return null
+      try {
+        const url = new URL(string)
+
+        return url
+      } catch {
+        return null
+      }
+    }
     default:
       return null
   }
