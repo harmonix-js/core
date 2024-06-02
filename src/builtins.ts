@@ -17,8 +17,8 @@ const groupCommandsByCategory = (commands: CommandConfig[]) => {
   }, {})
 }
 
-const capitalize = (str: string | undefined) => {
-  return str ? `${str.charAt(0).toUpperCase()}${str.slice(1)}` : str
+const capitalize = (str: string) => {
+  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
 }
 
 export const helpCommand = defineCommand(
@@ -86,7 +86,7 @@ export const helpCommand = defineCommand(
         fields: [
           {
             name: 'Category',
-            value: capitalize(cmd.config.category) ?? 'None',
+            value: capitalize(cmd.config.category ?? 'None'),
             inline: true
           },
           {
