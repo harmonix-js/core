@@ -16,8 +16,8 @@ export default defineModal(
       }
     }
   },
-  (interaction, context) => {
-    const { color } = context.inputs
+  (interaction, ctx) => {
+    const { color } = ctx.inputs
 
     interaction.reply(`Submitted color: ${color}`)
   }
