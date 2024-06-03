@@ -17,8 +17,7 @@
     "lint": "prettier --write .",
     "prepack": "unbuild",
     "start": "node ./bin/index.mjs",
-    "release": "changelogen --release",
-    "commitlint": "commitlint --edit"
+    "release": "changelogen --release"
   },
   "resolutions": {
     "@harmonix-js/core": "link:."
