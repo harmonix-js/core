@@ -17,6 +17,7 @@
     "lint": "prettier --write .",
     "prepack": "unbuild",
     "start": "node ./bin/index.mjs",
+    "prepare": "husky",
     "release": "changelogen --release"
   },
   "resolutions": {
