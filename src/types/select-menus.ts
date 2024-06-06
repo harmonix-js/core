@@ -18,15 +18,16 @@ export type SelectMenuType =
   | 'Mentionable'
 
 export type SelectMenuCallback<T extends SelectMenuType = SelectMenuType> = (
-  interaction: T extends 'String'
-    ? StringSelectMenuInteraction
-    : T extends 'User'
-      ? UserSelectMenuInteraction
-      : T extends 'Channel'
-        ? ChannelSelectMenuInteraction
-        : T extends 'Role'
-          ? RoleSelectMenuInteraction
-          : MentionableSelectMenuInteraction
+  interaction: T extends 'User'
+    ? UserSelectMenuInteraction
+    : T extends 'Channel'
+      ? ChannelSelectMenuInteraction
+      : T extends 'Role'
+        ? RoleSelectMenuInteraction
+        : T extends 'Mentionable'
+          ? MentionableSelectMenuInteraction
+          : StringSelectMenuInteraction,
+  selected: string[]
 ) => void
 
 interface StringOptionDef {

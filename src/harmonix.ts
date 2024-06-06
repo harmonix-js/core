@@ -45,10 +45,15 @@ import {
   resolvePrecondition,
   resolveSelectMenu
 } from './resolve'
-import type { Harmonix, HarmonixConfig, HarmonixOptions } from './types'
+import type {
+  Harmonix,
+  HarmonixConfig,
+  HarmonixOptions,
+  RuntimeHarmonix
+} from './types'
 import { version } from '../package.json'
 
-export const ctx = getContext<Harmonix>('harmonix')
+export const ctx = getContext<RuntimeHarmonix>('harmonix')
 export const useHarmonix = ctx.use
 
 const initHarmonix = async (

@@ -1,13 +1,13 @@
-import { defineCommand, getModal } from '../../../src'
+import { defineCommand, useModals } from '../../../src'
 
 export default defineCommand(
   {
     description: 'Test the bot',
     preconditions: ['ownerOnly']
   },
-  async (_, interaction) => {
-    const modal = getModal('form')
+  async (interaction) => {
+    const { form } = useModals()
 
-    await interaction.showModal(modal!)
+    await interaction.showModal(form!)
   }
 )

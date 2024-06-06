@@ -5,11 +5,13 @@ export default defineSelectMenu(
     type: 'User',
     placeholder: 'Choose a user'
   },
-  (interaction) => {
+  async (interaction, selected) => {
+    const member = await interaction.guild?.members.fetch(selected[0])
     const embed = useEmbed({
       color: 0x2c2d31,
-      description: `You selected ${interaction.users.first()}!`
+      description: `You selected ${member?.user}!`
     })
+
     interaction.reply({ embeds: [embed] })
   }
 )

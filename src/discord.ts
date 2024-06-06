@@ -1,6 +1,6 @@
 import { APIApplicationCommand, Client, REST, Routes } from 'discord.js'
 import consola from 'consola'
-import type { Harmonix } from './types'
+import type { Harmonix, RuntimeHarmonix } from './types'
 import 'dotenv/config'
 import { createError, ctx } from './harmonix'
 import { toJSON } from './utils'
@@ -48,7 +48,7 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
       const readyEvent = harmonix.events.get('ready')
 
       if (readyEvent) {
-        ctx.call(harmonix, () => readyEvent.callback(client))
+        ctx.call(harmonix as RuntimeHarmonix, () => readyEvent.callback(client))
       }
     } catch (error: any) {
       createError(error.message)

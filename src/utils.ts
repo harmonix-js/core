@@ -340,7 +340,23 @@ const resolveEmoji = async (
     : null
 }
 
-export const resolveDate = () => {}
+const resolveDate = (resolvable: string) => {
+  const date = new Date(resolvable)
+
+  if (isNaN(date.getTime())) return null
+
+  return date
+}
+
+const resolveUrl = (resolvable: string) => {
+  try {
+    const url = new URL(resolvable)
+
+    return url
+  } catch {
+    return null
+  }
+}
 
 export const resolveOption = async (
   interaction: ChatInputCommandInteraction,
@@ -388,22 +404,13 @@ export const resolveOption = async (
       const string = interaction.options.getString(name)
 
       if (!string) return null
-      const date = new Date(string)
-
-      if (isNaN(date.getTime())) return null
-      return date
+      return resolveDate(string)
     }
     case 'Url': {
       const string = interaction.options.getString(name)
 
       if (!string) return null
-      try {
-        const url = new URL(string)
-
-        return url
-      } catch {
-        return null
-      }
+      return resolveUrl(string)
     }
     default:
       return null

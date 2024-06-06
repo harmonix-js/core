@@ -4,19 +4,79 @@ import {
   AttachmentBuilder,
   type BufferResolvable,
   EmbedBuilder,
-  type RestOrArray
+  type RestOrArray,
+  type ButtonBuilder,
+  type ModalBuilder,
+  type StringSelectMenuBuilder,
+  type UserSelectMenuBuilder,
+  type ChannelSelectMenuBuilder,
+  type RoleSelectMenuBuilder,
+  type MentionableSelectMenuBuilder
 } from 'discord.js'
 import type { Stream } from 'node:stream'
+import { useHarmonix } from './harmonix'
 import type { EmbedOptions } from './types'
+import { getButton, getModal, getSelectMenu } from './getters'
+
+export const useButtons = () => {
+  const { buttons } = useHarmonix()
+
+  return buttons.reduce(
+    (acc, button) => {
+      if (button.config.id) {
+        acc[button.config.id] = getButton(button.config.id) ?? undefined
+      }
+      return acc
+    },
+    {} as Record<string, ButtonBuilder | undefined>
+  )
+}
+
+export const useModals = () => {
+  const { modals } = useHarmonix()
+
+  return modals.reduce(
+    (acc, modal) => {
+      if (modal.config.id) {
+        acc[modal.config.id] = getModal(modal.config.id) ?? undefined
+      }
+      return acc
+    },
+    {} as Record<string, ModalBuilder | undefined>
+  )
+}
+
+export const useSelectMenus = () => {
+  const { selectMenus } = useHarmonix()
+
+  return selectMenus.reduce(
+    (acc, selectMenu) => {
+      if (selectMenu.config.id) {
+        acc[selectMenu.config.id] =
+          getSelectMenu(selectMenu.config.id) ?? undefined
+      }
+      return acc
+    },
+    {} as Record<
+      string,
+      | StringSelectMenuBuilder
+      | UserSelectMenuBuilder
+      | ChannelSelectMenuBuilder
+      | RoleSelectMenuBuilder
+      | MentionableSelectMenuBuilder
+      | undefined
+    >
+  )
+}
 
 export const useActionRow = <
   T extends AnyComponentBuilder = AnyComponentBuilder
 >(
-  ...components: RestOrArray<T>
+  ...components: RestOrArray<T | undefined>
 ): ActionRowBuilder<T> => {
-  const builder = new ActionRowBuilder<T>().addComponents(...components)
-
-  return builder
+  return new ActionRowBuilder<T>().addComponents(
+    [...components].filter((c) => c) as T[]
+  )
 }
 
 export const useEmbed = (options: EmbedOptions) => {

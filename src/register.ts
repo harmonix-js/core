@@ -1,21 +1,30 @@
-import { ClientEvents, Events } from 'discord.js'
+import {
+  ClientEvents,
+  Events,
+  MessageContextMenuCommandInteraction
+} from 'discord.js'
 import consola from 'consola'
 import { resolveOption } from './utils'
 import { createError, ctx } from './harmonix'
-import type { Harmonix, ParsedInputs, ParsedOptions } from './types'
+import type {
+  Harmonix,
+  ParsedInputs,
+  ParsedOptions,
+  RuntimeHarmonix
+} from './types'
 
 export const registerEvents = (harmonix: Harmonix) => {
   for (const [, event] of harmonix.events) {
     if (event.config.name === 'ready') continue
     if (event.config.once) {
       harmonix.client?.once(event.config.name!, (...args) => {
-        ctx.call(harmonix, () =>
+        ctx.call(harmonix as RuntimeHarmonix, () =>
           event.callback(...(args as ClientEvents[keyof ClientEvents]))
         )
       })
     } else {
       harmonix.client?.on(event.config.name!, (...args) => {
-        ctx.call(harmonix, () =>
+        ctx.call(harmonix as RuntimeHarmonix, () =>
           event.callback(...(args as ClientEvents[keyof ClientEvents]))
         )
       })
@@ -53,17 +62,15 @@ export const registerCommands = (harmonix: Harmonix) => {
           consola.warn(`Precondition \`${prc}\` not found.`)
           continue
         }
-        const result = ctx.call(harmonix, () =>
+        const result = ctx.call(harmonix as RuntimeHarmonix, () =>
           precondition.callback(interaction)
         )
 
         if (!result) return
       }
     }
-    ctx.call(harmonix, () =>
-      cmd.execute(harmonix.client!, interaction, {
-        options
-      })
+    ctx.call(harmonix as RuntimeHarmonix, () =>
+      cmd.execute(interaction, { options })
     )
   })
 }
@@ -82,14 +89,19 @@ export const registerContextMenu = (harmonix: Harmonix) => {
           consola.warn(`Precondition \`${prc}\` not found.`)
           continue
         }
-        const result = ctx.call(harmonix, () =>
+        const result = ctx.call(harmonix as RuntimeHarmonix, () =>
           precondition.callback(interaction)
         )
 
         if (!result) return
       }
     }
-    ctm.callback(interaction)
+    ctm.callback(
+      interaction,
+      interaction instanceof MessageContextMenuCommandInteraction
+        ? interaction.targetMessage
+        : interaction.targetUser
+    )
   })
 }
 
@@ -127,7 +139,7 @@ export const registerSelectMenus = (harmonix: Harmonix) => {
     const slm = harmonix.selectMenus.get(interaction.customId)
 
     if (!slm) return
-    slm.callback(interaction)
+    slm.callback(interaction, interaction.values)
   })
 }
 
@@ -139,7 +151,7 @@ export const registerAutocomplete = (harmonix: Harmonix) => {
     if (!cmd || !cmd.config.autocomplete) return
     try {
       await ctx.call(
-        harmonix,
+        harmonix as RuntimeHarmonix,
         async () => await cmd.config.autocomplete!(interaction)
       )
     } catch (error: any) {

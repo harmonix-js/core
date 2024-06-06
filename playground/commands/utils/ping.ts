@@ -1,10 +1,12 @@
-import { defineCommand } from '../../../src'
+import { defineCommand, useHarmonix } from '../../../src'
 
 export default defineCommand(
   {
     description: 'Pong!'
   },
-  (client, interaction) => {
+  (interaction) => {
+    const { client } = useHarmonix()
+
     interaction.reply(`Pong ${client.ws.ping}ms!`)
   }
 )

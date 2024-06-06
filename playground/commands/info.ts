@@ -1,4 +1,4 @@
-import { defineCommand } from '../../src'
+import { defineCommand, useActionRow, useButtons } from '../../src'
 
 export default defineCommand(
   {
@@ -24,13 +24,15 @@ export default defineCommand(
       }
     }
   },
-  (_, interaction, ctx) => {
+  (interaction, ctx) => {
     const { user, server } = ctx.options
+    const { hello } = useButtons()
+    const row = useActionRow(hello!, hello!)
 
     if (user) {
-      return interaction.reply('User info')
+      return interaction.reply({ content: 'User info', components: [row] })
     } else if (server) {
-      return interaction.reply('Server info')
+      return interaction.reply({ content: 'Server info', components: [row] })
     }
   }
 )

@@ -1,5 +1,4 @@
 import type {
-  Client,
   ChatInputCommandInteraction,
   PermissionsString,
   User,
@@ -294,7 +293,6 @@ export interface CommandConfig<T extends OptionsDef = OptionsDef> {
 }
 
 export type CommandExecute<T extends OptionsDef = OptionsDef> = (
-  client: Client,
   interaction: ChatInputCommandInteraction,
   context: CommandContext<T>
 ) => void

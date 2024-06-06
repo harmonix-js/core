@@ -61,7 +61,7 @@ export const defineEvent: DefineEvent = <
 }
 
 export const defineCommand = <T extends OptionsDef = OptionsDef>(
-  config: CommandConfig & { options?: T },
+  config: Omit<CommandConfig<T>, 'id'> & { options?: T },
   execute: CommandExecute<T>
 ): HarmonixCommand<T> => {
   for (const [key, value] of Object.entries(config.options ?? {})) {
@@ -77,7 +77,7 @@ export const defineCommand = <T extends OptionsDef = OptionsDef>(
 }
 
 export const defineContextMenu: DefineContextMenu = <
-  T extends ContextMenuType = 'Message'
+  T extends ContextMenuType = ContextMenuType
 >(
   ...args: [
     (ContextMenuConfig & { type?: T }) | ContextMenuCallback<T>,

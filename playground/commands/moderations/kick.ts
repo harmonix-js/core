@@ -15,7 +15,7 @@ export default defineCommand(
       }
     }
   },
-  (_, interaction, context) => {
+  (interaction, context) => {
     const { user, reason } = context.options
 
     interaction.reply(`Kicked user ${user} for ${reason}`)

@@ -63,3 +63,7 @@ export interface Harmonix {
   selectMenus: Collection<string, HarmonixSelectMenu>
   preconditions: Collection<string, HarmonixPrecondition>
 }
+
+export interface RuntimeHarmonix extends Harmonix {
+  client: Client
+}

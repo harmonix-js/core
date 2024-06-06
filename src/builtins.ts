@@ -44,9 +44,9 @@ export const helpCommand = defineCommand(
       return interaction.respond(options)
     }
   },
-  async (client, interaction, ctx) => {
+  async (interaction, ctx) => {
     const { command } = ctx.options
-    const { commands } = useHarmonix()
+    const { client, commands } = useHarmonix()
 
     if (!command) {
       const groupedCommands = groupCommandsByCategory(

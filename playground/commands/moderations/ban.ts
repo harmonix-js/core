@@ -16,7 +16,7 @@ export default defineCommand(
     },
     userPermissions: ['Administrator']
   },
-  async (_, interaction, ctx) => {
+  async (interaction, ctx) => {
     const { user, reason } = ctx.options
 
     interaction.reply(`Banned user ${user} for ${reason}`)
