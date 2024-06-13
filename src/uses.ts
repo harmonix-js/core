@@ -19,9 +19,9 @@ import type { EmbedOptions } from './types'
 import { getButton, getModal, getSelectMenu } from './getters'
 
 export const useButtons = () => {
-  const { buttons } = useHarmonix()
+  const { components } = useHarmonix()
 
-  return buttons.reduce(
+  return components.buttons.reduce(
     (acc, button) => {
       if (button.config.id) {
         acc[button.config.id] = getButton(button.config.id) ?? undefined
@@ -33,9 +33,9 @@ export const useButtons = () => {
 }
 
 export const useModals = () => {
-  const { modals } = useHarmonix()
+  const { components } = useHarmonix()
 
-  return modals.reduce(
+  return components.modals.reduce(
     (acc, modal) => {
       if (modal.config.id) {
         acc[modal.config.id] = getModal(modal.config.id) ?? undefined
@@ -47,9 +47,9 @@ export const useModals = () => {
 }
 
 export const useSelectMenus = () => {
-  const { selectMenus } = useHarmonix()
+  const { components } = useHarmonix()
 
-  return selectMenus.reduce(
+  return components.selectMenus.reduce(
     (acc, selectMenu) => {
       if (selectMenu.config.id) {
         acc[selectMenu.config.id] =

@@ -39,13 +39,13 @@ export const loadContextMenus = (
 
 export const loadButtons = (harmonix: Harmonix, buttons: HarmonixButton[]) => {
   for (const btn of buttons) {
-    harmonix.buttons.set(btn.config.id!, btn)
+    harmonix.components.buttons.set(btn.config.id!, btn)
   }
 }
 
 export const loadModals = (harmonix: Harmonix, modals: HarmonixModal[]) => {
   for (const mdl of modals) {
-    harmonix.modals.set(mdl.config.id!, mdl)
+    harmonix.components.modals.set(mdl.config.id!, mdl)
   }
 }
 
@@ -54,7 +54,7 @@ export const loadSelectMenus = (
   selectMenus: HarmonixSelectMenu[]
 ) => {
   for (const slm of selectMenus) {
-    harmonix.selectMenus.set(slm.config.id!, slm)
+    harmonix.components.selectMenus.set(slm.config.id!, slm)
   }
 }
 

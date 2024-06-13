@@ -46,9 +46,12 @@ export const loadOptions = async (
     commands: 'commands',
     events: 'events',
     contextMenus: 'context-menus',
-    buttons: 'buttons',
-    modals: 'modals',
-    selectMenus: 'select-menus',
+    components: {
+      dir: 'components',
+      buttons: 'buttons',
+      modals: 'modals',
+      selectMenus: 'select-menus'
+    },
     preconditions: 'preconditions'
   })
 

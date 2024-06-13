@@ -23,7 +23,7 @@ import type {
 
 export const getButton = (id: string) => {
   const harmonix = useHarmonix()
-  const button = harmonix.buttons.get(id)
+  const button = harmonix.components.buttons.get(id)
 
   if (!button) return null
   const builder = new ButtonBuilder()
@@ -50,7 +50,7 @@ export const getButton = (id: string) => {
 
 export const getModal = (id: string) => {
   const harmonix = useHarmonix()
-  const modal = harmonix.modals.get(id)
+  const modal = harmonix.components.modals.get(id)
 
   if (!modal) return null
   const builder = new ModalBuilder()
@@ -91,7 +91,7 @@ export const getModal = (id: string) => {
 
 export const getSelectMenu = (id: string) => {
   const harmonix = useHarmonix()
-  const selectMenu = harmonix.selectMenus.get(id)
+  const selectMenu = harmonix.components.selectMenus.get(id)
 
   if (!selectMenu) return null
   const { placeholder, type, disabled, minValues, maxValues } =

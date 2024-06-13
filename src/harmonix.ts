@@ -68,9 +68,11 @@ const initHarmonix = async (
     events: new Collection(),
     commands: new Collection(),
     contextMenus: new Collection(),
-    buttons: new Collection(),
-    modals: new Collection(),
-    selectMenus: new Collection(),
+    components: {
+      buttons: new Collection(),
+      modals: new Collection(),
+      selectMenus: new Collection()
+    },
     preconditions: new Collection()
   }
 }
@@ -84,9 +86,9 @@ const watchReload = (
     harmonix.options.dirs.commands,
     harmonix.options.dirs.events,
     harmonix.options.dirs.contextMenus,
-    harmonix.options.dirs.buttons,
-    harmonix.options.dirs.modals,
-    harmonix.options.dirs.selectMenus,
+    harmonix.options.dirs.components.buttons,
+    harmonix.options.dirs.components.modals,
+    harmonix.options.dirs.components.selectMenus,
     harmonix.options.dirs.preconditions
   ].map((file) => resolve(harmonix.options.rootDir, file))
   const watcher = watch([...filesToWatch, harmonix.configFile], {
@@ -138,9 +140,9 @@ const clearHarmonix = async (harmonix: Harmonix) => {
   harmonix.events.clear()
   harmonix.commands.clear()
   harmonix.contextMenus.clear()
-  harmonix.buttons.clear()
-  harmonix.modals.clear()
-  harmonix.selectMenus.clear()
+  harmonix.components.buttons.clear()
+  harmonix.components.modals.clear()
+  harmonix.components.selectMenus.clear()
   harmonix.preconditions.clear()
 }
 
@@ -181,14 +183,16 @@ const loadHarmonix = async (
     ...(harmonix.options.contextMenus || []),
     ...scannedContextMenus
   ].map((ctm) => resolveContextMenu(ctm, harmonix.options))
-  const buttons = [...(harmonix.options.buttons || []), ...scannedButtons].map(
-    (btn) => resolveButton(btn, harmonix.options)
-  )
-  const modals = [...(harmonix.options.modals || []), ...scannedModals].map(
-    (mdl) => resolveModal(mdl, harmonix.options)
-  )
+  const buttons = [
+    ...(harmonix.options.components?.buttons || []),
+    ...scannedButtons
+  ].map((btn) => resolveButton(btn, harmonix.options))
+  const modals = [
+    ...(harmonix.options.components?.modals || []),
+    ...scannedModals
+  ].map((mdl) => resolveModal(mdl, harmonix.options))
   const selectMenus = [
-    ...(harmonix.options.selectMenus || []),
+    ...(harmonix.options.components?.selectMenus || []),
     ...scannedSelectMenus
   ].map((slm) => resolveSelectMenu(slm, harmonix.options))
   const preconditions = [

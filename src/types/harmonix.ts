@@ -18,9 +18,12 @@ interface HarmonixDirs {
   events: string
   commands: string
   contextMenus: string
-  buttons: string
-  modals: string
-  selectMenus: string
+  components: {
+    dir: string
+    buttons: string
+    modals: string
+    selectMenus: string
+  }
   preconditions: string
 }
 
@@ -33,9 +36,11 @@ export interface HarmonixOptions {
   events: HarmonixEventInput[]
   commands: HarmonixCommandInput[]
   contextMenus: HarmonixContextMenuInput[]
-  buttons: HarmonixButtonInput[]
-  modals: HarmonixModalInput[]
-  selectMenus: HarmonixSelectMenuInput[]
+  components: {
+    buttons: HarmonixButtonInput[]
+    modals: HarmonixModalInput[]
+    selectMenus: HarmonixSelectMenuInput[]
+  }
   preconditions: HarmonixPreconditionInput[]
   client: ClientOptions
   clientId: string
@@ -58,9 +63,11 @@ export interface Harmonix {
   events: Collection<string, HarmonixEvent>
   commands: Collection<string, HarmonixCommand>
   contextMenus: Collection<string, HarmonixContextMenu>
-  buttons: Collection<string, HarmonixButton>
-  modals: Collection<string, HarmonixModal>
-  selectMenus: Collection<string, HarmonixSelectMenu>
+  components: {
+    buttons: Collection<string, HarmonixButton>
+    modals: Collection<string, HarmonixModal>
+    selectMenus: Collection<string, HarmonixSelectMenu>
+  }
   preconditions: Collection<string, HarmonixPrecondition>
 }
 

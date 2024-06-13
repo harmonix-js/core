@@ -108,7 +108,7 @@ export const registerContextMenu = (harmonix: Harmonix) => {
 export const registerButtons = (harmonix: Harmonix) => {
   harmonix.client?.on(Events.InteractionCreate, (interaction) => {
     if (!interaction.isButton()) return
-    const btn = harmonix.buttons.get(interaction.customId)
+    const btn = harmonix.components.buttons.get(interaction.customId)
 
     if (!btn) return
     btn.callback(interaction)
@@ -118,7 +118,7 @@ export const registerButtons = (harmonix: Harmonix) => {
 export const registerModals = (harmonix: Harmonix) => {
   harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isModalSubmit()) return
-    const mdl = harmonix.modals.get(interaction.customId)
+    const mdl = harmonix.components.modals.get(interaction.customId)
 
     if (!mdl) return
     const inputs = Object.keys(mdl.config.inputs ?? {}).reduce<ParsedInputs>(
@@ -136,7 +136,7 @@ export const registerModals = (harmonix: Harmonix) => {
 export const registerSelectMenus = (harmonix: Harmonix) => {
   harmonix.client?.on(Events.InteractionCreate, (interaction) => {
     if (!interaction.isAnySelectMenu()) return
-    const slm = harmonix.selectMenus.get(interaction.customId)
+    const slm = harmonix.components.selectMenus.get(interaction.customId)
 
     if (!slm) return
     slm.callback(interaction, interaction.values)
