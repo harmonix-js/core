@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.3.0
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.2.0...v0.3.0)
+
+### 🚀 Enhancements
+
+- Add useRuntimeEnv function ([d2b70ea](https://github.com/harmonix-js/core/commit/d2b70ea))
+
+### 🏡 Chore
+
+- **playground:** Usage of useRuntimeEnv ([4d48b9a](https://github.com/harmonix-js/core/commit/4d48b9a))
+
+### 🤖 CI
+
+- Add knip configuration ([039d8e5](https://github.com/harmonix-js/core/commit/039d8e5))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.2.0
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.1.1...v0.2.0)
