@@ -1,4 +1,4 @@
-import { defineModal } from '../../src'
+import { defineModal } from '../../../src'
 
 export default defineModal(
   {

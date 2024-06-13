@@ -1,4 +1,4 @@
-import { defineButton } from '../../src'
+import { defineButton } from '../../../src'
 
 export default defineButton(
   {

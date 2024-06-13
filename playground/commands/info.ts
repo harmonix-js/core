@@ -10,24 +10,14 @@ export default defineCommand(
       },
       server: {
         type: 'SubCommand',
-        description: 'Get information about the server',
-        options: {
-          role: {
-            type: 'Role',
-            description: 'The role to get information about'
-          },
-          caca: {
-            type: 'String',
-            description: 'caca'
-          }
-        }
+        description: 'Get information about the server'
       }
     }
   },
   (interaction, ctx) => {
     const { user, server } = ctx.options
     const { hello } = useButtons()
-    const row = useActionRow(hello!, hello!)
+    const row = useActionRow(hello!)
 
     if (user) {
       return interaction.reply({ content: 'User info', components: [row] })

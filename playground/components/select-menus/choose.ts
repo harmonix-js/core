@@ -1,4 +1,4 @@
-import { defineSelectMenu, useEmbed } from '../../src'
+import { defineSelectMenu, useEmbed } from '../../../src'
 
 export default defineSelectMenu(
   {
