@@ -113,7 +113,9 @@ type OptionDef =
   | DateOptionDef
   | UrlOptionDef
 
-export type OptionsDef = Record<string, OptionDef>
+export interface OptionsDef {
+  [x: string]: OptionDef
+}
 
 export type ParsedOptionType =
   | string

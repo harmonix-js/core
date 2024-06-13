@@ -27,6 +27,10 @@ interface HarmonixDirs {
   preconditions: string
 }
 
+interface RuntimeEnv {
+  [key: string]: string | undefined
+}
+
 export interface HarmonixOptions {
   rootDir: string
   srcDir: string
@@ -44,7 +48,7 @@ export interface HarmonixOptions {
   preconditions: HarmonixPreconditionInput[]
   client: ClientOptions
   clientId: string
-  ownerIds: string[]
+  env: RuntimeEnv
 }
 
 type DeepPartial<T> =

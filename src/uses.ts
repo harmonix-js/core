@@ -13,10 +13,28 @@ import {
   type RoleSelectMenuBuilder,
   type MentionableSelectMenuBuilder
 } from 'discord.js'
+import { kebabCase, camelCase } from 'scule'
 import type { Stream } from 'node:stream'
 import { useHarmonix } from './harmonix'
 import type { EmbedOptions } from './types'
 import { getButton, getModal, getSelectMenu } from './getters'
+
+export const useRuntimeEnv = (): Record<string, string | undefined> => {
+  const harmonix = useHarmonix()
+  const env = Object.entries(process.env).reduce(
+    (acc, [key, value]) => {
+      if (/^(HMX_)/.test(key) && value) {
+        const _key = kebabCase(key.replace('HMX_', ''))
+
+        acc[camelCase(_key)] = value
+      }
+      return acc
+    },
+    {} as Record<string, string | undefined>
+  )
+
+  return { ...harmonix.options.env, ...env }
+}
 
 export const useButtons = () => {
   const { components } = useHarmonix()
