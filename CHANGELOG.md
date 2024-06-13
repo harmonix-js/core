@@ -1,5 +1,40 @@
 # Changelog
 
+## v0.2.0
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.1.1...v0.2.0)
+
+### 🚀 Enhancements
+
+- Buttons, modals and select menus regroups in components dir ([8699bac](https://github.com/harmonix-js/core/commit/8699bac))
+
+### 🩹 Fixes
+
+- Color on variable warning ([4575640](https://github.com/harmonix-js/core/commit/4575640))
+
+### 💅 Refactors
+
+- Streamline command and context menu definitions, enhance utility functions ([e7e3868](https://github.com/harmonix-js/core/commit/e7e3868))
+
+### 🏡 Chore
+
+- Remove items from .gitignore ([7930ecf](https://github.com/harmonix-js/core/commit/7930ecf))
+- **playground:** Regroups components ([726d271](https://github.com/harmonix-js/core/commit/726d271))
+
+### 🎨 Styles
+
+- Capitalize argument cannot be undefined ([9510181](https://github.com/harmonix-js/core/commit/9510181))
+
+### 🤖 CI
+
+- Add commitlint and husky ([4a04ce0](https://github.com/harmonix-js/core/commit/4a04ce0))
+- Fix commitlint ([34787c1](https://github.com/harmonix-js/core/commit/34787c1))
+- Fix commitlint workflow ([661aea9](https://github.com/harmonix-js/core/commit/661aea9))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.1.1
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.1.0...v0.1.1)
