@@ -12,7 +12,7 @@ export type PreconditionCallback<
   interaction: T extends 'ChatInput'
     ? ChatInputCommandInteraction
     : MessageContextMenuCommandInteraction | UserContextMenuCommandInteraction
-) => boolean | void
+) => Promise<boolean> | Promise<void> | boolean | void
 
 export interface DefinePrecondition {
   <T extends PreconditionType>(

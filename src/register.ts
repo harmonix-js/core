@@ -62,8 +62,9 @@ export const registerCommands = (harmonix: Harmonix) => {
           consola.warn(`Precondition \`${prc}\` not found.`)
           continue
         }
-        const result = ctx.call(harmonix as RuntimeHarmonix, () =>
-          precondition.callback(interaction)
+        const result = await ctx.call(
+          harmonix as RuntimeHarmonix,
+          async () => await precondition.callback(interaction)
         )
 
         if (!result) return
@@ -89,8 +90,9 @@ export const registerContextMenu = (harmonix: Harmonix) => {
           consola.warn(`Precondition \`${prc}\` not found.`)
           continue
         }
-        const result = ctx.call(harmonix as RuntimeHarmonix, () =>
-          precondition.callback(interaction)
+        const result = await ctx.call(
+          harmonix as RuntimeHarmonix,
+          async () => await precondition.callback(interaction)
         )
 
         if (!result) return
