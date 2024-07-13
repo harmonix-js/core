@@ -12,7 +12,11 @@ import type {
 
 export const loadEvents = (harmonix: Harmonix, events: HarmonixEvent[]) => {
   for (const evt of events) {
-    harmonix.events.set(evt.config.name!, evt)
+    if (evt.config.order) {
+      harmonix.events.set(`${evt.config.order}.${evt.config.name!}`, evt)
+    } else {
+      harmonix.events.set(evt.config.name!, evt)
+    }
   }
 }
 

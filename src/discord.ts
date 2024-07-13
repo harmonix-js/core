@@ -45,10 +45,16 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
         cmd.config.id = command.id
       }
       consola.success('Successfully reloaded application commands.\n')
-      const readyEvent = harmonix.events.get('ready')
+      const readyEvents = harmonix.events.filter(
+        (event) => event.config.name === 'ready'
+      )
 
-      if (readyEvent) {
-        ctx.call(harmonix as RuntimeHarmonix, () => readyEvent.callback(client))
+      if (readyEvents.size > 0) {
+        for (const [, readyEvent] of readyEvents) {
+          ctx.call(harmonix as RuntimeHarmonix, () =>
+            readyEvent.callback(client)
+          )
+        }
       }
     } catch (error: any) {
       createError(error.message)

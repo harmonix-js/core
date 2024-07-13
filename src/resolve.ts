@@ -49,12 +49,19 @@ export const resolveEvent = (
       )
       return { config: { name: filename(_evtPath) }, callback: () => {} }
     }
+    const matchPrefix = filename(_evtPath).match(/^[0-9]+\./)
     const matchSuffix = filename(_evtPath).match(/\.(on|once)?$/)
-    const name = filename(_evtPath).replace(/\.(on|once)$/, '')
+    const name = filename(_evtPath)
+      .replace(/^[0-9]+\./, '')
+      .replace(/\.(on|once)$/, '')
+    const order = matchPrefix
+      ? parseInt(matchPrefix[0].slice(0, -1))
+      : undefined
     const once = matchSuffix ? matchSuffix[1] === 'once' : undefined
     const config: EventConfig = {
       name: event.config.name ?? name,
-      once: event.config.once ?? once
+      once: event.config.once ?? once,
+      order: event.config.order ?? order
     }
 
     return { config, callback: event.callback }

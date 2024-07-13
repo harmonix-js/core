@@ -7,6 +7,7 @@ export type EventCallback<Event extends keyof ClientEvents = any> = (
 export interface EventConfig {
   name?: string
   once?: boolean
+  order?: number
 }
 
 export interface DefineEvent {
