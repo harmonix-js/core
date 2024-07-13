@@ -1,5 +1,26 @@
 # Changelog
 
+## v0.3.1
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.3.0...v0.3.1)
+
+### 🚀 Enhancements
+
+- Precondition can return promises ([9c16888](https://github.com/harmonix-js/core/commit/9c16888))
+- Add event ordering ([13cff82](https://github.com/harmonix-js/core/commit/13cff82))
+
+### 🩹 Fixes
+
+- Change 'lint' script to 'format' ([a9d8e5a](https://github.com/harmonix-js/core/commit/a9d8e5a))
+
+### 🏡 Chore
+
+- **playground:** Add 'Guilds' intent ([9b5b877](https://github.com/harmonix-js/core/commit/9b5b877))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.3.0
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.2.0...v0.3.0)
