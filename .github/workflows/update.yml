@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  starter:
+  update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.5
@@ -23,28 +23,6 @@ jobs:
         run: |
           npm install @harmonix-js/core@latest
           npm install -D @harmonix-js/cli@latest
-      - name: Commit changes
-        run: |
-          git config user.email ${{secrets.EMAIL}}
-          git config user.name ${{secrets.NAME}}
-          git commit -am "chore(deps): update dependencies" || echo "No changes to commit"
-          git push
-
-  cli:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.1.5
-        with:
-          repository: harmonix-js/cli
-          ref: main
-          token: ${{secrets.ACTION_GITHUB_TOKEN}}
-      - run: corepack enable
-      - uses: actions/setup-node@v4.0.2
-        with:
-          node-version: 20.x
-          cache: pnpm
-      - run: pnpm install --no-frozen-lockfile
-      - run: pnpm add @harmonix-js/core@latest
       - name: Commit changes
         run: |
           git config user.email ${{secrets.EMAIL}}
