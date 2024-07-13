@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "knip": "knip",
-    "lint": "prettier --write .",
+    "format": "prettier --write .",
     "prepack": "unbuild",
     "start": "node ./bin/index.mjs",
     "prepare": "husky",
