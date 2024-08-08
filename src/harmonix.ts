@@ -99,7 +99,7 @@ const watchReload = (
     async (event: string, path: string, stats: Stats | undefined) => {
       if (stats?.size === 0) return
       consola.info(
-        `${colors.blue(`${event}`)}`,
+        `${colors.blue(event)}`,
         `${colors.gray(resolve(path).replace(harmonix.options.rootDir, ''))}`
       )
       clearHarmonix(harmonix)
