@@ -136,146 +136,30 @@ export type ParsedOptionType =
   | URL
   | null
 
-export type ParsedOptions<T extends OptionsDef = OptionsDef> = Record<
-  {
-    [K in keyof T]: T[K] extends {
-      type: 'String'
-    }
-      ? K
-      : never
-  }[keyof T],
-  string | null
-> &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Integer'
-      }
-        ? K
-        : never
-    }[keyof T],
-    number | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Boolean'
-      }
-        ? K
-        : never
-    }[keyof T],
-    boolean | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'User'
-      }
-        ? K
-        : never
-    }[keyof T],
-    User | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Channel'
-      }
-        ? K
-        : never
-    }[keyof T],
-    GuildBasedChannel | APIInteractionDataResolvedChannel | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Role'
-      }
-        ? K
-        : never
-    }[keyof T],
-    Role | APIRole | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Number'
-      }
-        ? K
-        : never
-    }[keyof T],
-    number | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Mentionable'
-      }
-        ? K
-        : never
-    }[keyof T],
-    GuildMember | APIInteractionDataResolvedGuildMember | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Attachment'
-      }
-        ? K
-        : never
-    }[keyof T],
-    Attachment | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'SubCommand'
-      }
-        ? K
-        : never
-    }[keyof T],
-    boolean | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Message'
-      }
-        ? K
-        : never
-    }[keyof T],
-    Message | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Emoji'
-      }
-        ? K
-        : never
-    }[keyof T],
-    GuildEmoji | PartialEmoji | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Date'
-      }
-        ? K
-        : never
-    }[keyof T],
-    Date | null
-  > &
-  Record<
-    {
-      [K in keyof T]: T[K] extends {
-        type: 'Url'
-      }
-        ? K
-        : never
-    }[keyof T],
-    URL | null
-  >
+type OptionTypeMap = {
+  String: string
+  Integer: number
+  Boolean: boolean
+  User: User
+  Channel: GuildBasedChannel | APIInteractionDataResolvedChannel
+  Role: Role | APIRole
+  Number: number
+  Mentionable: GuildMember | APIInteractionDataResolvedGuildMember
+  Attachment: Attachment
+  SubCommand: boolean
+  Message: Message | null
+  Emoji: GuildEmoji | PartialEmoji | null
+  Date: Date | null
+  Url: URL | null
+}
+
+type RequiredOptionValue<T extends OptionDef> = T['required'] extends false
+  ? OptionTypeMap[T['type']] | null
+  : OptionTypeMap[T['type']]
+
+export type ParsedOptions<T extends OptionsDef = OptionsDef> = {
+  [K in keyof T]: RequiredOptionValue<T[K]>
+}
 
 interface CommandContext<T extends OptionsDef = OptionsDef> {
   options: ParsedOptions<T>

@@ -36,23 +36,27 @@ export const registerCommands = (harmonix: Harmonix) => {
   harmonix.client?.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) return
     const cmd = harmonix.commands.get(interaction.commandName)
+    const cmdOptions = Object.entries(cmd?.config.options ?? {}).map(
+      ([key, _]) => ({ name: key })
+    )
 
     if (!cmd) return
-    const options = await interaction.options.data.reduce<
-      Promise<ParsedOptions>
-    >(async (acc, opt) => {
-      const resolvedAcc = await acc
-      const resolvedOption = await resolveOption(
-        interaction,
-        cmd.config.options![opt.name]?.type,
-        opt.name
-      )
+    const options = await cmdOptions.reduce<Promise<ParsedOptions>>(
+      async (acc, opt) => {
+        const resolvedAcc = await acc
+        const resolvedOption = await resolveOption(
+          interaction,
+          cmd.config.options![opt.name]?.type,
+          opt.name
+        )
 
-      return {
-        ...resolvedAcc,
-        [opt.name]: resolvedOption
-      }
-    }, Promise.resolve({}))
+        return {
+          ...resolvedAcc,
+          [opt.name]: resolvedOption
+        }
+      },
+      Promise.resolve({})
+    )
 
     if (cmd.config.preconditions) {
       for (const prc of cmd.config.preconditions) {
