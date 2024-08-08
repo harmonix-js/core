@@ -1,5 +1,36 @@
 # Changelog
 
+## v0.3.2
+
+[compare changes](https://github.com/harmonix-js/core/compare/v0.3.1...v0.3.2)
+
+### 🚀 Enhancements
+
+- Modals input can be null if not required ([ba286c9](https://github.com/harmonix-js/core/commit/ba286c9))
+- Commands options can be null if not required ([e1be061](https://github.com/harmonix-js/core/commit/e1be061))
+
+### 🩹 Fixes
+
+- Modals inputs allways required bug ([bef86c0](https://github.com/harmonix-js/core/commit/bef86c0))
+
+### 🏡 Chore
+
+- Update playground details ([0c69155](https://github.com/harmonix-js/core/commit/0c69155))
+
+### 🎨 Styles
+
+- Change log message when live reloading ([d42814e](https://github.com/harmonix-js/core/commit/d42814e))
+- Remove useless template literals in reload log message ([aaca01d](https://github.com/harmonix-js/core/commit/aaca01d))
+- Change success message on command loaded ([081cdd6](https://github.com/harmonix-js/core/commit/081cdd6))
+
+### 🤖 CI
+
+- Remove cli updating ([15c8dd3](https://github.com/harmonix-js/core/commit/15c8dd3))
+
+### ❤️ Contributors
+
+- Nethris <david.abou@epitech.eu>
+
 ## v0.3.1
 
 [compare changes](https://github.com/harmonix-js/core/compare/v0.3.0...v0.3.1)
