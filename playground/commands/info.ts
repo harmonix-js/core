@@ -17,7 +17,7 @@ export default defineCommand(
   (interaction, ctx) => {
     const { user, server } = ctx.options
     const { hello } = useButtons()
-    const row = useActionRow(hello!)
+    const row = useActionRow(hello)
 
     if (user) {
       return interaction.reply({ content: 'User info', components: [row] })

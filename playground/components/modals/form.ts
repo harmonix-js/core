@@ -12,7 +12,8 @@ export default defineModal(
       hobbies: {
         label: 'Hobbies',
         style: 'Paragraph',
-        placeholder: 'Enter your hobbies'
+        placeholder: 'Enter your hobbies',
+        required: false
       }
     }
   },
