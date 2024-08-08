@@ -44,7 +44,7 @@ export const refreshApplicationCommands = async (harmonix: Harmonix) => {
         }
         cmd.config.id = command.id
       }
-      consola.success('Successfully reloaded application commands.\n')
+      consola.success('Successfully loaded application commands.\n')
       const readyEvents = harmonix.events.filter(
         (event) => event.config.name === 'ready'
       )
