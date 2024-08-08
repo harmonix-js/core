@@ -62,10 +62,11 @@ export const getModal = (id: string) => {
       const input = modal.config.inputs[id]
       const inputBuilder = new TextInputBuilder()
         .setCustomId(id)
-        .setLabel(input.label)
+        .setLabel(input.label ?? id)
         .setStyle(
           input.style ? TextInputStyle[input.style] : TextInputStyle.Short
         )
+        .setRequired(input.required ?? true)
 
       if (input.minLength) {
         inputBuilder.setMinLength(input.minLength)
@@ -78,9 +79,6 @@ export const getModal = (id: string) => {
       }
       if (input.value) {
         inputBuilder.setValue(input.value)
-      }
-      if (input.required) {
-        inputBuilder.setRequired(input.required)
       }
       builder.addComponents(useActionRow(inputBuilder))
     }
